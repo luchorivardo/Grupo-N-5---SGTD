@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositorios\Interfaces\" />
+    <Compile Remove="Repositorios\Interfaces\**" />
+    <EmbeddedResource Remove="Repositorios\Interfaces\**" />
+    <None Remove="Repositorios\Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositorios\Contracts\" />
+    <Folder Include="Repositorios\Implementations\" />
   </ItemGroup>
 
 </Project>
