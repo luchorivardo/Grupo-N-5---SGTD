@@ -28,9 +28,4 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositorios\Contracts\" />
-    <Folder Include="Repositorios\Implementations\" />
-  </ItemGroup>
-
 </Project>

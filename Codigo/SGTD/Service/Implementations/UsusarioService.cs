@@ -1,11 +1,11 @@
-﻿using Service.Contracts;
+﻿using Data.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Implementations
+namespace Data.Implementations
 {
     public class UsusarioService : IUsusarioService
     {

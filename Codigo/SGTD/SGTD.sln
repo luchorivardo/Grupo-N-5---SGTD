@@ -10,7 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{90FB2CEE-42D8-4851-BC22-985C6A7EFD88}"
 EndProject
-
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,7 +28,7 @@ Global
 		{B163394A-474E-4071-915B-53B4692513BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B163394A-474E-4071-915B-53B4692513BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B163394A-474E-4071-915B-53B4692513BD}.Release|Any CPU.Build.0 = Release|Any CPU
-    {90FB2CEE-42D8-4851-BC22-985C6A7EFD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90FB2CEE-42D8-4851-BC22-985C6A7EFD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90FB2CEE-42D8-4851-BC22-985C6A7EFD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90FB2CEE-42D8-4851-BC22-985C6A7EFD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90FB2CEE-42D8-4851-BC22-985C6A7EFD88}.Release|Any CPU.Build.0 = Release|Any CPU

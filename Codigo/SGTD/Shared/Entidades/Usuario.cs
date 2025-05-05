@@ -21,7 +21,7 @@ namespace Shared.Entidades
         public int CiudadId { get; set; }
         public Ciudad Ciudad { get; set; }
         public int ProvinciaId { get; set; }
-        public Provincias Provincia { get; set; }
+        public Provincia Provincia { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
         public int? EstadoId { get; set; }
