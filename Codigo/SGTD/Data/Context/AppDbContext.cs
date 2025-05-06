@@ -13,7 +13,6 @@ namespace Data.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
         public DbSet<Ciudad> Tipos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Disciplina> Disciplinas { get; set; }
@@ -28,5 +27,9 @@ namespace Data.Context
         public DbSet<RubroProveedor> RubrosProveedores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=LAPTOP-KFU2M4R9;Database=TiendaDeportivaDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;Encrypt=False");
+        }
     }
 }

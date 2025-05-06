@@ -16,8 +16,6 @@ namespace Shared.Entidades
         public string Apellido { get; set; }
         public string CorreoElectronico { get; set; }
         public string Contrasenia { get; set; }
-
-        [ForeignKey("CiudadId")]
         public int CiudadId { get; set; }
         public Ciudad Ciudad { get; set; }
         public int ProvinciaId { get; set; }
