@@ -13,7 +13,6 @@ namespace Data.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
         public DbSet<Ciudad> Tipos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Disciplina> Disciplinas { get; set; }
