@@ -1,6 +1,7 @@
 ﻿using Data.Context;
-using Data.Repositorios.Implementations;
 using Data.Contracts;
+using Data.Repositorios.Implementations;
+using Microsoft.EntityFrameworkCore;
 using Shared.Entidades;
 using System;
 using System.Collections.Generic;

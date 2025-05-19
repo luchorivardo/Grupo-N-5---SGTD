@@ -27,7 +27,10 @@ namespace Data.Repositorios.Implementations
         {
             return await this._context.Set<T>().ToListAsync();
         }
-
+        public async Task<T> ObtenerPorId(object id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
         public IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
             return this._context.Set<T>().Where(expression).ToList();
