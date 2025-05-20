@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DTOs.Producto
 {
-    internal class ProductoReadDTO
+    public class ProductoReadDTO
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
