@@ -11,7 +11,7 @@ namespace Data.Contracts
     {
         Task<List<DisciplinaReadDTO>> ObtenerTodos();
         Task<DisciplinaReadDTO> ObtenerPorId(int id);
-        void Crear(DisciplinaCreateDTO dto);
+        Task Crear(DisciplinaCreateDTO dto);
         Task Editar(int id, DisciplinaUpdateDTO dto);
         Task Eliminar(int id);
     }

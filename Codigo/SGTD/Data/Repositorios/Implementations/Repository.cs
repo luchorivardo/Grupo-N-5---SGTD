@@ -41,14 +41,16 @@ namespace Data.Repositorios.Implementations
             return await this._context.Set<T>().Where(expression).ToListAsync();
         }
 
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
-            this._context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
-            this._context.Set<T>().Update(entity);
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
         }
 
         public void Delete(T entity)

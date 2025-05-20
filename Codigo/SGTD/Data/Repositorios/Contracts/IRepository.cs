@@ -14,8 +14,8 @@ namespace Data.Repositorios.Contracts
         Task<T> ObtenerPorId(object id);
         IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression);
         Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
-        void Create(T entity);
-        void Update(T entity);
+        Task Create(T entity);
+        Task Update(T entity);
         void Delete(T entity);
         bool Save();
         Task SaveAsync();

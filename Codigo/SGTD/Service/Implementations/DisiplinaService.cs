@@ -42,13 +42,13 @@ namespace Data.Implementations
             };
         }
 
-        public void Crear(DisciplinaCreateDTO dto)
+        public async Task Crear(DisciplinaCreateDTO dto)
         {
             var disciplina = new Disciplina
             {
                 Nombre = dto.Nombre,
             };
-            _DisciplinaRepository.Create(disciplina);
+            await _DisciplinaRepository.Create(disciplina);
         }
 
         public async Task Editar(int id, DisciplinaUpdateDTO dto)
@@ -58,7 +58,7 @@ namespace Data.Implementations
 
             disciplina.Nombre = dto.Nombre;
 
-            _DisciplinaRepository.Update(disciplina);
+            await _DisciplinaRepository.Update(disciplina);
         }
 
         public async Task Eliminar(int id)
