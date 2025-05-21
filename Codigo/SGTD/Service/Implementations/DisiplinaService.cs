@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Shared.DTOs.Producto;
 using Shared.Entidades;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,9 @@ namespace Data.Implementations
 
         public async Task Crear(DisciplinaCreateDTO dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Nombre))
+                throw new ArgumentException("El nombre de la disciplina es obligatorio.");
+
             var disciplina = new Disciplina
             {
                 Nombre = dto.Nombre,
@@ -53,8 +57,15 @@ namespace Data.Implementations
 
         public async Task Editar(int id, DisciplinaUpdateDTO dto)
         {
+            if (id <= 0)
+                throw new ArgumentException("El ID debe ser mayor a cero.");
+
+            if (string.IsNullOrWhiteSpace(dto.Nombre))
+                throw new ArgumentException("El nombre de la disciplina es obligatorio.");
+
             var disciplina = await _DisciplinaRepository.ObtenerPorId(id);
-            if (disciplina == null) return;
+            if (disciplina == null)
+                throw new KeyNotFoundException($"No se encontró ningúna disciplina con ID {id}.");
 
             disciplina.Nombre = dto.Nombre;
 
@@ -63,7 +74,12 @@ namespace Data.Implementations
 
         public async Task Eliminar(int id)
         {
+            if (id <= 0)
+                throw new ArgumentException("El ID debe ser mayor a cero.");
+
             var disciplina = await _DisciplinaRepository.ObtenerPorId(id);
+            if (disciplina == null)
+                throw new KeyNotFoundException($"No se encontró ningúna disciplina con ID {id}.");
             _DisciplinaRepository.Delete(disciplina);
         }
     }
