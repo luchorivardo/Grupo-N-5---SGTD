@@ -1,18 +1,9 @@
 ﻿using Data.Contracts;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.IdentityModel.Tokens;
+using Service.Contracts;
 using Shared.DTOs.ClienteDTOs;
-using Shared.DTOs.Producto;
-using Shared.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ObjectiveC;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Data.Implementations
+namespace Service.Implementations
 {
     public class ClienteService : IClienteService
     {
