@@ -18,11 +18,7 @@ namespace Service.Implementations
         public async Task<List<EstadoReadDTO>> ObtenerTodosAsync()
         {
             var estado = await _estadoRepository.FindAllAsync();
-            return estado.Select(a => new EstadoReadDTO
-            {
-                Id = a.Id,
-                Nombre = a.Nombre
-            }).ToList();
+            return _mapper.ToReadDtoList(estado);
         }
 
         public async Task<EstadoReadDTO> ObtenerPorIdAsync(int id)
@@ -34,11 +30,7 @@ namespace Service.Implementations
             if (estado == null)
                 throw new KeyNotFoundException($"No se encontró ningún estado con ID {id}.");
 
-            return new EstadoReadDTO
-            {
-                Id = estado.Id,
-                Nombre = estado.Nombre
-            };
+            return _mapper.ToReadDto(estado);
         }
 
         public async Task<EstadoReadDTO> CrearAsync(EstadoCreateDTO dto)

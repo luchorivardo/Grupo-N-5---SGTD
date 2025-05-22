@@ -1,5 +1,6 @@
 ﻿using Riok.Mapperly.Abstractions;
 using Shared.DTOs.RolDTOs;
+using Shared.DTOs.RubroDTOs;
 using Shared.Entidades;
 
 namespace Service.Mappers
@@ -11,5 +12,8 @@ namespace Service.Mappers
         public partial RolReadDTO ToReadDto(Rol entity);
 
         public partial void UpdateEntity(RolUpdateDTO dto, Rol entity);
+
+        public List<RolReadDTO> ToReadDtoList(IEnumerable<Rol> entities)
+        => entities.Select(ToReadDto).ToList();
     }
 }

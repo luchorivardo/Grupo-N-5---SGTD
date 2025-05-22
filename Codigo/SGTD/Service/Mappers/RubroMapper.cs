@@ -11,5 +11,8 @@ namespace Service.Mappers
         public partial RubroReadDTO ToReadDto(Rubro entity);
 
         public partial void UpdateEntity(RubroUpdateDTO dto, Rubro entity);
+
+        public List<RubroReadDTO> ToReadDtoList(IEnumerable<Rubro> entities)
+        => entities.Select(ToReadDto).ToList();
     }
 }
