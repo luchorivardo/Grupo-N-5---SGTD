@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DTOs.RolDTOs
 {
-    internal class RolUpdateDTO
+    public class RolUpdateDTO
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
