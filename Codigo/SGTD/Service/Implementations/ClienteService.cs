@@ -44,7 +44,7 @@ namespace Data.Implementations
 
             var clientes = await _clienteRepository.ObtenerPorId(id);
             if (clientes == null)
-                throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
+                throw new KeyNotFoundException($"No se encontró ningún estado con ID {id}.");
 
             return new ClienteReadDTO
             {
