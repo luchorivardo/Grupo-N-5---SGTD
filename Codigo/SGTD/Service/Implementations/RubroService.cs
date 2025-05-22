@@ -18,11 +18,7 @@ namespace Service.Implementations
         public async Task<List<RubroReadDTO>> ObtenerTodosAsync()
         {
             var rubro = await _rubroRepository.FindAllAsync();
-            return rubro.Select(a => new RubroReadDTO
-            {
-                Id = a.Id,
-                Nombre = a.Nombre
-            }).ToList();
+            return _mapper.ToReadDtoList(rubro);
         }
 
         public async Task<RubroReadDTO> ObtenerPorIdAsync(int id)
@@ -34,11 +30,7 @@ namespace Service.Implementations
             if (rubro == null)
                 throw new KeyNotFoundException($"No se encontró ningún rol con ID {id}.");
 
-            return new RubroReadDTO
-            {
-                Id = rubro.Id,
-                Nombre = rubro.Nombre
-            };
+            return _mapper.ToReadDto(rubro);
         }
 
         public async Task<RubroReadDTO> CrearAsync(RubroCreateDTO dto)

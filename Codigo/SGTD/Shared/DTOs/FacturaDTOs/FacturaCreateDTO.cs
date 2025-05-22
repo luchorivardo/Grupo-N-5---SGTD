@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.DTOs.Factura
+namespace Shared.DTOs.FacturaDTOs
 {
     public class FacturaCreateDTO
     {
