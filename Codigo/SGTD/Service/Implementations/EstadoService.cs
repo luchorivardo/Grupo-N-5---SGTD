@@ -1,12 +1,7 @@
 ﻿using Data.Contracts;
+using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.EstadoDTOs;
-using Shared.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Implementations
 {

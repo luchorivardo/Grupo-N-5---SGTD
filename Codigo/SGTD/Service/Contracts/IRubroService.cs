@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shared.DTOs.RubroDTOs;
 
-namespace Data.Contracts
+namespace Service.Contracts
 {
     public interface IRubroService
     {
+        Task<List<RubroReadDTO>> ObtenerTodosAsync();
+        Task<RubroReadDTO> ObtenerPorIdAsync(int id);
+        Task<RubroReadDTO> CrearAsync(RubroCreateDTO dto);
+        Task<RubroReadDTO> Editar(int id, RubroUpdateDTO dto);
+        Task Eliminar(int id);
     }
 }
