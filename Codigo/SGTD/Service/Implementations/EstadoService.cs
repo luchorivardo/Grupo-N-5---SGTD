@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Implementations
+namespace Service.Implementations
 {
     public class EstadoService : IEstadoService
     {

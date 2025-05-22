@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DTOs.RolDTOs
 {
-    public class RubroCreateDTO
+    public class RolCreateDTO
     {
         public string Nombre { get; set; }
     }
