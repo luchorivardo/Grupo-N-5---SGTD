@@ -1,6 +1,7 @@
 ﻿using Data.Context;
-using Data.Repositorios.Implementations;
 using Data.Contracts;
+using Data.Repositorios.Implementations;
+using Microsoft.EntityFrameworkCore;
 using Shared.Entidades;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,17 @@ namespace Data.Implementations
     public class UsuarioRepository : Repository<Usuario>, IUsusarioRepository
     {
         public UsuarioRepository(AppDbContext context) : base(context) { }
+
+        public async Task<bool> ExistePorDniAsync(string dni, int? excludeUserId = null)
+        {
+            return await _context.Usuarios
+                .AnyAsync(u => u.NumeroDocumento == dni && (excludeUserId == null || u.Id != excludeUserId));
+        }
+
+        public async Task<bool> ExistePorCorreoAsync(string correo, int? excludeUserId = null)
+        {
+            return await _context.Usuarios
+                .AnyAsync(u => u.CorreoElectronico == correo && (excludeUserId == null || u.Id != excludeUserId));
+        }
     }
 }

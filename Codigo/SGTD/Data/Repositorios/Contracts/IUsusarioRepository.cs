@@ -10,5 +10,7 @@ namespace Data.Contracts
 {
     public interface IUsusarioRepository : IRepository<Usuario>
     {
+        Task<bool> ExistePorDniAsync(string dni, int? excludeUserId = null);
+        Task<bool> ExistePorCorreoAsync(string correo, int? excludeUserId = null);
     }
 }
