@@ -84,8 +84,15 @@ namespace Service.Implementations
                 throw new ArgumentException("El numero de telefono deve comenzar con + y contener entre 7 y 15 caracteres.");
             if (string.IsNullOrEmpty(dto.Direccion))
                 throw new ArgumentException("La dirección del cliente es obligatoria.");
-            if (dto.CiudadId <= 0)
-                throw new ArgumentException("Debe seleccionar una ciudad");
+            if (string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length < 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
+
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length < 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
         }
 
         private void ValidarClienteUpdateDTO(ClienteUpdateDTO dto)
@@ -98,8 +105,15 @@ namespace Service.Implementations
                 throw new ArgumentException("El numero de telefono deve comenzar con + y contener entre 7 y 15 caracteres.");
             if (string.IsNullOrEmpty(dto.Direccion))
                 throw new ArgumentException("La dirección del cliente es obligatoria.");
-            if (dto.CiudadId <= 0)
-                throw new ArgumentException("Debe seleccionar una ciudad");
+            if (string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length < 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
+
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length < 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
         }
 
         public bool EsTelefonoValido(string telefono)

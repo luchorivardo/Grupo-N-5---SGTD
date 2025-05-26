@@ -13,8 +13,8 @@ namespace Shared.Entidades
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public string Telefono { get; set; }
-        public Ciudad Ciudad { get; set; }
-        public int CiudadId { get; set; }
+        public string Ciudad { get; set; }
+        public string Provincia { get; set; }
         public Estado Estado { get; set; }
         public int EstadoId { get; set; }
 
