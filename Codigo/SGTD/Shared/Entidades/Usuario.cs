@@ -16,10 +16,8 @@ namespace Shared.Entidades
         public string Apellido { get; set; }
         public string CorreoElectronico { get; set; }
         public string Contrasenia { get; set; }
-        public int CiudadId { get; set; }
-        public Ciudad Ciudad { get; set; }
-        public int ProvinciaId { get; set; }
-        public Provincia Provincia { get; set; }
+        public string Ciudad { get; set; }
+        public string Provincia { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
         public int? EstadoId { get; set; }

@@ -38,12 +38,12 @@ namespace Shared.DTOs.UsuarioDTOs
         public string Contrasenia { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "La ciudad debe ser válida.")]
-        public int CiudadId { get; set; }
+        [StringLength(50, ErrorMessage = "La ciudad no puede superar los 50 caracteres.")]
+        public string Ciudad { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "La provincia debe ser válida.")]
-        public int ProvinciaId { get; set; }
+        [StringLength(50, ErrorMessage = "La provincia no puede superar los 50 caracteres.")]
+        public string Provincia { get; set; }
 
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "El rol debe ser válido.")]

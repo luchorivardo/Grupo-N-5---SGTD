@@ -31,7 +31,8 @@ namespace Data.Implementations
                 Direccion = p.Direccion,
                 Correo = p.Correo,
                 Telefono = p.Telefono,
-                CiudadId = p.CiudadId,
+                Ciudad = p.Ciudad,
+                Provincia = p.Provincia,
                 EstadoId = p.EstadoId
             }).ToList();
         }
@@ -53,7 +54,8 @@ namespace Data.Implementations
                 Direccion = proveedor.Direccion,
                 Correo = proveedor.Correo,
                 Telefono = proveedor.Telefono,
-                CiudadId = proveedor.CiudadId,
+                Ciudad = proveedor.Ciudad,
+                Provincia = proveedor.Provincia,
                 EstadoId = proveedor.EstadoId
             };
         }
@@ -108,8 +110,15 @@ namespace Data.Implementations
                 throw new ArgumentException("El correo no es válido.");
             if (!EsTelefonoValido(dto.Telefono))
                 throw new ArgumentException("El número de teléfono debe comenzar con + y tener entre 7 y 15 dígitos.");
-            if (dto.CiudadId <= 0)
-                throw new ArgumentException("Debe seleccionar una ciudad válida.");
+            if (string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length < 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
+
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length < 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
             if (dto.EstadoId <= 0)
                 throw new ArgumentException("Debe seleccionar un estado válido.");
         }
@@ -125,7 +134,8 @@ namespace Data.Implementations
                 Direccion = dto.Direccion,
                 Correo = dto.Correo,
                 Telefono = dto.Telefono,
-                CiudadId = dto.CiudadId,
+                Ciudad = dto.Ciudad,
+                Provincia = dto.Provincia,
                 EstadoId = dto.EstadoId
             });
         }

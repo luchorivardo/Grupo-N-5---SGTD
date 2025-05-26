@@ -13,7 +13,6 @@ namespace Data.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        public DbSet<Ciudad> Tipos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Disciplina> Disciplinas { get; set; }
         public DbSet<Estado> Estados { get; set; }
@@ -21,7 +20,6 @@ namespace Data.Context
         public DbSet<Producto> Productos { get; set; }
         public DbSet<ProductoProveedor> ProductosProveedores { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
-        public DbSet<Provincia> Provincias { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Rubro> Rubros { get; set; }
         public DbSet<RubroProveedor> RubrosProveedores { get; set; }

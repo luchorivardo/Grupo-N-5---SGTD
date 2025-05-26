@@ -14,7 +14,8 @@ namespace Shared.DTOs.ProveedorDTOs
         public string Direccion { get; set; }
         public string Correo { get; set; }
         public string Telefono { get; set; }
-        public int CiudadId { get; set; }
+        public string Ciudad { get; set; }
+        public string Provincia { get; set; }
         public int EstadoId { get; set; }
     }
 }

@@ -8,13 +8,11 @@ namespace Shared.Entidades
 {
     public class Cliente : EntidadBase
     {
-        
         public string Nombre { get; set; }
         public int Dni { get; set; }
         public string Telefono { get; set; }
         public string Direccion { get; set; }
-        public int CiudadId { get; set; }
-        public Ciudad Ciudad { get; set; }
-
+        public string Ciudad { get; set; }
+        public string Provincia { get; set; }
     }
 }

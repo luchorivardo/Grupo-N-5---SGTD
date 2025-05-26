@@ -109,11 +109,15 @@ namespace Data.Implementations
             if (dto.Contrasenia.Length < 6)
                 throw new ArgumentException("La contraseña debe tener al menos 6 caracteres.", nameof(dto.Contrasenia));
 
-            if (dto.CiudadId <= 0)
-                throw new ArgumentException("La ciudad debe ser seleccionada.", nameof(dto.CiudadId));
+            if (string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length < 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
 
-            if (dto.ProvinciaId <= 0)
-                throw new ArgumentException("La provincia debe ser seleccionada.", nameof(dto.ProvinciaId));
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length < 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
 
             if (dto.RolId <= 0)
                 throw new ArgumentException("El rol debe ser seleccionado.", nameof(dto.RolId));
@@ -161,11 +165,15 @@ namespace Data.Implementations
             if (dto.Contrasenia.Length < 6)
                 throw new ArgumentException("La contraseña debe tener al menos 6 caracteres.", nameof(dto.Contrasenia));
 
-            if (dto.CiudadId <= 0)
-                throw new ArgumentException("La ciudad debe ser seleccionada.", nameof(dto.CiudadId));
+            if(string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length < 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
 
-            if (dto.ProvinciaId <= 0)
-                throw new ArgumentException("La provincia debe ser seleccionada.", nameof(dto.ProvinciaId));
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length < 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
 
             if (dto.RolId <= 0)
                 throw new ArgumentException("El rol debe ser seleccionado.", nameof(dto.RolId));
