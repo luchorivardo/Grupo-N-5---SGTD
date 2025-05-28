@@ -23,18 +23,8 @@ namespace Data.Implementations
         public async Task<List<ProveedorReadDTO>> ObtenerTodos()
         {
             var proveedores = await _proveedorRepository.FindAllAsync();
-            return proveedores.Select(p => new ProveedorReadDTO
-            {
-                Id = p.Id,
-                Nombre = p.Nombre,
-                Cuit = p.Cuit,
-                Direccion = p.Direccion,
-                Correo = p.Correo,
-                Telefono = p.Telefono,
-                Ciudad = p.Ciudad,
-                Provincia = p.Provincia,
-                EstadoId = p.EstadoId
-            }).ToList();
+
+            return _mapper.ToReadDtoList(proveedores);
         }
 
         public async Task<ProveedorReadDTO> ObtenerPorId(int id)
@@ -46,18 +36,7 @@ namespace Data.Implementations
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
-            return new ProveedorReadDTO
-            {
-                Id = proveedor.Id,
-                Nombre = proveedor.Nombre,
-                Cuit = proveedor.Cuit,
-                Direccion = proveedor.Direccion,
-                Correo = proveedor.Correo,
-                Telefono = proveedor.Telefono,
-                Ciudad = proveedor.Ciudad,
-                Provincia = proveedor.Provincia,
-                EstadoId = proveedor.EstadoId
-            };
+            return _mapper.ToReadDto(proveedor);
         }
           public async Task<ProveedorReadDTO> CrearAsync(ProveedorCreateDTO dto)
         {
