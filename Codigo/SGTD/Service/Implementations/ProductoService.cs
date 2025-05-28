@@ -1,6 +1,7 @@
 ﻿using Data.Contracts;
-using Shared.Entidades;
+using Service.Mappers;
 using Shared.DTOs.Producto;
+using Shared.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Data.Implementations
     public class ProductoService : IProductoService
     {
         private IProductoRepository _ProductoRepository;
+        private readonly ProductoMapper _mapper = new ProductoMapper();
 
         public ProductoService(IProductoRepository productoRepository)
         {
@@ -21,15 +23,7 @@ namespace Data.Implementations
         public async Task<List<ProductoReadDTO>> ObtenerTodos()
         {
             var productos = await _ProductoRepository.FindAllAsync();
-            return productos.Select(a => new ProductoReadDTO
-            {
-                Id = a.Id,
-                Nombre = a.Nombre,
-                Cantidad = a.Cantidad,
-                Precio = a.Precio,
-                EstadoId = a.EstadoId,
-                DisciplinaId = a.DisciplinaId,
-            }).ToList();
+            return _mapper.ToReadDtoList(productos);
         }
 
         public async Task<ProductoReadDTO> ObtenerPorId(int id)
@@ -41,34 +35,20 @@ namespace Data.Implementations
             if (producto == null)
                 throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
 
-            return new ProductoReadDTO
-            {
-                Id = producto.Id,
-                Nombre = producto.Nombre,
-                Cantidad = producto.Cantidad,
-                Precio = producto.Precio,
-                EstadoId = producto.EstadoId,
-                DisciplinaId = producto.DisciplinaId,
-            };
+            return _mapper.ToReadDto(producto);
         }
 
-        public async Task Crear(ProductoCreateDTO dto)
+        public async Task<ProductoReadDTO> Crear(ProductoCreateDTO dto)
         {
             ValidarProductoCreateDTO(dto);
 
-            var producto = new Producto
-            {
-                Nombre = dto.Nombre,
-                Cantidad = dto.Cantidad,
-                Precio = dto.Precio,
-                EstadoId = dto.EstadoId,
-                DisciplinaId = dto.DisciplinaId,
-            };
+            var producto = _mapper.ToEntity(dto);
 
             await _ProductoRepository.Create(producto);
+            return _mapper.ToReadDto(producto);
         }
 
-        public async Task Editar(int id, ProductoUpdateDTO dto)
+        public async Task<ProductoReadDTO> Editar(int id, ProductoUpdateDTO dto)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -79,13 +59,11 @@ namespace Data.Implementations
             if (producto == null)
                 throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
 
-            producto.Nombre = dto.Nombre;
-            producto.Cantidad = dto.Cantidad;
-            producto.Precio = dto.Precio;
-            producto.EstadoId = dto.EstadoId;
-            producto.DisciplinaId = dto.DisciplinaId;
+            _mapper.UpdateEntity(dto, producto);
 
             await _ProductoRepository.Update(producto);
+
+            return _mapper.ToReadDto(producto);
         }
 
         public async Task Eliminar(int id)

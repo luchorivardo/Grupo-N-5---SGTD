@@ -1,4 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
+using Shared.DTOs.ClienteDTOs;
 using Shared.DTOs.ProveedorDTOs;
 using Shared.Entidades;
 
@@ -9,4 +10,7 @@ public partial class ProveedorMapper
     public partial ProveedorReadDTO ToReadDto(Proveedor entity);
 
     public partial void UpdateEntity(ProveedorUpdateDTO dto, Proveedor entity);
+
+    public List<ProveedorReadDTO> ToReadDtoList(IEnumerable<Proveedor> entities)
+    => entities.Select(ToReadDto).ToList();
 }

@@ -1,4 +1,6 @@
 ﻿using Data.Contracts;
+using Service.Mappers;
+using Shared.DTOs.ClienteDTOs;
 using Shared.DTOs.Producto;
 using Shared.Entidades;
 using System;
@@ -12,6 +14,7 @@ namespace Data.Implementations
     public class DisiplinaService : IDisiplinaService
     {
         private IDisciplinaRepository _DisciplinaRepository;
+        private readonly DisciplinaMapper _mapper = new DisciplinaMapper();
         public DisiplinaService(IDisciplinaRepository disciplinaRepository)
         {
             _DisciplinaRepository = disciplinaRepository;
@@ -19,43 +22,34 @@ namespace Data.Implementations
 
         public async Task<List<DisciplinaReadDTO>> ObtenerTodos()
         {
-            var animales = await _DisciplinaRepository.FindAllAsync();
+            var disciplina = await _DisciplinaRepository.FindAllAsync();
 
-            return animales.Select(a => new DisciplinaReadDTO
-            {
-                Id = a.Id,
-                Nombre = a.Nombre,
-            }).ToList();
+            return _mapper.ToReadDtoList(disciplina);
         }
 
         public async Task<DisciplinaReadDTO> ObtenerPorId(int id)
         {
-            var a = await _DisciplinaRepository.ObtenerPorId(id);
-            if (a == null)
-            {
-                return null;
-            }
+            if (id <= 0)
+                throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            return new DisciplinaReadDTO
-            {
-                Id = a.Id,
-                Nombre = a.Nombre
-            };
+            var disciplina = await _DisciplinaRepository.ObtenerPorId(id);
+            if (disciplina == null)
+                throw new KeyNotFoundException($"No se encontró ningúna disciplina con ID {id}.");
+
+            return _mapper.ToReadDto(disciplina);
         }
 
-        public async Task Crear(DisciplinaCreateDTO dto)
+        public async Task<DisciplinaReadDTO> Crear(DisciplinaCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre de la disciplina es obligatorio.");
-
-            var disciplina = new Disciplina
-            {
-                Nombre = dto.Nombre,
-            };
+            var disciplina = _mapper.ToEntity(dto);
             await _DisciplinaRepository.Create(disciplina);
+
+            return _mapper.ToReadDto(disciplina);
         }
 
-        public async Task Editar(int id, DisciplinaUpdateDTO dto)
+        public async Task<DisciplinaReadDTO> Editar(int id, DisciplinaUpdateDTO dto)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -67,9 +61,11 @@ namespace Data.Implementations
             if (disciplina == null)
                 throw new KeyNotFoundException($"No se encontró ningúna disciplina con ID {id}.");
 
-            disciplina.Nombre = dto.Nombre;
+            _mapper.UpdateEntity(dto, disciplina);
 
             await _DisciplinaRepository.Update(disciplina);
+
+            return _mapper.ToReadDto(disciplina);
         }
 
         public async Task Eliminar(int id)
