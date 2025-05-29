@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Contracts
+namespace Service.Contracts
 {
-    public interface IDisiplinaService 
+    public interface IDisciplinaService 
     {
         Task<List<DisciplinaReadDTO>> ObtenerTodos();
         Task<DisciplinaReadDTO> ObtenerPorId(int id);
-        Task Crear(DisciplinaCreateDTO dto);
-        Task Editar(int id, DisciplinaUpdateDTO dto);
+        Task<DisciplinaReadDTO> Crear(DisciplinaCreateDTO dto);
+        Task<DisciplinaReadDTO> Editar(int id, DisciplinaUpdateDTO dto);
         Task Eliminar(int id);
     }
 }

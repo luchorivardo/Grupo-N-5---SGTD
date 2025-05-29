@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Contracts
+namespace Service.Contracts
 {
-    public interface IUsusarioService
+    public interface IUsuarioService
     {
         Task<List<UsuarioReadDTO>> ObtenerTodosAsync();
         Task<UsuarioReadDTO> ObtenerPorIdAsync(int id);
         Task<UsuarioReadDTO> CrearAsync(UsuarioCreateDTO dto);
         Task<UsuarioReadDTO> Editar(int id, UsuarioUpdateDTO dto);
         Task Eliminar(int id);
-
     }
 }

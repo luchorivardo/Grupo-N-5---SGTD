@@ -1,14 +1,9 @@
 ﻿using Data.Contracts;
+using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.Producto;
-using Shared.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Data.Implementations
+namespace Service.Implementations
 {
     public class ProductoService : IProductoService
     {

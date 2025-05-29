@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Contracts
+namespace Data.Repositorios.Contracts
 {
     public interface IDisciplinaRepository : IRepository<Disciplina>
     {
