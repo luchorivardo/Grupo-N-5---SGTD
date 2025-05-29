@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Contracts
+namespace Service.Contracts
 {
     public interface IProveedorService
     {

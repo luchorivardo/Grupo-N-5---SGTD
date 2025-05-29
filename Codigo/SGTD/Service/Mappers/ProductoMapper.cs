@@ -1,15 +1,11 @@
-﻿using Shared.DTOs.ClienteDTOs;
+﻿using Riok.Mapperly.Abstractions;
 using Shared.DTOs.Producto;
 using Shared.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Mappers
 {
-    public class ProductoMapper
+    [Mapper]
+    public partial class ProductoMapper
     {
         public partial Producto ToEntity(ProductoCreateDTO dto);
         public partial ProductoReadDTO ToReadDto(Producto entity);

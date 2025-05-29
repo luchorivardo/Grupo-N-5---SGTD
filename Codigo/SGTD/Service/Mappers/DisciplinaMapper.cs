@@ -1,4 +1,5 @@
-﻿using Shared.DTOs.ClienteDTOs;
+﻿using Riok.Mapperly.Abstractions;
+using Shared.DTOs.ClienteDTOs;
 using Shared.Entidades;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace Service.Mappers
 {
-    public class DisciplinaMapper
+    [Mapper]
+    public partial class DisciplinaMapper
     {
         public partial Disciplina ToEntity(DisciplinaCreateDTO dto);
         public partial DisciplinaReadDTO ToReadDto(Disciplina entity);

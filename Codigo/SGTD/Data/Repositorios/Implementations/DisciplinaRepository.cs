@@ -1,5 +1,6 @@
 ﻿using Data.Context;
 using Data.Contracts;
+using Data.Repositorios.Contracts;
 using Data.Repositorios.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Shared.Entidades;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Implementations
+namespace Data.Repositorios.Implementations
 {
     public class DisciplinaRepository : Repository<Disciplina>, IDisciplinaRepository
     {

@@ -1,4 +1,6 @@
 ﻿using Data.Contracts;
+using Data.Repositorios.Contracts;
+using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
 using Shared.DTOs.UsuarioDTOs;
@@ -9,14 +11,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Data.Implementations
+namespace Service.Implementations
 {
-    public class UsusarioService : IUsusarioService
+    public class UsuarioService : IUsuarioService
     {
-        private IUsusarioRepository _usuarioRepository;
+        private IUsuarioRepository _usuarioRepository;
         private readonly UsuarioMapper _mapper = new UsuarioMapper();
 
-        public UsusarioService(IUsusarioRepository usuarioRepository)
+        public UsuarioService(IUsuarioRepository usuarioRepository)
         {
             _usuarioRepository = usuarioRepository;
         }

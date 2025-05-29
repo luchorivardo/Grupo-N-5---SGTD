@@ -1,4 +1,5 @@
-﻿using Data.Contracts;
+﻿using Service.Contracts;
+using Data.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
 using Shared.DTOs.Producto;
@@ -8,14 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Repositorios.Contracts;
 
-namespace Data.Implementations
+namespace Service.Implementations
 {
-    public class DisiplinaService : IDisiplinaService
+    public class DisciplinaService : IDisciplinaService
     {
         private IDisciplinaRepository _DisciplinaRepository;
         private readonly DisciplinaMapper _mapper = new DisciplinaMapper();
-        public DisiplinaService(IDisciplinaRepository disciplinaRepository)
+        public DisciplinaService(IDisciplinaRepository disciplinaRepository)
         {
             _DisciplinaRepository = disciplinaRepository;
         }

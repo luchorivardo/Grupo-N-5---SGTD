@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Service.Contracts;
 using Shared.DTOs.ProveedorDTOs;
 using Shared.Entidades;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Data.Implementations
+namespace Service.Implementations
 {
     public class ProveedorService : IProveedorService
     {
