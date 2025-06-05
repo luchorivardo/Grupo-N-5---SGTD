@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Repositorios.Contracts;
+using Shared.DTOs.DisciplinaDTOs;
 
 namespace Service.Implementations
 {
@@ -22,14 +23,14 @@ namespace Service.Implementations
             _DisciplinaRepository = disciplinaRepository;
         }
 
-        public async Task<List<DisciplinaReadDTO>> ObtenerTodos()
+        public async Task<List<DisciplinaReadDTO>> ObtenerTodosAsync()
         {
             var disciplina = await _DisciplinaRepository.FindAllAsync();
 
             return _mapper.ToReadDtoList(disciplina);
         }
 
-        public async Task<DisciplinaReadDTO> ObtenerPorId(int id)
+        public async Task<DisciplinaReadDTO> ObtenerPorIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -41,7 +42,7 @@ namespace Service.Implementations
             return _mapper.ToReadDto(disciplina);
         }
 
-        public async Task<DisciplinaReadDTO> Crear(DisciplinaCreateDTO dto)
+        public async Task<DisciplinaReadDTO> CrearAsync(DisciplinaCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre de la disciplina es obligatorio.");
