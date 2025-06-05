@@ -47,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> EliminarAnimal(int id)
+        public async Task<IActionResult> EliminarRol(int id)
         {
             var rol = _rolService.Eliminar(id);
             if (rol == null) return NotFound();       // 404 si no estaba
