@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Entidades
+namespace Shared.DTOs.DisciplinaDTOs
 {
     public class DisciplinaCreateDTO
     {
