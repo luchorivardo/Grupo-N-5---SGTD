@@ -9,10 +9,10 @@ namespace Service.Contracts
 {
     public interface IProveedorService
     {
-        Task<List<ProveedorReadDTO>> ObtenerTodos();
-        Task<ProveedorReadDTO> ObtenerPorId(int id);
+        Task<List<ProveedorReadDTO>> ObtenerTodosAsync();
+        Task<ProveedorReadDTO> ObtenerPorIdAsync(int id);
         Task<ProveedorReadDTO> CrearAsync(ProveedorCreateDTO dto);
-        Task<ProveedorReadDTO> EditarAsync(int id, ProveedorUpdateDTO dto);
-        Task EliminarAsync(int id);
+        Task<ProveedorReadDTO> Editar(int id, ProveedorUpdateDTO dto);
+        Task Eliminar(int id);
     }
 }
