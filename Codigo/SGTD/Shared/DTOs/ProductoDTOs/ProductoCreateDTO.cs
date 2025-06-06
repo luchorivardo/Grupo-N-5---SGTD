@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.DTOs.Producto
+namespace Shared.DTOs.ProductoDTOs
 {
     public class ProductoCreateDTO
     {

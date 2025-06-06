@@ -1,4 +1,4 @@
-﻿using Shared.DTOs.Producto;
+﻿using Shared.DTOs.ProductoDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace Service.Contracts
 {
     public interface IProductoService
     {
-        Task<List<ProductoReadDTO>> ObtenerTodos();
-        Task<ProductoReadDTO> ObtenerPorId(int id);
-        Task<ProductoReadDTO> Crear(ProductoCreateDTO dto);
+        Task<List<ProductoReadDTO>> ObtenerTodosAsync();
+        Task<ProductoReadDTO> ObtenerPorIdAsync(int id);
+        Task<ProductoReadDTO> CrearAsync(ProductoCreateDTO dto);
         Task<ProductoReadDTO> Editar(int id, ProductoUpdateDTO dto);
         Task Eliminar(int id);
     }

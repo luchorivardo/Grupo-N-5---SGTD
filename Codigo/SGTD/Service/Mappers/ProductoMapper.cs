@@ -1,5 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
-using Shared.DTOs.Producto;
+using Shared.DTOs.ProductoDTOs;
 using Shared.Entidades;
 
 namespace Service.Mappers

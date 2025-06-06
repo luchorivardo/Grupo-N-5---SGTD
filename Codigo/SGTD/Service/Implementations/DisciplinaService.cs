@@ -2,7 +2,7 @@
 using Data.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
-using Shared.DTOs.Producto;
+using Shared.DTOs.ProductoDTOs;
 using Shared.Entidades;
 using System;
 using System.Collections.Generic;

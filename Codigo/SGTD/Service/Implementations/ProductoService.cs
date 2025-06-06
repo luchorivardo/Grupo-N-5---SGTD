@@ -1,7 +1,7 @@
 ﻿using Data.Contracts;
 using Service.Contracts;
 using Service.Mappers;
-using Shared.DTOs.Producto;
+using Shared.DTOs.ProductoDTOs;
 
 namespace Service.Implementations
 {
@@ -15,13 +15,13 @@ namespace Service.Implementations
             _ProductoRepository = productoRepository;
         }
 
-        public async Task<List<ProductoReadDTO>> ObtenerTodos()
+        public async Task<List<ProductoReadDTO>> ObtenerTodosAsync()
         {
             var productos = await _ProductoRepository.FindAllAsync();
             return _mapper.ToReadDtoList(productos);
         }
 
-        public async Task<ProductoReadDTO> ObtenerPorId(int id)
+        public async Task<ProductoReadDTO> ObtenerPorIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -33,7 +33,7 @@ namespace Service.Implementations
             return _mapper.ToReadDto(producto);
         }
 
-        public async Task<ProductoReadDTO> Crear(ProductoCreateDTO dto)
+        public async Task<ProductoReadDTO> CrearAsync(ProductoCreateDTO dto)
         {
             ValidarProductoCreateDTO(dto);
 
