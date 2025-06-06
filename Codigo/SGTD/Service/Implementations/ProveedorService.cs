@@ -21,14 +21,14 @@ namespace Service.Implementations
             _proveedorRepository = proveedorRepository;
         }
 
-        public async Task<List<ProveedorReadDTO>> ObtenerTodos()
+        public async Task<List<ProveedorReadDTO>> ObtenerTodosAsync()
         {
             var proveedores = await _proveedorRepository.FindAllAsync();
 
             return _mapper.ToReadDtoList(proveedores);
         }
 
-        public async Task<ProveedorReadDTO> ObtenerPorId(int id)
+        public async Task<ProveedorReadDTO> ObtenerPorIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -49,7 +49,7 @@ namespace Service.Implementations
             return _mapper.ToReadDto(proveedor);
         }
 
-        public async Task<ProveedorReadDTO> EditarAsync(int id, ProveedorUpdateDTO dto)
+        public async Task<ProveedorReadDTO> Editar(int id, ProveedorUpdateDTO dto)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -66,7 +66,7 @@ namespace Service.Implementations
             return _mapper.ToReadDto(proveedor);
         }
 
-        public async Task EliminarAsync(int id)
+        public async Task Eliminar(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
@@ -91,13 +91,12 @@ namespace Service.Implementations
             if (!EsTelefonoValido(dto.Telefono))
                 throw new ArgumentException("El número de teléfono debe comenzar con + y tener entre 7 y 15 dígitos.");
             if (string.IsNullOrWhiteSpace(dto.Ciudad))
-                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
-            if (dto.Ciudad.Length < 50)
+                throw new ArgumentException("La ciudad es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length > 50)
                 throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
-
             if (string.IsNullOrWhiteSpace(dto.Provincia))
-                throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
-            if (dto.Provincia.Length < 50)
+                throw new ArgumentException("La provincia es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length > 50)
                 throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
             if (dto.EstadoId <= 0)
                 throw new ArgumentException("Debe seleccionar un estado válido.");
