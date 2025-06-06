@@ -86,12 +86,11 @@ namespace Service.Implementations
                 throw new ArgumentException("La dirección del cliente es obligatoria.");
             if (string.IsNullOrWhiteSpace(dto.Ciudad))
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
-            if (dto.Ciudad.Length < 50)
+            if (dto.Ciudad.Length > 50)
                 throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
-
             if (string.IsNullOrWhiteSpace(dto.Provincia))
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
-            if (dto.Provincia.Length < 50)
+            if (dto.Provincia.Length > 50)
                 throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
         }
 
@@ -107,12 +106,11 @@ namespace Service.Implementations
                 throw new ArgumentException("La dirección del cliente es obligatoria.");
             if (string.IsNullOrWhiteSpace(dto.Ciudad))
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
-            if (dto.Ciudad.Length < 50)
+            if (dto.Ciudad.Length > 50)
                 throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
-
             if (string.IsNullOrWhiteSpace(dto.Provincia))
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
-            if (dto.Provincia.Length < 50)
+            if (dto.Provincia.Length > 50)
                 throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
         }
 
