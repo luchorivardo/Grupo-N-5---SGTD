@@ -49,9 +49,25 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarProducto(int id)
         {
-            var producto = _productoService.Eliminar(id);
-            if (producto == null) return NotFound();
-            return NoContent();
+            try
+            {
+                await _productoService.Eliminar(id);
+                return NoContent(); 
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // 404 si no encuentra nada el hdp
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // 400 si el id es invalido
+            }
+            catch (Exception ex)
+            {
+                // log para ver que error tengo jajan´t :(
+                return StatusCode(500, "Ocurrio un error interno al eliminar el producto");
+            }
+
         }
     }
 }
