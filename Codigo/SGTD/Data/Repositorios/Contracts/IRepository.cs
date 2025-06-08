@@ -16,7 +16,7 @@ namespace Data.Repositorios.Contracts
         Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
         Task Create(T entity);
         Task Update(T entity);
-        void Delete(T entity);
+        Task Delete(T entity);
         bool Save();
         Task SaveAsync();
     }

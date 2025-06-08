@@ -53,9 +53,10 @@ namespace Data.Repositorios.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             this._context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
         public bool Save()

@@ -68,12 +68,12 @@ namespace Service.Implementations
 
             var producto = await _ProductoRepository.ObtenerPorId(id);
             if (producto == null)
-                throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
+                throw new KeyNotFoundException($"No se encontro ningún producto con ID {id}.");
 
-            _ProductoRepository.Delete(producto);
+            await _ProductoRepository.Delete(producto); 
         }
 
-       
+
         private void ValidarProductoCreateDTO(ProductoCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
