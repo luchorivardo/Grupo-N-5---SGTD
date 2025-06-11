@@ -10,6 +10,7 @@ namespace Shared.DTOs.UsuarioDTOs
 {
     public class UsuarioReadDTO
     {
+        public int Id { get; set; }
         public int TipoDocumento { get; set; }
         public string NumeroDocumento { get; set; }
         public string Nombre { get; set; }
