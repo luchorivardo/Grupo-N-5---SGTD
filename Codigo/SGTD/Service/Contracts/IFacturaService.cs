@@ -9,7 +9,9 @@ namespace Service.Contracts
 {
     public interface IFacturaService
     {
-
+        Task<List<FacturaReadDTO>> ObtenerTodosAsync();
+        Task<FacturaReadDTO> ObtenerPorIdAsync(int id);
+        Task<FacturaReadDTO> CrearAsync(FacturaCreateDTO dto);
         Task<FacturaReadDTO> Editar(int id, FacturaUpdateDTO dto);
         Task Eliminar(int id);
     }
