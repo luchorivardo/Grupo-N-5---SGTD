@@ -75,7 +75,7 @@ namespace Service.Implementations
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
-            _proveedorRepository.Delete(proveedor);
+            await _proveedorRepository.Delete(proveedor);
         }
 
         private void ValidarProveedorCreateDTO(ProveedorCreateDTO dto)

@@ -66,7 +66,7 @@ namespace Service.Implementations
             if (estado == null)
                 throw new KeyNotFoundException($"No se encontró ninguna factura con ID {id}.");
 
-            _facturaRepository.Delete(estado);
+            await _facturaRepository.Delete(estado);
         }
     }
 }

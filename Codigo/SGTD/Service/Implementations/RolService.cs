@@ -72,7 +72,7 @@ namespace Service.Implementations
             if (rol == null)
                 throw new KeyNotFoundException($"No se encontró ningún cliente con ID {id}.");
 
-            _rolRepository.Delete(rol);
+            await _rolRepository.Delete(rol);
         }
     }
 }
