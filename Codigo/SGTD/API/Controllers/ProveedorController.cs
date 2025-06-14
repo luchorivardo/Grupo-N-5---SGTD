@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Service.Implementations;
 using Shared.DTOs.ProveedorDTOs;
 
 namespace API.Controllers
@@ -49,9 +50,24 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarProveedor(int id)
         {
-            var proveedor = _proveedorService.Eliminar(id);
-            if (proveedor == null) return NotFound();
-            return NoContent();
+            try
+            {
+                await _proveedorService.Eliminar(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // 404 si no encuentra nada el hdp
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // 400 si el id es invalido
+            }
+            catch (Exception ex)
+            {
+                // log para ver que error tengo jajan´t :(
+                return StatusCode(500, "Ocurrio un error interno al eliminar el proveedor");
+            }
         }
     }
 }

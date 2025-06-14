@@ -1,7 +1,10 @@
-﻿using Service.Contracts;
-using Data.Contracts;
+﻿using Data.Contracts;
+using Data.Implementations;
+using Data.Repositorios.Contracts;
+using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
+using Shared.DTOs.DisciplinaDTOs;
 using Shared.DTOs.ProductoDTOs;
 using Shared.Entidades;
 using System;
@@ -9,8 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Data.Repositorios.Contracts;
-using Shared.DTOs.DisciplinaDTOs;
 
 namespace Service.Implementations
 {
@@ -79,7 +80,7 @@ namespace Service.Implementations
             var disciplina = await _DisciplinaRepository.ObtenerPorId(id);
             if (disciplina == null)
                 throw new KeyNotFoundException($"No se encontró ningúna disciplina con ID {id}.");
-            _DisciplinaRepository.Delete(disciplina);
+            await _DisciplinaRepository.Delete(disciplina);
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Service.Implementations
             if (usuario == null)
                 throw new KeyNotFoundException($"No se encontró ningún usuario con ID {id}.");
 
-            _usuarioRepository.Delete(usuario);
+            await _usuarioRepository.Delete(usuario);
         }
 
 

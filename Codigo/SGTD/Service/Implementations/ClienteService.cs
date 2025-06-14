@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Data.Implementations;
 using Service.Contracts;
 using Shared.DTOs.ClienteDTOs;
 using System.Text.RegularExpressions;
@@ -70,7 +71,7 @@ namespace Service.Implementations
             if (cliente == null)
                 throw new KeyNotFoundException($"No se encontró ningún cliente con ID {id}.");
 
-            _clienteRepository.Delete(cliente);
+            await _clienteRepository.Delete(cliente);
         }
 
 

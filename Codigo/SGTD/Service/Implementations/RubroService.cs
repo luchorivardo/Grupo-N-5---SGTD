@@ -71,7 +71,7 @@ namespace Service.Implementations
             if (rubro == null)
                 throw new KeyNotFoundException($"No se encontró ningún cliente con ID {id}.");
 
-            _rubroRepository.Delete(rubro);
+            await _rubroRepository.Delete(rubro);
         }
     }
 }

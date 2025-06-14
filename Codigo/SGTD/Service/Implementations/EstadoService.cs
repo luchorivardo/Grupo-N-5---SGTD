@@ -71,7 +71,7 @@ namespace Service.Implementations
             if (estado == null)
                 throw new KeyNotFoundException($"No se encontró ningún cliente con ID {id}.");
 
-            _estadoRepository.Delete(estado);
+            await _estadoRepository.Delete(estado);
         }
     }
 }
