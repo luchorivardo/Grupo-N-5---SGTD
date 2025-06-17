@@ -4,6 +4,7 @@ using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
 using Shared.DTOs.UsuarioDTOs;
+using Shared.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,25 +114,28 @@ namespace Service.Implementations
 
             if (string.IsNullOrWhiteSpace(dto.Ciudad))
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Ciudad));
-            if (dto.Ciudad.Length < 50)
-                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length > 50)
+                throw new ArgumentException("La ciudad debe tener menos de 50 caracteres.", nameof(dto.Ciudad));
 
             if (string.IsNullOrWhiteSpace(dto.Provincia))
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
-            if (dto.Provincia.Length < 50)
-                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
+            if (dto.Provincia.Length > 50)
+                throw new ArgumentException("La provincia debe tener menos de 50 caracteres.", nameof(dto.Provincia));
 
             if (dto.RolId <= 0)
                 throw new ArgumentException("El rol debe ser seleccionado.", nameof(dto.RolId));
 
             if (dto.EstadoId != null && dto.EstadoId <= 0)
                 throw new ArgumentException("El estado debe ser un valor válido si se especifica.", nameof(dto.EstadoId));
+            var hayUsuario = _usuarioRepository.FindAll();
+            if (hayUsuario.Count() != 0)
+            {
+                if (await _usuarioRepository.ExistePorDniAsync(dto.NumeroDocumento))
+                    throw new ArgumentException("Ya existe un usuario con ese número de documento.", nameof(dto.NumeroDocumento));
 
-            if (await _usuarioRepository.ExistePorDniAsync(dto.NumeroDocumento))
-                throw new ArgumentException("Ya existe un usuario con ese número de documento.", nameof(dto.NumeroDocumento));
-
-            if (await _usuarioRepository.ExistePorCorreoAsync(dto.CorreoElectronico))
-                throw new ArgumentException("Ya existe un usuario con ese correo electrónico.", nameof(dto.CorreoElectronico));
+                if (await _usuarioRepository.ExistePorCorreoAsync(dto.CorreoElectronico))
+                    throw new ArgumentException("Ya existe un usuario con ese correo electrónico.", nameof(dto.CorreoElectronico));
+            }
         }
         
 
@@ -182,12 +186,15 @@ namespace Service.Implementations
 
             if (dto.EstadoId != null && dto.EstadoId <= 0)
                 throw new ArgumentException("El estado debe ser un valor válido si se especifica.", nameof(dto.EstadoId));
+            var hayUsuario = _usuarioRepository.FindAll();
+            if (hayUsuario != null)
+            {
+                if (await _usuarioRepository.ExistePorDniAsync(dto.NumeroDocumento))
+                    throw new ArgumentException("Ya existe un usuario con ese número de documento.", nameof(dto.NumeroDocumento));
 
-            if (await _usuarioRepository.ExistePorDniAsync(dto.NumeroDocumento, excludeUserId: id))
-                throw new ArgumentException("Ya existe otro usuario con ese número de documento.", nameof(dto.NumeroDocumento));
-
-            if (await _usuarioRepository.ExistePorCorreoAsync(dto.CorreoElectronico, excludeUserId: id))
-                throw new ArgumentException("Ya existe otro usuario con ese correo electrónico.", nameof(dto.CorreoElectronico));
+                if (await _usuarioRepository.ExistePorCorreoAsync(dto.CorreoElectronico))
+                    throw new ArgumentException("Ya existe un usuario con ese correo electrónico.", nameof(dto.CorreoElectronico));
+            }
 
         }
 
