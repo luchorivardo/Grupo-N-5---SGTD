@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Service.Implementations;
 using Shared.DTOs.ProveedorDTOs;
+using Shared.Entidades;
 
 namespace API.Controllers
 {
@@ -20,31 +21,91 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearProveedor([FromBody] ProveedorCreateDTO dto)
         {
-            var proveedor = await _proveedorService.CrearAsync(dto);
-            return CreatedAtAction(nameof(ObtenerProveedorPorId), new { id = proveedor.Id }, proveedor);
+            if (dto == null)
+                return BadRequest("Los datos del cliente no pueden ser nulos.");
+
+            try
+            {
+                var proveedor = await _proveedorService.CrearAsync(dto);
+                if (proveedor != null)
+                    return CreatedAtAction(nameof(ObtenerProveedorPorId), new { id = proveedor.Id }, proveedor);
+
+                return Conflict("Ya existe un proveedor con esos datos.");
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al crear el proveedor.");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> ObtenerProveedor()
         {
-            var proveedor = await _proveedorService.ObtenerTodosAsync();
-            return Ok(proveedor);
+            try
+            {
+                var proveedor = await _proveedorService.ObtenerTodosAsync();
+                if (proveedor == null || !proveedor.Any())
+                    return NoContent();
+
+                return Ok(proveedor);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al obtener los proveedor.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerProveedorPorId(int id)
         {
-            var proveedor = await _proveedorService.ObtenerPorIdAsync(id);
-            if (proveedor == null) return NotFound();
-            return Ok(proveedor);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+
+            try
+            {
+                var proveedor = await _proveedorService.ObtenerPorIdAsync(id);
+                if (proveedor != null)
+
+                    return Ok(proveedor);
+                return BadRequest(proveedor);
+
+            }
+            catch (Exception)
+            {
+                return NotFound($"No se encontró un proveedor con ID {id}.");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarProveedor(int id, [FromBody] ProveedorUpdateDTO dto)
         {
-            var proveedor = await _proveedorService.Editar(id, dto);
-            if (proveedor == null) return NotFound();
-            return Ok(proveedor);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            if (dto == null)
+                return BadRequest("Los datos de actualización no pueden ser nulos.");
+
+            try
+            {
+                var proveedor = await _proveedorService.Editar(id, dto);
+                if (proveedor != null)
+                    return Ok(proveedor);
+
+
+                return BadRequest(proveedor);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al actualizar el proveedor.");
+            }
         }
 
         [HttpDelete("{id}")]
