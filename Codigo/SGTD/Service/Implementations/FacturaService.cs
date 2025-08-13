@@ -51,6 +51,7 @@ namespace Service.Implementations
             if (factura == null)
                 throw new KeyNotFoundException($"No se encontró ninguna factura con ID {id}.");
 
+            factura.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, factura);
             await _facturaRepository.Update(factura);
 

@@ -55,6 +55,7 @@ namespace Service.Implementations
             if (cliente == null)
                 throw new KeyNotFoundException($"No se encontró ningún cliente con ID {id}.");
 
+            cliente.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, cliente);
 
             await _clienteRepository.Update(cliente);

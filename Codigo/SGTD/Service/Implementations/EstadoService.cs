@@ -55,6 +55,7 @@ namespace Service.Implementations
             if (estado == null)
                 throw new KeyNotFoundException($"No se encontró ningún estado con ID {id}.");
 
+            estado.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, estado);
 
             await _estadoRepository.Update(estado);

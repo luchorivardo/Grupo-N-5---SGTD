@@ -21,31 +21,91 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearDisciplina([FromBody] DisciplinaCreateDTO dto)
         {
-            var disciplina = await _disciplinaService.CrearAsync(dto);
-            return CreatedAtAction(nameof(ObtenerDisciplinaPorId), new { id = disciplina.Id }, disciplina);
+            if (dto == null)
+                return BadRequest("Los datos del cliente no pueden ser nulos.");
+
+            try
+            {
+                var disciplina = await _disciplinaService.CrearAsync(dto);
+                if (disciplina != null)
+                    return CreatedAtAction(nameof(ObtenerDisciplinaPorId), new { id = disciplina.Id }, disciplina);
+
+                return Conflict("Ya existe una disciplina con esos datos.");
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al crear la disciplina.");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> ObtenerDisciplina()
         {
-            var disciplina = await _disciplinaService.ObtenerTodosAsync();
-            return Ok(disciplina);
+            try
+            {
+                var disciplina = await _disciplinaService.ObtenerTodosAsync();
+                if (disciplina == null || !disciplina.Any())
+                    return NoContent();
+
+                return Ok(disciplina);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al obtener las disciplinas.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerDisciplinaPorId(int id)
         {
-            var disciplina = await _disciplinaService.ObtenerPorIdAsync(id);
-            if (disciplina == null) return NotFound();
-            return Ok(disciplina);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+
+            try
+            {
+                var disciplina = await _disciplinaService.ObtenerPorIdAsync(id);
+                if (disciplina != null)
+
+                    return Ok(disciplina);
+                return BadRequest(disciplina);
+
+            }
+            catch (Exception)
+            {
+                return NotFound($"No se encontró una disciplina con ID {id}.");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarDisciplina(int id, [FromBody] DisciplinaUpdateDTO dto)
         {
-            var disciplina = await _disciplinaService.Editar(id, dto);
-            if (disciplina == null) return NotFound();
-            return Ok(disciplina);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            if (dto == null)
+                return BadRequest("Los datos de actualización no pueden ser nulos.");
+
+            try
+            {
+                var disciplina = await _disciplinaService.Editar(id, dto);
+                if (disciplina != null)
+                    return Ok(disciplina);
+
+
+                return BadRequest(disciplina);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al actualizar la disciplina.");
+            }
         }
 
         [HttpDelete("{id}")]

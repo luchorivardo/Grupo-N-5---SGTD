@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Service.Implementations;
 using Shared.DTOs.ProductoDTOs;
+using Shared.Entidades;
 
 namespace API.Controllers
 {
@@ -19,31 +21,89 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearProducto([FromBody] ProductoCreateDTO dto)
         {
-            var producto = await _productoService.CrearAsync(dto);
-            return CreatedAtAction(nameof(ObtenerProductoPorId), new { id = producto.Id }, producto);
+            if (dto == null)
+                return BadRequest("Los datos del cliente no pueden ser nulos.");
+            try
+            {
+                var producto = await _productoService.CrearAsync(dto);
+                if (producto != null)
+                    return CreatedAtAction(nameof(_productoService.ObtenerPorIdAsync), new { id = producto.Id }, producto);
+
+                return Conflict("Ya existe un producto con esos datos.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al crear el producto.");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> ObtenerProducto()
         {
-            var producto = await _productoService.ObtenerTodosAsync();
-            return Ok(producto);
+            try
+            {
+                var producto = await _productoService.ObtenerTodosAsync();
+                if (producto == null || !producto.Any())
+                    return NoContent();
+
+                return Ok(producto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al obtener los productos.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerProductoPorId(int id)
         {
-            var producto = await _productoService.ObtenerPorIdAsync(id);
-            if (producto == null) return NotFound();
-            return Ok(producto);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            try
+            {
+                var producto = await _productoService.ObtenerPorIdAsync(id);
+                if (producto != null)
+
+                    return Ok(producto);
+                return BadRequest(producto);
+
+            }
+            catch (Exception)
+            {
+                return NotFound($"No se encontró un producto con ID {id}.");
+            }
+        
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarProducto(int id, [FromBody] ProductoUpdateDTO dto)
         {
-            var producto = await _productoService.Editar(id, dto);
-            if (producto == null) return NotFound();
-            return Ok(producto);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            if (dto == null)
+                return BadRequest("Los datos de actualización no pueden ser nulos.");
+
+            try
+            {
+                var producto = await _productoService.Editar(id, dto);
+                if (producto != null)
+                    return Ok(producto);
+
+
+                return BadRequest(producto);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al actualizar el producto.");
+            }
         }
 
         [HttpDelete("{id}")]

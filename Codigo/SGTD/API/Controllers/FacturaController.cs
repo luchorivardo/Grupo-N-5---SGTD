@@ -20,8 +20,26 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearFactura([FromBody] FacturaCreateDTO dto)
         {
-            var factura = await _facturaService.CrearAsync(dto);
-            return CreatedAtAction(nameof(ObtenerFacturaPorId), new { id = factura.Id }, factura);
+            if (dto == null)
+                return BadRequest("Los datos del cliente no pueden ser nulos.");
+
+            try
+            {
+                var factura = await _facturaService.CrearAsync(dto);
+                if (factura != null)
+                    return CreatedAtAction(nameof(ObtenerFacturaPorId), new { id = factura.Id }, factura);
+               
+                return Conflict("Ya existe una factura con esos datos.");
+                
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al crear la factura.");
+            }
 
         }
 
@@ -29,24 +47,67 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerFactura()
         {
-            var factura = await _facturaService.ObtenerTodosAsync();
-            return Ok(factura);
-        }
+            try
+            {
+                var facturas = await _facturaService.ObtenerTodosAsync();
+                if (facturas == null || !facturas.Any())
+                    return NoContent();
+                return Ok(facturas);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al obtener las facturas.");
+            }
 
-        [HttpGet("{id}")]
+        }
+           
+
+            [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerFacturaPorId(int id)
         {
-            var factura = await _facturaService.ObtenerPorIdAsync(id);
-            if (factura == null) return NotFound();
-            return Ok(factura);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            try
+            {
+                var factura = await _facturaService.ObtenerPorIdAsync(id);
+                if (factura != null)
+                    return Ok(factura);
+                return BadRequest(factura);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); 
+            }
+            catch (Exception)
+            {
+                return NotFound($"No se encontró un cliente con ID {id}.");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarFactura(int id, [FromBody] FacturaUpdateDTO dto)
         {
-            var factura = await _facturaService.Editar(id, dto);
-            if (factura == null) return NotFound();
-            return Ok(factura);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            if (dto == null)
+                return BadRequest("Los datos de actualización no pueden ser nulos.");
+            try
+            {
+                var factura = await _facturaService.Editar(id, dto);
+                if (factura != null)
+                    return Ok(factura);
+
+
+                return BadRequest(factura);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al actualizar la factura.");
+            }
         }
 
         [HttpDelete("{id}")]

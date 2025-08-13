@@ -60,6 +60,7 @@ namespace Service.Implementations
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
+            proveedor.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, proveedor);
             await _proveedorRepository.Update(proveedor);
 

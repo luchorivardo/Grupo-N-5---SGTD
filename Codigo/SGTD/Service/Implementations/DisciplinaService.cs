@@ -65,6 +65,7 @@ namespace Service.Implementations
             if (disciplina == null)
                 throw new KeyNotFoundException($"No se encontró ningúna disciplina con ID {id}.");
 
+            disciplina.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, disciplina);
 
             await _DisciplinaRepository.Update(disciplina);
