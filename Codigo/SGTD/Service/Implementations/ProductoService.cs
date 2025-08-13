@@ -54,6 +54,7 @@ namespace Service.Implementations
             if (producto == null)
                 throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
 
+            producto.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, producto);
 
             await _ProductoRepository.Update(producto);

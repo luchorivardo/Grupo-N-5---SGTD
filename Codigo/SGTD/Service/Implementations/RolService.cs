@@ -56,6 +56,7 @@ namespace Service.Implementations
             if (rol == null)
                 throw new KeyNotFoundException($"No se encontró ningún estado con ID {id}.");
 
+            rol.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, rol);
 
             await _rolRepository.Update(rol);

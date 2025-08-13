@@ -20,31 +20,92 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearRol([FromBody] RolCreateDTO dto)
         {
-            var rol = await _rolService.CrearAsync(dto);
-            return CreatedAtAction(nameof(ObtenerRolPorId), new { id = rol.Id }, rol);
+            if (dto == null)
+                return BadRequest("Los datos del cliente no pueden ser nulos.");
+
+            try
+            {
+                var rol = await _rolService.CrearAsync(dto);
+                if (rol != null)
+                    return CreatedAtAction(nameof(ObtenerRolPorId), new { id = rol.Id }, rol);
+
+                return Conflict("Ya existe un rol con esos datos.");
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al crear el rol.");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> ObtenerRol()
         {
-            var rol = await _rolService.ObtenerTodosAsync();
-            return Ok(rol);
+
+            try
+            {
+                var rol = await _rolService.ObtenerTodosAsync();
+                if (rol == null || !rol.Any())
+                    return NoContent();
+
+                return Ok(rol);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al obtener los roles.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerRolPorId(int id)
         {
-            var rol = await _rolService.ObtenerPorIdAsync(id);
-            if (rol == null) return NotFound();
-            return Ok(rol);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+
+            try
+            {
+                var rol = await _rolService.ObtenerPorIdAsync(id);
+                if (rol != null)
+
+                    return Ok(rol);
+                return BadRequest(rol);
+
+            }
+            catch (Exception)
+            {
+                return NotFound($"No se encontró un rol con ID {id}.");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarRol(int id, [FromBody] RolUpdateDTO dto)
         {
-            var rol = await _rolService.Editar(id, dto);
-            if (rol == null) return NotFound();
-            return Ok(rol);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            if (dto == null)
+                return BadRequest("Los datos de actualización no pueden ser nulos.");
+
+            try
+            {
+                var rol = await _rolService.Editar(id, dto);
+                if (rol != null)
+                    return Ok(rol);
+
+
+                return BadRequest(rol);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al actualizar el rol.");
+            }
         }
 
         [HttpDelete("{id}")]

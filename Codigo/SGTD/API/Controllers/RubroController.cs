@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Service.Implementations;
 using Shared.DTOs.RubroDTOs;
+using Shared.Entidades;
 
 namespace API.Controllers
 {
@@ -20,31 +21,91 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CrearRubro([FromBody] RubroCreateDTO dto)
         {
-            var rubro = await _rubroService.CrearAsync(dto);
-            return CreatedAtAction(nameof(ObtenerRubroPorId), new { id = rubro.Id }, rubro);
+            if (dto == null)
+                return BadRequest("Los datos del cliente no pueden ser nulos.");
+
+            try
+            {
+                var rubro = await _rubroService.CrearAsync(dto);
+                if (rubro != null)
+                    return CreatedAtAction(nameof(ObtenerRubroPorId), new { id = rubro.Id }, rubro);
+
+                return Conflict("Ya existe un rubro con esos datos.");
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al crear el cliente.");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> ObtenerRubro()
         {
-            var rubro = await _rubroService.ObtenerTodosAsync();
-            return Ok(rubro);
+            try
+            {
+                var rubro = await _rubroService.ObtenerTodosAsync();
+                if (rubro == null || !rubro.Any())
+                    return NoContent();
+
+                return Ok(rubro);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al obtener los rubros.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerRubroPorId(int id)
         {
-            var rubro = await _rubroService.ObtenerPorIdAsync(id);
-            if (rubro == null) return NotFound();
-            return Ok(rubro);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+
+            try
+            {
+                var rubro = await _rubroService.ObtenerPorIdAsync(id);
+                if (rubro != null)
+
+                    return Ok(rubro);
+                return BadRequest(rubro);
+
+            }
+            catch (Exception)
+            {
+                return NotFound($"No se encontró un rubro con ID {id}.");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarRubro(int id, [FromBody] RubroUpdateDTO dto)
         {
-            var rubro = await _rubroService.Editar(id, dto);
-            if (rubro == null) return NotFound();
-            return Ok(rubro);
+            if (id <= 0)
+                return BadRequest("El ID debe ser mayor a cero.");
+            if (dto == null)
+                return BadRequest("Los datos de actualización no pueden ser nulos.");
+
+            try
+            {
+                var rubro = await _rubroService.Editar(id, dto);
+                if (rubro != null)
+                    return Ok(rubro);
+
+
+                return BadRequest(rubro);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno al actualizar el rubro.");
+            }
         }
 
         [HttpDelete("{id}")]
