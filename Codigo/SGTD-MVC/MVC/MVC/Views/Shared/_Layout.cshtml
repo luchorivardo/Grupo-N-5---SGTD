@@ -1,49 +1,89 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVC</title>
+    <title>@ViewData["Title"] - Sistema</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Barra superior -->
+    <header class="topbar">
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 12H42M16 24H42M16 36H42M6 12H6.02M6 24H6.02M6 36H6.02" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <span class="topbar-title">Sistema de Gestion de Tienda Deportiva</span>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar collapsed" id="sidebar">
+        <a class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index" title="Inicio">
+            <svg class="mar-18px" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 44V24H30V44M6 18L24 4L42 18V40C42 41.0609 41.5786 42.0783 40.8284 42.8284C40.0783 43.5786 39.0609 44 38 44H10C8.93913 44 7.92172 43.5786 7.17157 42.8284C6.42143 42.0783 6 41.0609 6 40V18Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+            <i class="bi bi-house"></i><span class="nav-text">Inicio</span>
+        </a>
+        <a class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Stock" ? "active" : "")" asp-controller="Stock" asp-action="Index" title="Stock">
+            <svg class="mar-18px" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M42 16V42H6V16M20 24H28M2 6H46V16H2V6Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+            <i class="bi bi-box-seam"></i><span class="nav-text">Stock</span>
+        </a>
+        <a class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Proveedores" ? "active" : "")" asp-controller="Proveedores" asp-action="Index" title="Proveedores">
+            <svg class="mar-18px" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M32 8H36C37.0609 8 38.0783 8.42143 38.8284 9.17157C39.5786 9.92172 40 10.9391 40 12V40C40 41.0609 39.5786 42.0783 38.8284 42.8284C38.0783 43.5786 37.0609 44 36 44H12C10.9391 44 9.92172 43.5786 9.17157 42.8284C8.42143 42.0783 8 41.0609 8 40V12C8 10.9391 8.42143 9.92172 9.17157 9.17157C9.92172 8.42143 10.9391 8 12 8H16M18 4H30C31.1046 4 32 4.89543 32 6V10C32 11.1046 31.1046 12 30 12H18C16.8954 12 16 11.1046 16 10V6C16 4.89543 16.8954 4 18 4Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+			</svg>
+
+            <i class="bi bi-truck"></i><span class="nav-text">Proveedores</span>
+        </a>
+        <a class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Usuarios" ? "active" : "")" asp-controller="Usuarios" asp-action="Index" title="Usuarios">
+			<svg class="mar-18px" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M40 42V38C40 35.8783 39.1571 33.8434 37.6569 32.3431C36.1566 30.8429 34.1217 30 32 30H16C13.8783 30 11.8434 30.8429 10.3431 32.3431C8.84285 33.8434 8 35.8783 8 38V42M32 14C32 18.4183 28.4183 22 24 22C19.5817 22 16 18.4183 16 14C16 9.58172 19.5817 6 24 6C28.4183 6 32 9.58172 32 14Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+			</svg>
+
+            <i class="bi bi-people"></i><span class="nav-text">Usuarios</span>
+        </a>
+        <a class="nav-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Reportes" ? "active" : "")" asp-controller="Reportes" asp-action="Index" title="Reportes">
+            <svg class="mar-18px" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 42V10C32 8.93913 31.5786 7.92172 30.8284 7.17157C30.0783 6.42143 29.0609 6 28 6H20C18.9391 6 17.9217 6.42143 17.1716 7.17157C16.4214 7.92172 16 8.93913 16 10V42M8 14H40C42.2091 14 44 15.7909 44 18V38C44 40.2091 42.2091 42 40 42H8C5.79086 42 4 40.2091 4 38V18C4 15.7909 5.79086 14 8 14Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <i class="bi bi-graph-up"></i><span class="nav-text">Reportes</span>
+        </a>
+
+        <form asp-controller="Cuenta" asp-action="Logout" method="post">
+			<button class="btn-logout">
+				<svg class="mar-18px" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M18 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V10C6 8.93913 6.42143 7.92172 7.17157 7.17157C7.92172 6.42143 8.93913 6 10 6H18M32 34L42 24M42 24L32 14M42 24H18" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+                <i class="bi bi-box-arrow-right"></i><span class="nav-text">Cerrar Sesión</span>
+			</button>
+        </form>
+    </nav>
+
+    <!-- Contenido -->
+    <main class="content" id="main-content">
+        @RenderBody()
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const mainContent = document.getElementById("main-content");
+            sidebar.classList.toggle("collapsed");
+            mainContent.classList.toggle("expanded");
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
 </body>
 </html>
