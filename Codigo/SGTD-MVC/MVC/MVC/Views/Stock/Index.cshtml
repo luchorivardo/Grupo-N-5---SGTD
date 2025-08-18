@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Stock";
+}
+
+<link rel="stylesheet" href="~/css/proveedores.css" asp-append-version="true" />
+
+<div class="content-container p-3 proveedores-page">
+    <!-- Fila superior: filtro + acciones rápidas -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <div class="search-wrapper d-flex align-items-center w-100 w-md-40">
+            <label for="q" class="me-2 visually-hidden">Buscar</label>
+            <div class="input-group">
+                <span class="input-group-text bg-dark border-0" style="color: #dedede; padding: 5px 8px; border-radius: 8px 0 0 8px;">
+                    <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M42 42L33.3 33.3M38 22C38 30.8366 30.8366 38 22 38C13.1634 38 6 30.8366 6 22C6 13.1634 13.1634 6 22 6C30.8366 6 38 13.1634 38 22Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </span>
+                <input id="q" type="text" class="form-control search-input" placeholder="Buscar por código, nombre, proveedor..." />
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla dentro de un contenedor con scroll -->
+    <div class="table-card">
+        <div class="table-responsive proveedores-table-wrapper">
+            <table class="table proveedores-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="check-col"><input type="checkbox" id="checkAll" /></th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Proveedor</th>
+                        <th>Cantidad</th>
+                        <th>Rubro</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body">
+                    @* Ejemplo: recorriendo el modelo *@
+                    @if (Model != null)
+                    {
+                        foreach (var producto in Model)
+                        {
+                            <tr>
+                                <td class="check-col"><input type="checkbox" name="sel" value="@producto.Id" /></td>
+                                <td>@producto.Codigo</td>
+                                <td>@producto.Nombre</td>
+                                <td>@producto.Proveedor</td>
+                                <td class="@(producto.Cantidad < 5 ? "text-danger fw-bold" : "")">@producto.Cantidad</td>
+                                <td>@producto.Rubro</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6" class="text-center text-muted">No hay productos en stock</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="actions-row mt-3 d-flex flex-wrap gap-3 justify-content-between sticky-footer">
+            <a asp-controller="Stock" asp-action="Create" class="btn btn-lg btn-add">AÑADIR PRODUCTO</a>
+            <div class="ms-auto d-flex gap-2">
+                <button id="btnModify" class="btn btn-lg btn-edit" disabled>MODIFICAR PRODUCTO</button>
+                <button id="btnDelete" class="btn btn-lg btn-delete" disabled>ELIMINAR PRODUCTO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Simple filtro cliente (opcional) — filtra por texto en la tabla
+        document.getElementById('q').addEventListener('input', function () {
+            const q = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#tabla-body tr');
+            rows.forEach(r => {
+                const text = r.innerText.toLowerCase();
+                r.style.display = text.includes(q) ? '' : 'none';
+            });
+        });
+
+        // Habilitar botones al seleccionar una fila
+        const checkAll = document.getElementById('checkAll');
+        const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"]');
+        const btnModify = document.getElementById('btnModify');
+        const btnDelete = document.getElementById('btnDelete');
+
+        document.addEventListener('change', (e) => {
+            if (e.target === checkAll) {
+                rowChecks().forEach(c => c.checked = checkAll.checked);
+            }
+            const checked = Array.from(rowChecks()).filter(c => c.checked).length;
+            btnModify.disabled = checked !== 1; // modificar solo si 1 seleccionado
+            btnDelete.disabled = checked === 0;
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            const inputGroup = document.querySelector('.input-group');
+
+            if (searchInput && inputGroup) {
+                // Cuando el input recibe foco
+                searchInput.addEventListener('focus', function() {
+                    inputGroup.classList.add('input-group-active');
+                });
+
+                // Cuando el input pierde el foco
+                searchInput.addEventListener('blur', function() {
+                    inputGroup.classList.remove('input-group-active');
+                });
+            }
+        });
+    </script>
+}
