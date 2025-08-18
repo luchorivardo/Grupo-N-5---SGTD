@@ -39,11 +39,11 @@
         z-index: 2; /* para que el thead quede encima al hacer sticky */
     }
         .proveedores-table thead th:last-child {
-            border-radius: 0 8px 0 0 ;
+            border-radius: 0 5px 0 0;
         }
 
         .proveedores-table thead th:first-child {
-            border-radius: 8px 0 0 0;
+            border-radius: 5px 0 0 0;
         }
 
     /* Celdas: borde negro y estilo de fila */
