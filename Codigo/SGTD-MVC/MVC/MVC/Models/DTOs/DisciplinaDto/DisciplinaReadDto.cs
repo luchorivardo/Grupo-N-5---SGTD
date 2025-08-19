@@ -1,6 +1,8 @@
 ﻿namespace MVC.Models.DTOs.DisciplinaDto
 {
-    public class DisciplinaReadDto
+    public class DisciplinaReadDTO
     {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
     }
 }

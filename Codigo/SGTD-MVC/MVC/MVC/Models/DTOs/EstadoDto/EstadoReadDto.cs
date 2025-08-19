@@ -1,6 +1,8 @@
 ﻿namespace MVC.Models.DTOs.EstadoDto
 {
-    public class EstadoReadDto
+    public class EstadoReadDTO
     {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
     }
 }
