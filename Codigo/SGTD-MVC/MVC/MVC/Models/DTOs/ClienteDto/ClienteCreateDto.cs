@@ -1,4 +1,6 @@
-﻿namespace MVC.Models.DTOs.ClienteDto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MVC.Models.DTOs.ClienteDto
 {
     public class ClienteCreateDTO
     {
