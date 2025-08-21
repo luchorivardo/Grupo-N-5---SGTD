@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MVC.Models.DTOs.ProveedorDto.ProveedorReadDTO>
+
+@{
     ViewData["Title"] = "Proveedores";
 }
 
@@ -32,7 +34,6 @@
                         <th>Teléfono</th>
                         <th>Correo Electrónico</th>
                         <th>Dirección</th>
-                        <th>Rubro</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
@@ -46,9 +47,9 @@
                                 <td>@p.Nombre</td>
                                 <td>@p.Cuit</td>
                                 <td>@p.Telefono</td>
-                                <td>@p.Email</td>
+                                <td>@p.Correo</td> 
                                 <td>@p.Direccion</td>
-                                <td>@p.Rubro</td>
+                               
                             </tr>
                         }
                     }
@@ -71,47 +72,63 @@
 
 @section Scripts {
     <script>
-        // Simple filtro cliente (opcional) — filtra por texto en la tabla
-        document.getElementById('q').addEventListener('input', function () {
-            const q = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#tabla-body tr');
-            rows.forEach(r => {
-                const text = r.innerText.toLowerCase();
-                r.style.display = text.includes(q) ? '' : 'none';
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Filtro ---
+            const qInput = document.getElementById('q');
+            if (qInput) {
+                qInput.addEventListener('input', function () {
+                    const q = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#tabla-body tr');
+                    rows.forEach(r => {
+                        const text = r.innerText.toLowerCase();
+                        r.style.display = text.includes(q) ? '' : 'none';
+                    });
+                });
+            }
+
+            // --- Selección ---
+            const checkAll = document.getElementById('checkAll');
+            const btnModify = document.getElementById('btnModify');
+            const btnDelete = document.getElementById('btnDelete');
+
+            // Siempre que necesitemos las checkboxes de filas, las pedimos de nuevo
+            const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"][name="sel"]');
+
+            // Habilitar / deshabilitar botones según la selección
+            function updateButtons() {
+                const checks = Array.from(rowChecks());
+                const checkedCount = checks.filter(c => c.checked).length;
+
+                btnModify && (btnModify.disabled = checkedCount !== 1);
+                btnDelete && (btnDelete.disabled = checkedCount === 0);
+
+                // Estado de checkAll
+                if (checkAll) {
+                    checkAll.indeterminate = checkedCount > 0 && checkedCount < checks.length;
+                    checkAll.checked = checks.length > 0 && checkedCount === checks.length;
+                }
+            }
+
+            // Marcar / desmarcar todas
+            if (checkAll) {
+                checkAll.addEventListener('click', () => {
+                    const checks = rowChecks();
+                    checks.forEach(c => { c.checked = checkAll.checked; });
+                    updateButtons();
+                });
+            }
+
+            // Delegación: cualquier cambio en una checkbox de fila
+            document.addEventListener('change', (e) => {
+                if (e.target.matches('#tabla-body input[type="checkbox"][name="sel"]')) {
+                    updateButtons();
+                }
             });
-        });
 
-        // Habilitar botones al seleccionar una fila
-        const checkAll = document.getElementById('checkAll');
-        const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"]');
-        const btnModify = document.getElementById('btnModify');
-        const btnDelete = document.getElementById('btnDelete');
-
-        document.addEventListener('change', (e) => {
-            if (e.target === checkAll) {
-                rowChecks().forEach(c => c.checked = checkAll.checked);
-            }
-            const checked = Array.from(rowChecks()).filter(c => c.checked).length;
-            btnModify.disabled = checked !== 1; // modificar solo si 1 seleccionado
-            btnDelete.disabled = checked === 0;
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.querySelector('.search-input');
-            const inputGroup = document.querySelector('.input-group');
-
-            if (searchInput && inputGroup) {
-                // Cuando el input recibe foco
-                searchInput.addEventListener('focus', function() {
-                    inputGroup.classList.add('input-group-active');
-                });
-
-                // Cuando el input pierde el foco
-                searchInput.addEventListener('blur', function() {
-                    inputGroup.classList.remove('input-group-active');
-                });
-            }
+            // Inicial
+            updateButtons();
         });
     </script>
 }
+
+
