@@ -10,6 +10,11 @@ builder.Services.AddHttpClient("ProveedoresApi", client =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
+builder.Services.AddHttpClient("ProductosApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5079/api/"); // URL de tu API
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
