@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<MVC.Models.DTOs.ProductoDto.ProductoReadDTO>
+@{
     ViewData["Title"] = "Stock";
 }
 
@@ -42,11 +43,11 @@
                         {
                             <tr>
                                 <td class="check-col"><input type="checkbox" name="sel" value="@producto.Id" /></td>
-                                <td>@producto.Codigo</td>
+                                <td>@producto.Id</td>
                                 <td>@producto.Nombre</td>
-                                <td>@producto.Proveedor</td>
+                                <td>@producto.Cantidad</td>
                                 <td class="@(producto.Cantidad < 5 ? "text-danger fw-bold" : "")">@producto.Cantidad</td>
-                                <td>@producto.Rubro</td>
+                                <td>@producto.DisciplinaId</td>
                             </tr>
                         }
                     }
