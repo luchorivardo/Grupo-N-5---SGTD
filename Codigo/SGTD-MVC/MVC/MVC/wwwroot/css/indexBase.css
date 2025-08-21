@@ -8,35 +8,42 @@
     border-radius: 10px;
     padding: 12px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    height: 80vh; /* Altura fija para el contenedor */
 }
 
 /* Wrapper con scroll para la tabla */
 .proveedores-table-wrapper {
-    max-height: 100vh; /* ajustalo según prefieras */
+    flex: 1;
     overflow: auto;
     border-radius: 8px;
     border: 2px solid #000;
+    min-height: 400px; /* Altura mínima para mantener consistencia */
 }
 
 /* Tabla */
 .proveedores-table {
     border-collapse: collapse;
     border-spacing: 0;
-    min-width: 900px;
-    min-height: 65vh;
+    width: 100%;
     color: #e6edf3;
+    table-layout: fixed; /* Para forzar distribución uniforme */
 }
 
     /* Encabezados: fondo liso y borde negro */
     .proveedores-table thead th {
-        background: #21313a; /* <-- fondo liso */
+        background: #21313a;
         color: #e9f1f5;
-        border: 1px solid #000; /* <-- borde negro 1px */
+        border: 1px solid #000;
         font-weight: 500;
         font-family: 'Montserrat';
         text-align: left;
-        padding: 10px;
-        z-index: 2; /* para que el thead quede encima al hacer sticky */
+        padding: 12px 10px;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        height: 50px; /* Altura fija para encabezados */
     }
         .proveedores-table thead th:last-child {
             border-radius: 0 5px 0 0;
@@ -50,10 +57,18 @@
     .proveedores-table tbody td {
         padding: 10px;
         border: 1px solid #000;
-        color: #c9d8df;
+        color: #000;
         background: #dedede;
-        border-radius: 0 0 8px 8px;
+        height: 50px; /* altura fija */
+        max-height: 50px;
     }
+        .proveedores-table tbody td:last-child {
+            border-radius: 0 0 5px 0;
+        }
+
+        .proveedores-table tbody td:first-child {
+            border-radius: 0 0 0 5px;
+        }
 
     /* Mantener hover pero sin romper bordes */
     .proveedores-table tbody tr:hover td {
@@ -68,7 +83,6 @@
 .check-col {
     width: fit-content;
     text-align: center;
-    
 }
 
 #checkAll {
@@ -78,6 +92,14 @@
     top: 3px;
     left: 3px;
 }
+
+#tabla-body input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 3px;
+    left: 0px;
+}
 /* Responsive: si quieres quitar min-width en móvil */
 @media (max-width: 768px) {
     .proveedores-table {
@@ -86,6 +108,13 @@
 
     .proveedores-table-wrapper {
         max-height: 45vh;
+    }
+    .proveedores-table thead th {
+        width: 200px;
+    }
+    th.check-col {
+        width: 46px !important;
+        border: 1px solid #000;
     }
 }
 
@@ -226,3 +255,12 @@
     .btn-delete:disabled {
         opacity: 0.5;
     }
+
+/* Mensaje cuando no hay datos */
+.no-data-row td {
+    height: 50px;
+    text-align: center;
+    color: #6c757d !important;
+    background: #dedede !important;
+    font-style: italic;
+}

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVC.Models.DTOs.ProveedorDto;
 
 namespace MVC.Controllers
 {
@@ -26,7 +27,7 @@ namespace MVC.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var proveedores = JsonSerializer.Deserialize<List<Proveedor>>(content,
+                        var proveedores = JsonSerializer.Deserialize<List<ProveedorReadDTO>>(content,
                             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                         return View(proveedores);
@@ -38,7 +39,7 @@ namespace MVC.Controllers
                     ViewBag.Error = "Error al cargar los proveedores";
                 }
 
-                return View(new List<Proveedor>());
+                return View(new List<ProveedorReadDTO>());
             }
 
             public IActionResult Create()
