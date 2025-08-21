@@ -1,4 +1,6 @@
-﻿@{
+﻿@using MVC.Models.Entity
+@model List<Proveedor>
+@{
     ViewData["Title"] = "Proveedores";
 }
 
@@ -32,7 +34,6 @@
                         <th>Teléfono</th>
                         <th>Correo Electrónico</th>
                         <th>Dirección</th>
-                        <th>Rubro</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
@@ -46,9 +47,9 @@
                                 <td>@p.Nombre</td>
                                 <td>@p.Cuit</td>
                                 <td>@p.Telefono</td>
-                                <td>@p.Email</td>
+                                <td>@p.Correo</td> 
                                 <td>@p.Direccion</td>
-                                <td>@p.Rubro</td>
+                               
                             </tr>
                         }
                     }
