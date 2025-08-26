@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MVC.Models.DTOs.FacturaDto.FacturaReadDTO>
+
+@{
     ViewData["Title"] = "Reportes";
 }
 
@@ -46,11 +48,16 @@
             <table class="table proveedores-table mb-0">
                 <thead>
                     <tr>
-                        <th>Emisor</th>
+                        <th>Razon Social</th>
                         <th>Nro Factura</th>
                         <th>Cliente</th>
-                        <th>Fecha Emisión</th>
+                        <th>Cantidad Productos</th>
                         <th>Valor</th>
+                        <th>Id Fiscal</th>
+                        <th>Descripcion</th>
+                        <th>Usuario</th>
+                        <th>Fecha Emision</th>
+
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
@@ -60,11 +67,16 @@
                         foreach (var reporte in Model)
                         {
                             <tr class="cursor-pointer" onclick="seleccionarFila(this, @reporte.Id)">
-                                <td>@reporte.Emisor</td>
-                                <td>@reporte.NumeroFactura</td>
-                                <td>@reporte.Cliente</td>
+                                <td>@reporte.RazonSocial</td>
+                                <td>@reporte.Id</td>
+                                <td>@reporte.ClienteId</td>
+                                <td>@reporte.CantidadProductos</td>
+                                <td class="fw-bold">@reporte.Monto.ToString("C")</td>
+                                 <td>@reporte.IdFiscal</td>
+                                <td>@reporte.Descripcion</td>
+                                <td>@reporte.UsuarioId</td>
                                 <td>@reporte.FechaEmision.ToString("dd/MM/yyyy")</td>
-                                <td class="fw-bold">@reporte.Valor.ToString("C")</td>
+                                
                             </tr>
                         }
                     }
