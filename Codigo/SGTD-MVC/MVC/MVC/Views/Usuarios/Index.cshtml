@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MVC.Models.DTOs.UsuarioDto.UsuarioReadDTO>
+
+@{
     ViewData["Title"] = "Usuarios";
 }
 
@@ -27,12 +29,15 @@
                 <thead>
                     <tr>
                         <th class="check-col"><input type="checkbox" id="checkAll" /></th>
-                        <th>Nombre</th>
+                        <th>Nombre y Apellido</th>
+                        <th>Tipo Documento</th>
                         <th>Documento</th>
                         <th>Teléfono</th>
-                        <th>Correo</th>
+                        <th>Correo Electronico</th>
                         <th>Rol</th>
                         <th>Estado</th>
+                        <th>Ciudad</th>
+                        <th>Provincia</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
@@ -43,16 +48,20 @@
                         {
                             <tr>
                                 <td class="check-col"><input type="checkbox" name="sel" value="@usuario.Id" /></td>
-                                <td>@usuario.Nombre</td>
-                                <td>@usuario.Documento</td>
-                                <td>@usuario.Telefono</td>
-                                <td>@usuario.Correo</td>
-                                <td>@usuario.Rol</td>
-                                <td>
-                                    <span class="badge @(usuario.Estado == "Activo" ? "bg-success" : "bg-secondary")">
-                                        @usuario.Estado
+                                <td>@usuario.Nombre; @usuario.Apellido</td>
+                         
+                                <td>@usuario.TipoDocumento</td>
+                                <td>@usuario.NumeroDocumento</td>
+                                
+                                <td>@usuario.CorreoElectronico</td>
+                                <td>@usuario.RolId</td>
+                             @*    <td>
+                                    <span class="badge @(usuario.EstadoId == "Activo" ? "bg-success" : "bg-secondary")">
+                                        @usuario.EstadoId
                                     </span>
-                                </td>
+                                </td> *@
+                                <td>@usuario.CiudadId</td>
+                                <td>@usuario.ProvinciaId</td>
                             </tr>
                         }
                     }
