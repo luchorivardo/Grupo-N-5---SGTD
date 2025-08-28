@@ -12,12 +12,12 @@
         <form asp-action="Create" method="post">
             <div class="form-row">
                 <input class="form-input" placeholder="Nombre *" name="Nombre" />
-                <input class="form-input" placeholder="Cantidad *" name="Cantidad" type="number" min="0" />
-                <input class="form-input" placeholder="Rubro *" name="Rubro" />
+                <input class="form-input" placeholder="Disciplina *" name="Disciplina" />
+                <input class="form-input" placeholder="Proveedor *" name="Proveedor" />
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Proveedor *" name="Proveedor" />
-                <input class="form-input" placeholder="Código *" name="Codigo" />
+                <input class="form-input" placeholder="Cantidad inicial *" name="Cantidad" type="number" min="0" />
+                <input class="form-input" placeholder="Precio *" name="Precio" type="number" />
             </div>
 
             <div class="estado-row">
@@ -33,9 +33,9 @@
                 </div>
             </div>
 
-            <div class="form-actions">
+			<div class="form-actions">
+				<a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
                 <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
-                <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
             </div>
         </form>
     </div>
