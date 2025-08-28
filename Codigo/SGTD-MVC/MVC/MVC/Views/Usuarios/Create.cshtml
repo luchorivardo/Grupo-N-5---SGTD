@@ -13,19 +13,24 @@
             <div class="form-row">
                 <input class="form-input" placeholder="Nombre *" name="Nombre" />
                 <input class="form-input" placeholder="Apellido *" name="Apellido" />
-                <input class="form-input" placeholder="Tipo Documento *" name="TipoDocumento" />
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Número Documento *" name="NumeroDocumento" />
+                <input class="form-input" placeholder="Seleccione tipo de documento" name="TipoDocumento" />
+				<input class="form-input" placeholder="Número documento *" name="NumeroDocumento" />
+                <input class="form-input" placeholder="Seleccion el Rol *" name="RolId" />
+            </div>
+            <div class="form-row">
                 <input class="form-input" placeholder="Teléfono *" name="Telefono" />
-                <input class="form-input" placeholder="Correo Electrónico *" name="CorreoElectronico" type="email" />
+                <input class="form-input" placeholder="Correo electrónico *" name="CorreoElectronico" type="email" />
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Rol *" name="RolId" />
-                <input class="form-input" placeholder="Ciudad *" name="CiudadId" />
-                <input class="form-input" placeholder="Provincia *" name="ProvinciaId" />
+                <input class="form-input" placeholder="Seleccione la ciudad *" name="CiudadId" />
+                <input class="form-input" placeholder="Seleccione la provincia *" name="ProvinciaId" />
+			</div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Contraseña *" name="Contrasena" type="password"/>
+                <input class="form-input" placeholder="Repetir contraseña *" type="password" />
             </div>
-
             <div class="estado-row">
                 <div>
                     <label>Estado:</label>
@@ -40,8 +45,8 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
                 <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
+                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
             </div>
         </form>
     </div>

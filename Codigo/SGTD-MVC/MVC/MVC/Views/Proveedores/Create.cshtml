@@ -11,14 +11,18 @@
 
         <form asp-action="Create" method="post">
             <div class="form-row">
-                <input class="form-input" placeholder="Nombre *" />
-                <input class="form-input" placeholder="Teléfono *" />
+				<input class="form-input" placeholder="Nombre *" style="flex: 345;"/>
+                <input class="form-input" placeholder="Rubro *" style="flex: 155;"/>
+            </div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Seleccione la provincia *" />
+                <input class="form-input" placeholder="Seleccione la ciudad *" />
                 <input class="form-input" placeholder="Dirección *" />
             </div>
             <div class="form-row">
                 <input class="form-input" placeholder="CUIT *" />
-                <input class="form-input" placeholder="Correo electrónico *" />
-                <input class="form-input" placeholder="Rubro *" />
+                <input class="form-input" placeholder="Correo electrónico *" type="email"/>
+                <input class="form-input" placeholder="Teléfono *" />               
             </div>
 
             <div class="estado-row">
@@ -35,8 +39,8 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
                 <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
+                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
             </div>
         </form>
     </div>
