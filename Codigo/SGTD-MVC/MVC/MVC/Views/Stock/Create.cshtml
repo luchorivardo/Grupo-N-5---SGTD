@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Añadir Producto";
+}
+
+<link rel="stylesheet" href="~/css/createBase.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/botones.css" asp-append-version="true" />
+
+<div class="content-container p-4 add-producto-page">
+    <div class="form-card">
+        <h2 class="form-title">AÑADIR PRODUCTO</h2>
+
+        <form asp-action="Create" method="post">
+            <div class="form-row">
+                <input class="form-input" placeholder="Nombre *" name="Nombre" />
+                <input class="form-input" placeholder="Disciplina *" name="Disciplina" />
+                <input class="form-input" placeholder="Proveedor *" name="Proveedor" />
+            </div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Cantidad inicial *" name="Cantidad" type="number" min="0" />
+                <input class="form-input" placeholder="Precio *" name="Precio" type="number" />
+            </div>
+
+            <div class="estado-row">
+                <div>
+                    <label>Estado:</label>
+                </div>
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="estadoSwitch" name="Estado" />
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="estadoLabel" class="switch-label">Inactivo</span>
+                </div>
+            </div>
+
+			<div class="form-actions">
+				<a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
+                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const switchInput = document.getElementById('estadoSwitch');
+            const switchLabel = document.getElementById('estadoLabel');
+
+            // Inicializar según el valor
+            switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+
+            // Cambiar dinámicamente al hacer toggle
+            switchInput.addEventListener('change', () => {
+                switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+            });
+        });
+    </script>
+}
