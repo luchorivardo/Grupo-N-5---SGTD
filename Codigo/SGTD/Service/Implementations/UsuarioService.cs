@@ -1,5 +1,6 @@
 ﻿using Data.Contracts;
 using Data.Repositorios.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
@@ -46,7 +47,11 @@ namespace Service.Implementations
         {
             ValidarUsuarioCreateDTO(dto);
 
+
             var usuario = _mapper.ToEntity(dto);
+
+            usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia);
+
             await _usuarioRepository.Create(usuario);
 
             return _mapper.ToReadDto(usuario);
@@ -82,8 +87,22 @@ namespace Service.Implementations
 
             await _usuarioRepository.Delete(usuario);
         }
+        public async Task<Usuario?> LoginAsync(string correo, string contraseña)
+        {
+            var user = await _usuarioRepository.ObtenerPorCorreoAsync(correo);
 
+            if (user == null)
+                return null;
 
+            // Verificar la contraseña (ej: usando BCrypt)
+            if (!BCrypt.Net.BCrypt.Verify(contraseña, user.Contrasenia))
+                return null;
+
+            if (user.EstadoId != 1) // 1 = Activo
+                return null;
+
+            return user; // devolver usuario válido
+        }
         private async void ValidarUsuarioCreateDTO(UsuarioCreateDTO dto)
         {
             if (dto == null)
