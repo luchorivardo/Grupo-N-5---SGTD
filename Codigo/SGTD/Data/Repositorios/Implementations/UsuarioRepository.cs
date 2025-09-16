@@ -26,5 +26,10 @@ namespace Data.Repositorios.Implementations
             return await _context.Usuarios
                 .AnyAsync(u => u.CorreoElectronico == correo && (excludeUserId == null || u.Id != excludeUserId));
         }
+        public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
+        {
+            return await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.CorreoElectronico == correo);
+        }
     }
 }

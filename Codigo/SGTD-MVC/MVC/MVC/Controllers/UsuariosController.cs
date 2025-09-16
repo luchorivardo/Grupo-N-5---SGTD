@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVC.Models.DTOs.LoginDto;
 using MVC.Models.DTOs.ProductoDto;
 using MVC.Models.DTOs.UsuarioDto;
 using MVC.Models.Entity;
@@ -18,28 +19,35 @@ namespace MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            try
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
+                return RedirectToAction("Login", "Auth");
+            else
             {
-                var response = await _httpClient.GetAsync(_apiBaseUrl);
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var usuarios = JsonSerializer.Deserialize<List<UsuarioReadDTO>>(content,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    var response = await _httpClient.GetAsync(_apiBaseUrl);
 
-                    return View(usuarios);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var usuarios = JsonSerializer.Deserialize<List<UsuarioReadDTO>>(content,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                        return View(usuarios);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                // Log error si es necesario
-                ViewBag.Error = "Error al cargar los usuarios";
-            }
+                catch (Exception ex)
+                {
+                    // Log error si es necesario
+                    ViewBag.Error = "Error al cargar los usuarios";
+                }
 
-            return View(new List<UsuarioReadDTO>());
+                return View(new List<UsuarioReadDTO>());
+            }
+              
         }
-
+        [HttpPost]
+        
         public IActionResult Create()
         {
             return View();
