@@ -1,4 +1,5 @@
 ﻿using Shared.DTOs.UsuarioDTOs;
+using Shared.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Service.Contracts
         Task<UsuarioReadDTO> CrearAsync(UsuarioCreateDTO dto);
         Task<UsuarioReadDTO> Editar(int id, UsuarioUpdateDTO dto);
         Task Eliminar(int id);
+        Task<Usuario?> ObtenerPorCorreoAsync(string correo);
     }
 }

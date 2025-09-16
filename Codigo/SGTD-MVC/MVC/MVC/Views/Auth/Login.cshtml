@@ -1,0 +1,24 @@
+﻿@model MVC.Models.DTOs.LoginDto.LoginDTO
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Iniciar sesión</h2>
+
+<form asp-action="Login" method="post">
+    <div class="form-group">
+        <label for="CorreoElectronico">Correo electrónico</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Contrasenia">Contraseña</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ingresar</button>
+</form>
+

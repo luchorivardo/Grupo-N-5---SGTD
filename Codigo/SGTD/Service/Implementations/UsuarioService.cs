@@ -30,6 +30,21 @@ namespace Service.Implementations
             var usuario = await _usuarioRepository.FindAllAsync();
             return _mapper.ToReadDtoList(usuario);
         }
+        public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
+        {
+            if (string.IsNullOrWhiteSpace(correo))
+                throw new ArgumentException("El correo no puede ser vacío.");
+
+            // Llamamos al repositorio para buscar el usuario por correo
+            var usuario = await _usuarioRepository.ObtenerPorCorreoAsync(correo);
+
+            // Si no existe, devolvemos null
+            if (usuario == null)
+                return null;
+
+            return usuario;
+        }
+
 
         public async Task<UsuarioReadDTO> ObtenerPorIdAsync(int id)
         {
