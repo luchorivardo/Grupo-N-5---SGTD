@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC.Models.DTOs.ProveedorDto.ProveedorReadDTO>
+﻿@model List<MVC.Models.DTOs.ProveedorDto.ProveedorReadDTO>
 
 @{
     ViewData["Title"] = "Proveedores";
@@ -38,7 +38,6 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
-                    @* Ejemplo: recorriendo el modelo *@
                     @if (Model != null)
                     {
                         foreach (var p in Model)

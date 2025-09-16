@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using MVC.Models.DTOs.RubroDto
+@using MVC.Models.DTOs.DisciplinaDto
+@using MVC.Models.DTOs.RolDto
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -21,6 +25,19 @@
             </svg>
         </button>
         <span class="topbar-title">Sistema de Gestion de Tienda Deportiva</span>
+
+        <div class="ms-auto">
+            <button class="topbar-btn" data-bs-toggle="modal" data-bs-target="#modalRubros">
+                Rubros
+            </button>
+            <button class="topbar-btn" data-bs-toggle="modal" data-bs-target="#modalDisciplinas">
+                Disciplinas
+            </button>
+            <button class="topbar-btn" data-bs-toggle="modal" data-bs-target="#modalRoles">
+                Roles
+            </button>
+        </div>
+
     </header>
 
     <!-- Sidebar -->
@@ -74,17 +91,43 @@
     <main class="content" id="main-content">
         @RenderSection("Scripts", required: false)
         @RenderBody()
+        @await Html.PartialAsync("Modals/_ModalRubro", new List<RubroCreateDTO>())
+        @await Html.PartialAsync("Modals/_ModalDisciplina", new List<DisciplinaCreateDTO>())
+        @await Html.PartialAsync("Modals/_ModalRol", new List<RolCreateDTO>())
     </main>
 
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById("sidebar");
-            const mainContent = document.getElementById("main-content");
-            sidebar.classList.toggle("collapsed");
-            mainContent.classList.toggle("expanded");
-        }
-    </script>
+    
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const urlsRubro = {
+            getRubros: '@Url.Action("GetRubros", "Rubros")',
+            crearRubro: '@Url.Action("CrearRubro", "Rubros")',
+            modificarRubro: '@Url.Action("ModificarRubro", "Rubros")',
+            eliminarRubro: '@Url.Action("EliminarRubro", "Rubros")'
+        };
+    </script>
+    <script src="~/js/rubros.js"></script>
+
+    <script>
+        const urlsRol = {
+            getRoles: '@Url.Action("GetRoles", "Roles")',
+            crearRol: '@Url.Action("CrearRol", "Roles")',
+            modificarRol: '@Url.Action("ModificarRol", "Roles")',
+            eliminarRol: '@Url.Action("EliminarRol", "Roles")'
+        };
+    </script>
+    <script src="~/js/roles.js"></script>
+
+    <script>
+        const urlsDisciplina = {
+            getDisciplinas: '@Url.Action("GetDisciplinas", "Disciplinas")',
+            crearDisciplina: '@Url.Action("CrearDisciplinas", "Disciplinas")',
+            modificarDisciplina: '@Url.Action("ModificarDisciplina", "Disciplinas")',
+            eliminarDisciplina: '@Url.Action("EliminarDisciplina", "Disciplinas")'
+        };
+    </script>
+    <script src="~/js/disciplinas.js"></script>
 </body>
 </html>

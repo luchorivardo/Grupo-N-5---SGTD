@@ -11,15 +11,32 @@
     display: flex;
     flex-direction: column;
     height: 80vh; /* Altura fija para el contenedor */
+    position: sticky;
 }
 
 /* Wrapper con scroll para la tabla */
 .proveedores-table-wrapper {
     flex: 1;
     overflow: auto;
-    border-radius: 8px;
-    border: 2px solid #000;
+    background: #0f141a; /* mismo color que el fondo de la tabla */
+    border-radius: 7px;
+    box-shadow: 0 0 0 2px #000, 0px 0px 10px rgba(0, 0, 0, 0.3);
     min-height: 400px; /* Altura mínima para mantener consistencia */
+    position: relative;
+}
+
+.tapa {
+    content: "";
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: transparent;
+    z-index: 9999;
+    pointer-events: none;
 }
 
 /* Tabla */
@@ -45,13 +62,7 @@
         z-index: 2;
         height: 50px; /* Altura fija para encabezados */
     }
-        .proveedores-table thead th:last-child {
-            border-radius: 0 5px 0 0;
-        }
 
-        .proveedores-table thead th:first-child {
-            border-radius: 5px 0 0 0;
-        }
 
     /* Celdas: borde negro y estilo de fila */
     .proveedores-table tbody td {
@@ -62,13 +73,7 @@
         height: 50px; /* altura fija */
         max-height: 50px;
     }
-        .proveedores-table tbody td:last-child {
-            border-radius: 0 0 5px 0;
-        }
 
-        .proveedores-table tbody td:first-child {
-            border-radius: 0 0 0 5px;
-        }
 
     /* Mantener hover pero sin romper bordes */
     .proveedores-table tbody tr:hover td {
