@@ -3,7 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configuración de HttpClient para tus APIs
+// ConfiguraciÃ³n de HttpClient para tus APIs
 builder.Services.AddHttpClient("ProveedoresApi", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5079/api/");
@@ -25,7 +25,24 @@ builder.Services.AddHttpClient("UsuariosApi", client =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-// Configuración de sesión
+builder.Services.AddHttpClient("RubrosApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5079/api/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddHttpClient("RolesApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5079/api/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddHttpClient("DisciplinasApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5079/api/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {

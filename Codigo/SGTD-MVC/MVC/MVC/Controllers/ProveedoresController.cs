@@ -23,6 +23,8 @@ namespace MVC.Controllers
                 try
                 {
                     var response = await _httpClient.GetAsync(_apiBaseUrl);
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                        return View(new List<ProveedorReadDTO>());
 
                     if (response.IsSuccessStatusCode)
                     {

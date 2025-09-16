@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MVC.Models.DTOs.DisciplinaDto.DisciplinaCreateDTO>
+
+<link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/indexBase.css" asp-append-version="true" />
+
+
+<div class="modal fade" id="modalDisciplinas" tabindex="-1" aria-labelledby="modalDisciplinasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDisciplinasLabel">Disciplinas</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="tablaDisciplinasContainer">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="formCrearDisciplina" class="d-flex w-100">
+                    <input type="hidden" name="Id" />
+                    <input type="text" name="Nombre" class="form-control me-2" placeholder="Nueva disciplina" required />
+                    <button type="submit" class="btn btn-add">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
