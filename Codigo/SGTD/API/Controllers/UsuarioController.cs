@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Service.Implementations;
+using Shared.DTOs.LoginDTOs;
 using Shared.DTOs.RubroDTOs;
 using Shared.DTOs.UsuarioDTOs;
 using Shared.Entidades;
@@ -16,6 +18,41 @@ namespace API.Controllers
         public UsuarioController (IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO dto)
+        {
+            if (dto == null)
+                return BadRequest("Los datos de login no pueden ser nulos.");
+
+            try
+            {
+                // Usamos el método del repo a través del service
+                var usuario = await _usuarioService.ObtenerPorCorreoAsync(dto.Email);
+
+                if (usuario == null)
+                    return Unauthorized("Usuario o contraseña incorrectos.");
+
+                // Verificamos contraseña
+                if (!BCrypt.Net.BCrypt.Verify(dto.Password, usuario.Contrasenia))
+                    return Unauthorized("Usuario o contraseña incorrectos.");
+
+                // DTO de sesión
+                var usuarioDTO = new UsuarioSessionDTO
+                {
+                    Id = usuario.Id,
+                    Nombre = usuario.Nombre,
+                    Apellido = usuario.Apellido,
+                    RolUsuarioId = usuario.RolId
+                };
+
+                return Ok(usuarioDTO);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrió un error interno al procesar el login.");
+            }
         }
 
         [HttpPost]

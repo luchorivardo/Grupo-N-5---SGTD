@@ -12,5 +12,6 @@ namespace Data.Repositorios.Contracts
     {
         Task<bool> ExistePorDniAsync(string dni, int? excludeUserId = null);
         Task<bool> ExistePorCorreoAsync(string correo, int? excludeUserId = null);
+        Task<Usuario?> ObtenerPorCorreoAsync(string correo);
     }
 }

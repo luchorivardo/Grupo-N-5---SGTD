@@ -28,6 +28,8 @@ builder.Services.AddTransient<IProveedorService, ProveedorService>();
 builder.Services.AddTransient<IRubroService, RubroService>();
 builder.Services.AddTransient<IUsuarioService, UsuarioService>();
 
+builder.Services.AddTransient<UsuarioService>();
+
 builder.Services.AddTransient<IRolRepository, RolRepository>();
 builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 builder.Services.AddTransient<IDisciplinaRepository, DisciplinaRepository>();
@@ -38,7 +40,13 @@ builder.Services.AddTransient<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddTransient<IRubroRepository, RubroRepository>();
 builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -48,6 +56,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+
+app.UseSession();
 
 app.UseAuthorization();
 
