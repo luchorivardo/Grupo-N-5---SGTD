@@ -3,6 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
 // Configuración de HttpClient para tus APIs
 builder.Services.AddHttpClient("ProveedoresApi", client =>
 {
@@ -41,39 +43,40 @@ builder.Services.AddHttpClient("DisciplinasApi", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5079/api/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
-
-
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
 });
 
-var app = builder.Build();
+builder.Services.AddDistributedMemoryCache();
+    builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromMinutes(30);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
 
-// Middleware
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+    var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+    // Middleware
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
 
-app.UseRouting();
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
 
-app.UseSession();       // <--- Debe ir antes de UseAuthorization
-app.UseAuthorization();
+    app.UseRouting();
 
-// Mapear rutas MVC
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.UseSession();       // <--- Debe ir antes de UseAuthorization
+    app.UseAuthorization();
 
-app.Run();
+    // Mapear rutas MVC
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.Run();
+
 
 //var builder = WebApplication.CreateBuilder(args);
 
