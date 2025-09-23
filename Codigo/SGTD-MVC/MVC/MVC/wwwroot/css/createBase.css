@@ -32,8 +32,10 @@
     background: #0f141a;
     color: #e6edf3;
     font-size: 0.95rem;
+    font-family: 'Montserrat', sans-serif;
     outline: none;
     transition: 0.2s;
+    width: 100% !important;
 }
 
     .form-input:focus {

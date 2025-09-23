@@ -99,7 +99,7 @@
         opacity: 0.5;
     }
 
-.btn-add {
+.btn-agregar {
     background: #439c57;
     color: #191b1e;
     border: 2px solid #000;
@@ -109,7 +109,7 @@
     transition: 0.3s;
 }
 
-    .btn-add:hover {
+    .btn-agregar:hover {
         border: 2px solid #6ce694;
         color: #6ce694;
         box-shadow: 0 0 0 0.25rem rgba(108, 230, 148, 0.25) !important;
