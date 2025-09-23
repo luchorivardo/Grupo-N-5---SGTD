@@ -10,6 +10,9 @@ namespace Data.Context
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext()
+        {
+        }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -27,8 +30,10 @@ namespace Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=LAPTOP-KFU2M4R9;Database=TiendaDeportivaDB;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;"
-);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=LAPTOP-BRM4J6A3\\SQLEXPRESS;Database=TiendaDeportivaDB;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;");
+            }
         }
     }
 }
