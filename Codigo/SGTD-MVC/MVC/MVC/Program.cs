@@ -1,4 +1,17 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login"; // página de login
+        options.AccessDeniedPath = "/Auth/AccesoDenegado"; // si no tiene rol
+    });
+
+builder.Services.AddAuthorization();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -69,9 +82,10 @@ builder.Services.AddDistributedMemoryCache();
 
     app.UseSession();       // <--- Debe ir antes de UseAuthorization
     app.UseAuthorization();
+    app.UseAuthentication();
 
-    // Mapear rutas MVC
-    app.MapControllerRoute(
+// Mapear rutas MVC
+app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
