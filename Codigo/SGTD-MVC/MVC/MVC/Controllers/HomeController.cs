@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
+using System.Diagnostics;
 
 namespace MVC.Controllers
 {
@@ -13,8 +14,12 @@ namespace MVC.Controllers
             _logger = logger;
         }
 
+        [Authorize]
+
+        //[Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
+
             return View();
         }
 
