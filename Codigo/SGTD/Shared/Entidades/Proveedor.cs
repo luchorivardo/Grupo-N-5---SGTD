@@ -15,8 +15,12 @@ namespace Shared.Entidades
         public string Telefono { get; set; }
         public string Ciudad { get; set; }
         public string Provincia { get; set; }
+
         public Estado Estado { get; set; }
         public int EstadoId { get; set; }
+
+        public ICollection<RubroProveedor> RubrosProveedor { get; set; } = new List<RubroProveedor>();
+        public ICollection<ProductoProveedor> ProductoProveedor { get; set; } = new List<ProductoProveedor>();
 
         public override string ToString()
         {
