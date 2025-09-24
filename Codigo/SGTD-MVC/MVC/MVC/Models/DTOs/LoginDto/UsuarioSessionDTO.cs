@@ -6,5 +6,7 @@
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int RolUsuarioId { get; set; }
+
+        public string RolUsuario { get; set; }
     }
 }

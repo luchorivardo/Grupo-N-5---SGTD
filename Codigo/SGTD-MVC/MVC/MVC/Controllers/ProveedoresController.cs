@@ -5,6 +5,7 @@ namespace MVC.Controllers
 {
     using global::MVC.Models.DTOs.RubroDto;
     using global::MVC.Models.Entity;
+    using Microsoft.AspNetCore.Authorization;
     using System.Text.Json;
 
     namespace MVC.Controllers
@@ -20,6 +21,7 @@ namespace MVC.Controllers
                 _httpClient = httpClientFactory.CreateClient("ProveedoresApi");
             }
 
+            [Authorize(Roles = "2")]
             public async Task<IActionResult> Index()
             {
                 try

@@ -71,7 +71,7 @@ namespace MVC.Controllers
         {
             new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
             new Claim(ClaimTypes.Name, usuario.Nombre),
-            new Claim(ClaimTypes.Role, usuario.RolUsuarioId.ToString()) 
+            new Claim(ClaimTypes.Role, usuario.RolUsuario.ToString()) 
             // podés usar "Admin"/"Empleado" en lugar de Id si preferís
         };
 

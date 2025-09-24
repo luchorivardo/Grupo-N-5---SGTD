@@ -47,6 +47,8 @@ namespace Shared.DTOs.UsuarioDTOs
         [Range(1, int.MaxValue, ErrorMessage = "El rol debe ser válido.")]
         public int RolId { get; set; }
 
+        public string Rol { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "El estado debe ser válido si se especifica.")]
         public int? EstadoId { get; set; }
     }

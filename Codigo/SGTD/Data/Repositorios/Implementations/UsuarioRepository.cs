@@ -23,13 +23,23 @@ namespace Data.Repositorios.Implementations
 
         public async Task<bool> ExistePorCorreoAsync(string correo, int? excludeUserId = null)
         {
-            return await _context.Usuarios
+            return await _context.Usuarios.Include(u => u.Rol.Nombre)
                 .AnyAsync(u => u.CorreoElectronico == correo && (excludeUserId == null || u.Id != excludeUserId));
+
+
         }
-        public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
+
+        public async Task<Usuario> ObtenerPorCorreoAsync(string email)
         {
             return await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.CorreoElectronico == correo);
+                .Include(u => u.Rol) // 🔑 Carga el rol junto con el usuario
+                .FirstOrDefaultAsync(u => u.CorreoElectronico == email);
         }
+
+        //public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
+        //{
+        //    return await _context.Usuarios
+        //        .FirstOrDefaultAsync(u => u.CorreoElectronico == correo);
+        //}
     }
 }

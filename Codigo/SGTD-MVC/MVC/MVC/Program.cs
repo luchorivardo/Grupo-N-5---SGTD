@@ -80,14 +80,15 @@ builder.Services.AddDistributedMemoryCache();
 
     app.UseRouting();
 
-    app.UseSession();       // <--- Debe ir antes de UseAuthorization
+    app.UseSession();
+    app.UseAuthentication();// <--- Debe ir antes de UseAuthorization
     app.UseAuthorization();
-    app.UseAuthentication();
+   
 
 // Mapear rutas MVC
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{controller=Auth}/{action=Login}/{id?}");
 
     app.Run();
 
