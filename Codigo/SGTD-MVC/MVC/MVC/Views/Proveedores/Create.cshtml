@@ -17,7 +17,7 @@
         <form asp-action="Create" method="post">
 			<div class="form-row">
                 <div style="width:100%;">
-                    <div class="custom-multiple-select-container multiple" style="width:100%;">
+                    <div class="custom-multiple-select-container multiple" data-name="RubroIds" style="width:100%;">
                         <button type="button" class="custom-multiple-select-trigger">
                             <span class="selected-value placeholder">Seleccione uno o más rubros</span>
                             <span class="arrow">▼</span>
@@ -25,16 +25,18 @@
 
                         @if (ViewBag.Rubros != null && ((IEnumerable<MVC.Models.DTOs.RubroDto.RubroReadDTO>)ViewBag.Rubros).Any())
                         {
-                        <ul class="custom-multiple-select-options">
-                            @foreach (var rubro in (IEnumerable<MVC.Models.DTOs.RubroDto.RubroReadDTO>)ViewBag.Rubros)
-                            {
-                                <li data-value="@rubro.Id">@rubro.Nombre</li>
-                            }
-                        </ul>
+                            <ul class="custom-multiple-select-options">
+                                @foreach (var rubro in (IEnumerable<MVC.Models.DTOs.RubroDto.RubroReadDTO>)ViewBag.Rubros)
+                                {
+                                    <li data-value="@rubro.Id">@rubro.Nombre</li>
+                                }
+                            </ul>
                         }
                         else
                         {
-                            <li>No hay rubros disponibles</li>
+                            <ul class="custom-multiple-select-options">
+                                <li class="disabled">No hay disciplinas disponibles</li>
+                            </ul>
                         }
                         <div class="hidden-inputs"></div>
                     </div>
@@ -61,13 +63,23 @@
                         </button>
 
                         <ul class="custom-select-options">
-                            @foreach (var prov in (IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias)
+                            @if (ViewBag.Provincias != null && ((IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias).Any())
                             {
-                                <li data-value="@prov.Id">@prov.Nombre</li>
+                                @foreach (var prov in (IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias)
+                                {
+                                    <li data-value="@prov.Id">@prov.Nombre</li>
+                                }
+                            }
+                            else
+                            {
+                                <ul class="custom-multiple-select-options">
+                                    <li class="disabled">Error, no hay provincias disponibles</li>
+                                </ul>
                             }
                         </ul>
 
                         <input type="hidden" name="ProvinciaId" />
+                        <input type="hidden" id="ProvinciaNombre" name="Provincia" />
                     </div>
                     @Html.ValidationMessageFor(m => m.Provincia, "", new { @class = "field-validation-error" })
                 </div>
@@ -83,6 +95,7 @@
                             <!-- Vacío: se llenará dinámicamente al seleccionar provincia -->
                         </ul>
                         <input type="hidden" name="CiudadId" />
+                        <input type="hidden" id="CiudadNombre" name="Ciudad" />
                     </div>
                     @Html.ValidationMessageFor(m => m.Ciudad)
                 </div>
@@ -161,11 +174,14 @@
 
             provinciaContainer.addEventListener("custom-select:change", async (e) => {
                 const provinciaNombre = e.detail.text;
+                const provinciaInput = provinciaContainer.querySelector("#ProvinciaNombre");
+                provinciaInput.value = provinciaNombre; // <-- asignamos el nombre
 
                 // Limpiar ciudades
                 ciudadOptionsList.innerHTML = "";
                 ciudadContainer.querySelector(".selected-value").textContent = "Seleccione ciudad";
-                ciudadContainer.querySelector("input[type=hidden]").value = "";
+                ciudadContainer.querySelector("input[name=CiudadId]").value = "";
+                ciudadContainer.querySelector("#CiudadNombre").value = "";
 
                 try {
                     const res = await fetch(`/Proveedores/GetCiudades?provinciaNombre=${encodeURIComponent(provinciaNombre)}`);
@@ -183,6 +199,14 @@
                     console.error("Error cargando ciudades:", err);
                 }
             });
+
+            // Para la ciudad, si tu select dispara el mismo evento:
+            ciudadContainer.addEventListener("custom-select:change", (e) => {
+                const ciudadNombre = e.detail.text;
+                const ciudadInput = ciudadContainer.querySelector("#CiudadNombre");
+                ciudadInput.value = ciudadNombre;
+            });
+
         });
     </script>
 }

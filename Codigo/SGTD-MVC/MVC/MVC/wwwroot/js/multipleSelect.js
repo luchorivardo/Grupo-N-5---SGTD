@@ -51,7 +51,7 @@
             if (optionLi.classList.contains('selected')) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
-                input.name = 'RubroIds'; // 👈 nombre que model binder reconoce como lista
+                input.name = this.container.dataset.name;
                 input.value = value;
                 input.dataset.value = value;
                 this.hiddenInputsContainer.appendChild(input);
