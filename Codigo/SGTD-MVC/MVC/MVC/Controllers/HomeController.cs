@@ -14,7 +14,7 @@ namespace MVC.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        [Authorize(Roles = "string")]
 
         //[Authorize(Roles = "Admin")]
         public IActionResult Index()
