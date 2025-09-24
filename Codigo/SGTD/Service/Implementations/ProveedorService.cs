@@ -44,6 +44,7 @@ namespace Service.Implementations
             ValidarProveedorCreateDTO(dto);
 
             var proveedor = _mapper.ToEntity(dto);
+            _mapper.MapRubros(dto, proveedor);
             await _proveedorRepository.Create(proveedor);
 
             return _mapper.ToReadDto(proveedor);

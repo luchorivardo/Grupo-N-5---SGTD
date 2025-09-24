@@ -1,9 +1,13 @@
-﻿@{
+﻿@model MVC.Models.DTOs.ProductoDto.ProductoCreateDTO
+
+@{
     ViewData["Title"] = "Añadir Producto";
 }
 
 <link rel="stylesheet" href="~/css/createBase.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/botones.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/select.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/multipleSelect.css" asp-append-version="true" />
 
 <div class="content-container p-4 add-producto-page">
     <div class="form-card">
@@ -11,9 +15,58 @@
 
         <form asp-action="Create" method="post">
             <div class="form-row">
-                <input class="form-input" placeholder="Nombre *" name="Nombre" />
-                <input class="form-input" placeholder="Disciplina *" name="Disciplina" />
-                <input class="form-input" placeholder="Proveedor *" name="Proveedor" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-input", placeholder = "Nombre", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+                <div style="width:100%;">
+                    <div class="custom-select-container multiple" style="width:100%;">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione uno o más disciplinas</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        @if (ViewBag.Disciplinas != null && ((IEnumerable<MVC.Models.DTOs.DisciplinaDto.DisciplinaReadDTO>)ViewBag.Disciplinas).Any())
+                        {
+                            <ul class="custom-select-options">
+                                @foreach (var disciplina in (IEnumerable<MVC.Models.DTOs.DisciplinaDto.DisciplinaReadDTO>)ViewBag.Disciplinas)
+                                {
+                                    <li data-value="@disciplina.Id">@disciplina.Nombre</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <li>No hay disciplinas disponibles</li>
+                        }
+                        <input type="hidden" name="DisciplinaId" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.DisciplinaId, "", new { @class = "text-danger" })
+                </div>
+                <div style="width:100%;">
+                    <div class="custom-multiple-select-container multiple" data-name="ProveedorIds" style="width:100%;">
+                        <button type="button" class="custom-multiple-select-trigger">
+                            <span class="selected-value placeholder">Seleccione uno o más proveedores</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        @if (ViewBag.Proveedores != null && ((IEnumerable<MVC.Models.DTOs.ProveedorDto.ProveedorReadDTO>)ViewBag.Proveedores).Any())
+                        {
+                            <ul class="custom-multiple-select-options">
+                                @foreach (var proveedor in (IEnumerable<MVC.Models.DTOs.ProveedorDto.ProveedorReadDTO>)ViewBag.Proveedores)
+                                {
+                                    <li data-value="@proveedor.Id">@proveedor.Nombre</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <li>No hay proveedores disponibles</li>
+                        }
+                        <div class="hidden-inputs"></div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ProveedorIds, "", new { @class = "text-danger" })
+                </div>
             </div>
             <div class="form-row">
                 <input class="form-input" placeholder="Cantidad inicial *" name="Cantidad" type="number" min="0" />
@@ -26,12 +79,15 @@
                 </div>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="estadoSwitch" name="Estado" />
+                        <input type="checkbox" id="estadoSwitch" />
                         <span class="slider round"></span>
                     </label>
                     <span id="estadoLabel" class="switch-label">Inactivo</span>
                 </div>
             </div>
+
+            <!-- Campo oculto que viaja en el POST -->
+            <input type="hidden" id="EstadoId" name="EstadoId" value="4" />
 
 			<div class="form-actions">
 				<a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
@@ -42,17 +98,28 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/select.js" defer asp-append-version="true"></script>
+    <script src="~/js/multipleSelect.js" defer asp-append-version="true"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const switchInput = document.getElementById('estadoSwitch');
             const switchLabel = document.getElementById('estadoLabel');
+            const hiddenEstado = document.getElementById('EstadoId');
 
-            // Inicializar según el valor
+            // Inicializar valores
             switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+            hiddenEstado.value = switchInput.checked ? 3 : 4;
 
-            // Cambiar dinámicamente al hacer toggle
+            // Actualizar dinámicamente
             switchInput.addEventListener('change', () => {
-                switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+                if (switchInput.checked) {
+                    switchLabel.textContent = "Activo";
+                    hiddenEstado.value = 3;
+                } else {
+                    switchLabel.textContent = "Inactivo";
+                    hiddenEstado.value = 4;
+                }
             });
         });
     </script>

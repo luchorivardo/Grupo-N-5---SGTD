@@ -2,6 +2,7 @@
 using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ProductoDTOs;
+using Shared.Entidades;
 
 namespace Service.Implementations
 {
@@ -38,7 +39,7 @@ namespace Service.Implementations
             ValidarProductoCreateDTO(dto);
 
             var producto = _mapper.ToEntity(dto);
-
+            _mapper.MapProveedores(dto, producto);
             await _ProductoRepository.Create(producto);
             return _mapper.ToReadDto(producto);
         }
