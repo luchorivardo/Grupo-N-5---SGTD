@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+<div class="inicio-background d-flex flex-column align-items-center text-center p-3">
+
+    <!-- Texto superior -->
+    <div class="welcome-section">
+        <h1 class="welcome-title">BIENVENIDO</h1>
+        <p class="text-muted">
+            Gestiona tus productos, ventas y proveedores de forma rápida y sencilla.
+        </p>
+    </div>
+
+    <!-- Acciones -->
+    <div class="actions container mt-auto">
+        <div class="row justify-content-center g-4">
+            <div class="col-6 col-sm-4 col-md-3">
+                <a asp-controller="Stock" asp-action="Index" class="card shadow-sm h-100 text-decoration-none">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <!-- Icono -->
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M42 16V42H6V16M20 24H28M2 6H46V16H2V6Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <h5 class="card-title">Stock</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3">
+                <a asp-controller="Proveedores" asp-action="Index" class="card shadow-sm h-100 text-decoration-none">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 8H36C37.0609 8 38.0783 8.42143 38.8284 9.17157C39.5786 9.92172 40 10.9391 40 12V40C40 41.0609 39.5786 42.0783 38.8284 42.8284C38.0783 43.5786 37.0609 44 36 44H12C10.9391 44 9.92172 43.5786 9.17157 42.8284C8.42143 42.0783 8 41.0609 8 40V12C8 10.9391 8.42143 9.92172 9.17157 9.17157C9.92172 8.42143 10.9391 8 12 8H16M18 4H30C31.1046 4 32 4.89543 32 6V10C32 11.1046 31.1046 12 30 12H18C16.8954 12 16 11.1046 16 10V6C16 4.89543 16.8954 4 18 4Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <h5 class="card-title">Proveedores</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3">
+                <a asp-controller="Usuarios" asp-action="Index" class="card shadow-sm h-100 text-decoration-none">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40 42V38C40 35.8783 39.1571 33.8434 37.6569 32.3431C36.1566 30.8429 34.1217 30 32 30H16C13.8783 30 11.8434 30.8429 10.3431 32.3431C8.84285 33.8434 8 35.8783 8 38V42M32 14C32 18.4183 28.4183 22 24 22C19.5817 22 16 18.4183 16 14C16 9.58172 19.5817 6 24 6C28.4183 6 32 9.58172 32 14Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <h5 class="card-title">Usuarios</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3">
+                <a asp-controller="Reportes" asp-action="Index" class="card shadow-sm h-100 text-decoration-none">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 42V10C32 8.93913 31.5786 7.92172 30.8284 7.17157C30.0783 6.42143 29.0609 6 28 6H20C18.9391 6 17.9217 6.42143 17.1716 7.17157C16.4214 7.92172 16 8.93913 16 10V42M8 14H40C42.2091 14 44 15.7909 44 18V38C44 40.2091 42.2091 42 40 42H8C5.79086 42 4 40.2091 4 38V18C4 15.7909 5.79086 14 8 14Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <h5 class="card-title">Reportes</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Imagen decorativa -->
+        <div class="mt-5">
+            <img src="~/images/deporte-banner.jpg" alt="Deporte"
+                 class="img-fluid rounded shadow"
+                 style="max-height: 300px; object-fit: cover;">
+        </div>
+    </div>
+</div>

@@ -15,8 +15,11 @@ namespace Shared.Entidades
         public string Descripcion { get; set; }
         public string RazonSocial { get; set; }
         public int CantidadProductos { get; set; }
+        public int ProductoId { get; set; }
         public Producto Producto { get; set; }
+        public int UsuarioId { get; set; }
         public Usuario Usuario { get; set; }
+        public int ClienteId { get; set; }
         public Cliente Cliente { get; set; }
     }
 }

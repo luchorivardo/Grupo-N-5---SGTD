@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Añadir Usuario";
+}
+
+<link rel="stylesheet" href="~/css/createBase.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/botones.css" asp-append-version="true" />
+
+<div class="content-container p-4 add-usuario-page">
+    <div class="form-card">
+        <h2 class="form-title">AÑADIR USUARIO</h2>
+
+        <form asp-action="Create" method="post">
+            <div class="form-row">
+                <input class="form-input" placeholder="Nombre *" name="Nombre" />
+                <input class="form-input" placeholder="Apellido *" name="Apellido" />
+            </div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Seleccione tipo de documento" name="TipoDocumento" />
+				<input class="form-input" placeholder="Número documento *" name="NumeroDocumento" />
+                <input class="form-input" placeholder="Seleccion el Rol *" name="RolId" />
+            </div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Teléfono *" name="Telefono" />
+                <input class="form-input" placeholder="Correo electrónico *" name="CorreoElectronico" type="email" />
+            </div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Seleccione la ciudad *" name="CiudadId" />
+                <input class="form-input" placeholder="Seleccione la provincia *" name="ProvinciaId" />
+			</div>
+            <div class="form-row">
+                <input class="form-input" placeholder="Contraseña *" name="Contrasena" type="password"/>
+                <input class="form-input" placeholder="Repetir contraseña *" type="password" />
+            </div>
+            <div class="estado-row">
+                <div>
+                    <label>Estado:</label>
+                </div>
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="estadoSwitch" name="Estado" />
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="estadoLabel" class="switch-label">Inactivo</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
+                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const switchInput = document.getElementById('estadoSwitch');
+            const switchLabel = document.getElementById('estadoLabel');
+
+            // Inicializar según el valor
+            switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+
+            // Cambiar dinámicamente al hacer toggle
+            switchInput.addEventListener('change', () => {
+                switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+            });
+        });
+    </script>
+}
