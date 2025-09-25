@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
   
 env:
-  PROJECT_DIR: 2025/Persona/Persona
+  PROJECT_DIR: Codigo/SGTD-MVC/MVC/MVC
 
 jobs:
   build:
@@ -71,3 +71,4 @@ jobs:
           package: .
 
           
+
