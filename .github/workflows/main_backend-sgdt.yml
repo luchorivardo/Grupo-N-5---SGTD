@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_DIR: Codigo/SGTD/WebApplication1
+  PROJECT_DIR: Codigo/SGTD
 
 jobs:
   build:
@@ -69,4 +69,5 @@ jobs:
           package: .
 
           
+
 
