@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
   
 env:
-  PROJECT_DIR: Codigo/SGTD-MVC/MVC
+  PROJECT_DIR: Codigo/SGTD-MVC/MVC/MVC
 
 jobs:
   build:
@@ -71,5 +71,6 @@ jobs:
           package: .
 
           
+
 
 
