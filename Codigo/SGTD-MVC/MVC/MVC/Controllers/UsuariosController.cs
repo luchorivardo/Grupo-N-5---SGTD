@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVC.Models.DTOs.LoginDto;
 using MVC.Models.DTOs.ProductoDto;
+using MVC.Models.DTOs.RolDto;
+using MVC.Models.DTOs.RubroDto;
 using MVC.Models.DTOs.UsuarioDto;
 using MVC.Models.Entity;
+using System.Data;
 using System.Text.Json;
 
 namespace MVC.Controllers
@@ -10,7 +13,8 @@ namespace MVC.Controllers
     public class UsuariosController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "usuario"; // endpoint base de tu API
+        private readonly string _apiBaseUrl = "usuario";
+        private readonly string _apiRolUrl = "rol";
 
         public UsuariosController(IHttpClientFactory httpClientFactory)
         {
@@ -47,14 +51,36 @@ namespace MVC.Controllers
               
         }
         [HttpPost]
-        
-        public IActionResult Create()
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
+            try
+            {
+                var response = await _httpClient.GetAsync(_apiRolUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var roles = JsonSerializer.Deserialize<List<RolReadDTO>>(content,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    ViewBag.Roles = roles;
+                }
+                else
+                {
+                    ViewBag.Roles = new List<RolReadDTO>();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Roles = new List<RolReadDTO>();
+            }
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Usuario usuario)
+        public async Task<IActionResult> Create(UsuarioCreateDTO usuario)
         {
             if (ModelState.IsValid)
             {
