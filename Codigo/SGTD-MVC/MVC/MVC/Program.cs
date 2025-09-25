@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Auth/Login"; // página de login
+        options.LoginPath = "/Home/Index"; // página de login
         options.AccessDeniedPath = "/Auth/AccesoDenegado"; // si no tiene rol
     });
 
@@ -80,14 +80,15 @@ builder.Services.AddDistributedMemoryCache();
 
     app.UseRouting();
 
-    app.UseSession();       // <--- Debe ir antes de UseAuthorization
+    app.UseSession();
+    app.UseAuthentication();// <--- Debe ir antes de UseAuthorization
     app.UseAuthorization();
-    app.UseAuthentication();
+   
 
 // Mapear rutas MVC
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{controller=Auth}/{action=Login}/{id?}");
 
     app.Run();
 

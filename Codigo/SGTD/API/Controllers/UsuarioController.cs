@@ -44,7 +44,8 @@ namespace API.Controllers
                     Id = usuario.Id,
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
-                    RolUsuarioId = usuario.RolId
+                    RolUsuarioId = usuario.RolId,
+                    RolUsuario = usuario.Rol.Nombre
                 };
 
                 return Ok(usuarioDTO);

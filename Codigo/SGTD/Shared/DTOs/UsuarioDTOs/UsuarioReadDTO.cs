@@ -20,6 +20,8 @@ namespace Shared.DTOs.UsuarioDTOs
         public int CiudadId { get; set; }
         public int ProvinciaId { get; set; }
         public int RolId { get; set; }
+
+        public string RolUsuario { get; set; }
         public int? EstadoId { get; set; }
     }
 }
