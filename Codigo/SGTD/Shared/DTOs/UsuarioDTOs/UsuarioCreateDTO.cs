@@ -12,8 +12,7 @@ namespace Shared.DTOs.UsuarioDTOs
     public class UsuarioCreateDTO
     {
         [Required(ErrorMessage = "El tipo de documento es obligatorio.")]
-        [Range(1, int.MaxValue, ErrorMessage = "El tipo de documento debe ser válido.")]
-        public int TipoDocumento { get; set; }
+        public string TipoDocumento { get; set; }
 
         [Required(ErrorMessage = "El número de documento es obligatorio.")]
         [StringLength(15, MinimumLength = 6, ErrorMessage = "El número de documento debe tener entre 6 y 15 caracteres.")]
@@ -46,8 +45,6 @@ namespace Shared.DTOs.UsuarioDTOs
         [Required(ErrorMessage = "El rol es obligatorio.")]
         [Range(1, int.MaxValue, ErrorMessage = "El rol debe ser válido.")]
         public int RolId { get; set; }
-
-        public string Rol { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "El estado debe ser válido si se especifica.")]
         public int? EstadoId { get; set; }

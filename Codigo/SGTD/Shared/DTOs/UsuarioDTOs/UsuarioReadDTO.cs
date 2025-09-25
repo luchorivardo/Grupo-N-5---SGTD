@@ -11,7 +11,7 @@ namespace Shared.DTOs.UsuarioDTOs
     public class UsuarioReadDTO
     {
         public int Id { get; set; }
-        public int TipoDocumento { get; set; }
+        public string TipoDocumento { get; set; }
         public string NumeroDocumento { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
@@ -20,7 +20,6 @@ namespace Shared.DTOs.UsuarioDTOs
         public int CiudadId { get; set; }
         public int ProvinciaId { get; set; }
         public int RolId { get; set; }
-
         public string RolUsuario { get; set; }
         public int? EstadoId { get; set; }
     }

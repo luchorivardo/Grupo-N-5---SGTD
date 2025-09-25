@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 namespace MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -13,10 +14,7 @@ namespace MVC.Controllers
         {
             _logger = logger;
         }
-
-        [Authorize(Roles = "string")]
-
-        //[Authorize(Roles = "Admin")]
+        
         public IActionResult Index()
         {
 

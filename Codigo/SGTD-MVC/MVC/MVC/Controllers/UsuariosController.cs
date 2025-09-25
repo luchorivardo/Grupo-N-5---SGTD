@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVC.Models.DTOs.LoginDto;
 using MVC.Models.DTOs.ProductoDto;
 using MVC.Models.DTOs.RolDto;
@@ -21,37 +22,30 @@ namespace MVC.Controllers
             _httpClient = httpClientFactory.CreateClient("UsuariosApi");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioId")))
-                return RedirectToAction("Login", "Auth");
-            else
+            try
             {
-                try
+                var response = await _httpClient.GetAsync(_apiBaseUrl);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    var response = await _httpClient.GetAsync(_apiBaseUrl);
+                    var content = await response.Content.ReadAsStringAsync();
+                    var usuarios = JsonSerializer.Deserialize<List<UsuarioReadDTO>>(content,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var content = await response.Content.ReadAsStringAsync();
-                        var usuarios = JsonSerializer.Deserialize<List<UsuarioReadDTO>>(content,
-                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                        return View(usuarios);
-                    }
+                    return View(usuarios);
                 }
-                catch (Exception ex)
-                {
-                    // Log error si es necesario
-                    ViewBag.Error = "Error al cargar los usuarios";
-                }
-
-                return View(new List<UsuarioReadDTO>());
             }
-              
-        }
-        [HttpPost]
+            catch (Exception ex)
+            {
+                // Log error si es necesario
+                ViewBag.Error = "Error al cargar los usuarios";
+            }
 
+            return View(new List<UsuarioReadDTO>());     
+        }
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -69,6 +63,24 @@ namespace MVC.Controllers
                 else
                 {
                     ViewBag.Roles = new List<RolReadDTO>();
+                }
+                using var http = new HttpClient();
+                var provinciasResponse = await http.GetAsync("https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre");
+                if (provinciasResponse.IsSuccessStatusCode)
+                {
+                    var provinciasContent = await provinciasResponse.Content.ReadAsStringAsync();
+
+                    // DTO auxiliar
+                    var provinciasWrapper = JsonSerializer.Deserialize<ProvinciaWrapper>(provinciasContent,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    ViewBag.Provincias = provinciasWrapper?.Provincias
+                        .OrderBy(p => p.Nombre)
+                        .ToList() ?? new List<ProvinciaDTO>();
+                }
+                else
+                {
+                    ViewBag.Provincias = new List<ProvinciaDTO>();
                 }
             }
             catch (Exception ex)
@@ -92,6 +104,8 @@ namespace MVC.Controllers
                     {
                         return RedirectToAction(nameof(Index));
                     }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(content);
 
                     ModelState.AddModelError("", "Error al crear el usuario");
                 }

@@ -123,7 +123,7 @@ namespace Service.Implementations
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto), "El objeto UsuarioCreateDTO no puede ser nulo.");
 
-            if (dto.TipoDocumento <= 0)
+            if (string.IsNullOrWhiteSpace(dto.TipoDocumento))
                 throw new ArgumentException("El tipo de documento debe ser un valor válido.", nameof(dto.TipoDocumento));
 
             if (string.IsNullOrWhiteSpace(dto.NumeroDocumento))
@@ -182,7 +182,7 @@ namespace Service.Implementations
             if (dto.Id != id)
                 throw new ArgumentException("El ID del cuerpo no coincide con el ID de la ruta.");
 
-            if (dto.TipoDocumento <= 0)
+            if (string.IsNullOrWhiteSpace(dto.TipoDocumento))
                 throw new ArgumentException("El tipo de documento debe ser un valor válido.", nameof(dto.TipoDocumento));
 
             if (string.IsNullOrWhiteSpace(dto.NumeroDocumento))

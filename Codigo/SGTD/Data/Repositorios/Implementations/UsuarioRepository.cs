@@ -23,7 +23,7 @@ namespace Data.Repositorios.Implementations
 
         public async Task<bool> ExistePorCorreoAsync(string correo, int? excludeUserId = null)
         {
-            return await _context.Usuarios.Include(u => u.Rol.Nombre)
+            return await _context.Usuarios
                 .AnyAsync(u => u.CorreoElectronico == correo && (excludeUserId == null || u.Id != excludeUserId));
 
 

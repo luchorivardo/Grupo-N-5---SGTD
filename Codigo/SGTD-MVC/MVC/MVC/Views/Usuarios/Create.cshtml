@@ -14,25 +14,51 @@
 
         <form asp-action="Create" method="post">
             <div class="form-row">
-                <input class="form-input" placeholder="Nombre *" name="Nombre" />
-                <input class="form-input" placeholder="Apellido *" name="Apellido" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-input", placeholder = "Nombre", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Apellido, new { @class = "form-input", placeholder = "Apellido", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Apellido)
+                </div>
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Seleccione tipo de documento" name="TipoDocumento" />
-				<input class="form-input" placeholder="Número documento *" name="NumeroDocumento" />
                 <div style="width:100%;">
-                    <div class="custom-select-container" id="provinciaSelect">
+                    <div class="custom-select-container" id="tipoDocumentoSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione el tipo de documento</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        <ul class="custom-select-options">
+                            <li data-value="DNI">DNI</li>
+                            <li data-value="Pasaporte">Pasaporte</li>
+                            <li data-value="Cédula de Identidad">Cédula de Identidad</li>
+                        </ul>
+
+                        <!-- hidden para enviar el valor seleccionado al servidor -->
+                        <input type="hidden" name="TipoDocumento" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TipoDocumento, "", new { @class = "field-validation-error" })
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.NumeroDocumento, new { @class = "form-input", placeholder = "Numero de Documento", required = "required" })
+                    @Html.ValidationMessageFor(m => m.NumeroDocumento)
+                </div>
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="rolSelect">
                         <button type="button" class="custom-select-trigger">
                             <span class="selected-value placeholder">Seleccione el rol</span>
                             <span class="arrow">▼</span>
                         </button>
 
                         <ul class="custom-select-options">
-                            @if (ViewBag.Roles != null && ((IEnumerable<MVC.Models.DTOs.UsuarioDto.UsuarioCreateDTO>)ViewBag.Roles).Any())
+                            @if (ViewBag.Roles != null && ((IEnumerable<MVC.Models.DTOs.RolDto.RolReadDTO>)ViewBag.Roles).Any())
                             {
-                                @foreach (var rol in (IEnumerable<MVC.Models.DTOs.UsuarioDto.UsuarioCreateDTO>)ViewBag.Roles)
+                                @foreach (var rol in (IEnumerable<MVC.Models.DTOs.RolDto.RolReadDTO>)ViewBag.Roles)
                                 {
-                                    <li data-value="@rol.RolId">@rol.Nombre</li>
+                                    <li data-value="@rol.Id">@rol.Nombre</li>
                                 }
                             }
                             else
@@ -43,14 +69,17 @@
                             }
                         </ul>
 
+                        <!-- 👇 Ahora sí mapea con tu DTO -->
                         <input type="hidden" name="RolId" />
                     </div>
                     @Html.ValidationMessageFor(m => m.RolId, "", new { @class = "field-validation-error" })
                 </div>
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Teléfono *" name="Telefono" />
-                <input class="form-input" placeholder="Correo electrónico *" name="CorreoElectronico" type="email" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-input", placeholder = "Correo Electrónico", required = "required" })
+                    @Html.ValidationMessageFor(m => m.CorreoElectronico)
+                </div>
             </div>
             <div class="form-row">
                 <!-- Select de Provincias -->
@@ -100,8 +129,14 @@
                 </div>
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Contraseña *" name="Contrasena" type="password"/>
-                <input class="form-input" placeholder="Repetir contraseña *" type="password" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Contrasenia, new { @class = "form-input", placeholder = "Contraseña", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.RepetirContrasenia, new { @class = "form-input", placeholder = "Repetir Contraseña", required = "required" })
+                    @Html.ValidationMessageFor(m => m.RepetirContrasenia)
+                </div>
             </div>
             <div class="estado-row">
                 <div>
@@ -109,12 +144,15 @@
                 </div>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="estadoSwitch" name="Estado" />
+                        <input type="checkbox" id="estadoSwitch" />
                         <span class="slider round"></span>
                     </label>
                     <span id="estadoLabel" class="switch-label">Inactivo</span>
                 </div>
             </div>
+
+            <!-- Campo oculto que viaja en el POST -->
+            <input type="hidden" id="EstadoId" name="EstadoId" value="4" />
 
             <div class="form-actions">
                 <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
