@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVC.Models.DTOs.DisciplinaDto;
 using MVC.Models.DTOs.ProductoDto;
 using MVC.Models.DTOs.ProveedorDto;
@@ -8,6 +9,7 @@ using System.Text.Json;
 
 namespace MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StockController : Controller
     {
         private readonly HttpClient _httpClient;

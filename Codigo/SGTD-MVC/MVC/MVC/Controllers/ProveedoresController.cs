@@ -10,6 +10,7 @@ namespace MVC.Controllers
 
     namespace MVC.Controllers
     {
+        [Authorize(Roles = "Admin")]
         public class ProveedoresController : Controller
         {
             private readonly HttpClient _httpClient;

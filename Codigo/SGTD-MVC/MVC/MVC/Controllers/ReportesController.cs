@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVC.Models.DTOs.FacturaDto;
 using MVC.Models.DTOs.ProductoDto;
 using MVC.Models.Entity;
@@ -6,6 +7,7 @@ using System.Text.Json;
 
 namespace MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ReportesController : Controller
     {
         private readonly HttpClient _httpClient;

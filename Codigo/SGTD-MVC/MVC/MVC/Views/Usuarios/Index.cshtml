@@ -85,29 +85,34 @@
 
 @section Scripts {
     <script>
-        // Simple filtro cliente (opcional) — filtra por texto en la tabla
-        document.getElementById('q').addEventListener('input', function () {
-            const q = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#tabla-body tr');
-            rows.forEach(r => {
-                const text = r.innerText.toLowerCase();
-                r.style.display = text.includes(q) ? '' : 'none';
-            });
-        });
-
-        // Habilitar botones al seleccionar una fila
-        const checkAll = document.getElementById('checkAll');
-        const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"]');
-        const btnModify = document.getElementById('btnModify');
-        const btnDelete = document.getElementById('btnDelete');
-
-        document.addEventListener('change', (e) => {
-            if (e.target === checkAll) {
-                rowChecks().forEach(c => c.checked = checkAll.checked);
+        document.addEventListener('DOMContentLoaded', function () {
+            const qInput = document.getElementById('q');
+            if (qInput) {
+                qInput.addEventListener('input', function () {
+                    const q = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#tabla-body tr');
+                    rows.forEach(r => {
+                        const text = r.innerText.toLowerCase();
+                        r.style.display = text.includes(q) ? '' : 'none';
+                    });
+                });
             }
-            const checked = Array.from(rowChecks()).filter(c => c.checked).length;
-            btnModify.disabled = checked !== 1; // modificar solo si 1 seleccionado
-            btnDelete.disabled = checked === 0;
+
+            const checkAll = document.getElementById('checkAll');
+            const btnModify = document.getElementById('btnModify');
+            const btnDelete = document.getElementById('btnDelete');
+            const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"]');
+
+            if (checkAll && btnModify && btnDelete) {
+                document.addEventListener('change', (e) => {
+                    if (e.target === checkAll) {
+                        rowChecks().forEach(c => c.checked = checkAll.checked);
+                    }
+                    const checked = Array.from(rowChecks()).filter(c => c.checked).length;
+                    btnModify.disabled = checked !== 1;
+                    btnDelete.disabled = checked === 0;
+                });
+            }
         });
     </script>
     <script>

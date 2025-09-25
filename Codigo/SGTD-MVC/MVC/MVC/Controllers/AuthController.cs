@@ -23,35 +23,6 @@ namespace MVC.Controllers
             return View();
         }
 
-        /*
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginDTO loginDto)
-        {
-            if (!ModelState.IsValid)
-                return View(loginDto);
-
-            var response = await _httpClient.PostAsJsonAsync(_apiBaseUrl, loginDto);
-
-            if (response.IsSuccessStatusCode)
-            {
-             
-                var content = await response.Content.ReadAsStringAsync();
-                var usuario = JsonSerializer.Deserialize<UsuarioSessionDTO>(content,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                // Guardar en session (para manejar roles)
-                HttpContext.Session.SetString("UsuarioId", usuario.Id.ToString());
-                HttpContext.Session.SetString("RolUsuarioId", usuario.RolUsuarioId.ToString());
-                HttpContext.Session.SetString("Nombre", usuario.Nombre);
-
-            
-                return RedirectToAction("Index", "Home");
-            }
-
-            ModelState.AddModelError("", "Credenciales inválidas");
-            return View(loginDto);
-        } */
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginDTO loginDto)
         {
@@ -68,12 +39,12 @@ namespace MVC.Controllers
 
                 // Creamos los claims (info que viaja en la cookie)
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-            new Claim(ClaimTypes.Name, usuario.Nombre),
-            new Claim(ClaimTypes.Role, usuario.RolUsuario.ToString()) 
-            // podés usar "Admin"/"Empleado" en lugar de Id si preferís
-        };
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.Nombre),
+                    new Claim(ClaimTypes.Role, usuario.RolUsuario.ToString()) 
+                    // podés usar "Admin"/"Empleado" en lugar de Id si preferís
+                };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -95,13 +66,6 @@ namespace MVC.Controllers
             ModelState.AddModelError("", "Credenciales inválidas");
             return View(loginDto);
         }
-         /*
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Auth");
-        }
-         */
 
         public async Task<IActionResult> Logout()
         {

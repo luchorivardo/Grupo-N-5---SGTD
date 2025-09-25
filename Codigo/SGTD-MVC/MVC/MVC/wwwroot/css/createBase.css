@@ -132,3 +132,10 @@
 }
 
 
+
+input:-internal-autofill-selected {
+    appearance: menulist-button;
+    background-image: none !important;
+    background-color: #16222a !important;
+    color: fieldtext !important;
+}
