@@ -82,6 +82,28 @@
         </div>
     </div>
 </div>
+<!-- Modal confirmación eliminación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form id="deleteForm" asp-controller="Usuarios" asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" id="deleteId" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que querés eliminar al usuario?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
@@ -113,6 +135,17 @@
                     btnDelete.disabled = checked === 0;
                 });
             }
+            // --- Modal eliminación ---
+            btnDelete?.addEventListener('click', () => {
+                const selected = document.querySelector('#tabla-body input[name="sel"]:checked');
+                if (selected) {
+                    document.getElementById('deleteId').value = selected.value;
+                    // Abrir modal usando Bootstrap 5
+                    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+                } else {
+                    alert('Seleccioná al menos un usuario para eliminar.');
+                }
+            });
         });
     </script>
     <script>
@@ -132,5 +165,6 @@
                 });
             }
         });
+        
     </script>
 }

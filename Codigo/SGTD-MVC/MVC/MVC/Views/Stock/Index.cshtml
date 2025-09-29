@@ -69,6 +69,28 @@
         </div>
     </div>
 </div>
+<!-- Modal confirmación eliminación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form id="deleteForm" asp-controller="Stock" asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" id="deleteId" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que querés eliminar el producto?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
@@ -80,21 +102,6 @@
                 const text = r.innerText.toLowerCase();
                 r.style.display = text.includes(q) ? '' : 'none';
             });
-        });
-
-        // Habilitar botones al seleccionar una fila
-        const checkAll = document.getElementById('checkAll');
-        const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"]');
-        const btnModify = document.getElementById('btnModify');
-        const btnDelete = document.getElementById('btnDelete');
-
-        document.addEventListener('change', (e) => {
-            if (e.target === checkAll) {
-                rowChecks().forEach(c => c.checked = checkAll.checked);
-            }
-            const checked = Array.from(rowChecks()).filter(c => c.checked).length;
-            btnModify.disabled = checked !== 1; // modificar solo si 1 seleccionado
-            btnDelete.disabled = checked === 0;
         });
     </script>
     <script>
@@ -113,6 +120,36 @@
                     inputGroup.classList.remove('input-group-active');
                 });
             }
+
+           
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkAll = document.getElementById('checkAll');
+            const rowChecks = () => document.querySelectorAll('#tabla-body input[type="checkbox"]');
+            const btnModify = document.getElementById('btnModify');
+            const btnDelete = document.getElementById('btnDelete');
+
+            document.addEventListener('change', (e) => {
+                if (e.target === checkAll) {
+                    rowChecks().forEach(c => c.checked = checkAll.checked);
+                }
+                const checked = Array.from(rowChecks()).filter(c => c.checked).length;
+                btnModify.disabled = checked !== 1;
+                btnDelete.disabled = checked === 0;
+            });
+
+            // Modal eliminación
+            btnDelete?.addEventListener('click', () => {
+                const selected = document.querySelector('#tabla-body input[name="sel"]:checked');
+                if (selected) {
+                    document.getElementById('deleteId').value = selected.value;
+                    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+                } else {
+                    alert('Seleccioná al menos un producto para eliminar.');
+                }
+            });
         });
     </script>
 }
