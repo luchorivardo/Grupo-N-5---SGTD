@@ -130,11 +130,11 @@
             </div>
             <div class="form-row">
                 <div style="width:100%;">
-                    @Html.TextBoxFor(m => m.Contrasenia, new { @class = "form-input", placeholder = "Contraseña", required = "required" })
+                    @Html.TextBoxFor(m => m.Contrasenia, new { @class = "form-input", placeholder = "Contraseña", required = "required", type = "password" })
                     @Html.ValidationMessageFor(m => m.Nombre)
                 </div>
                 <div style="width:100%;">
-                    @Html.TextBoxFor(m => m.RepetirContrasenia, new { @class = "form-input", placeholder = "Repetir Contraseña", required = "required" })
+                    @Html.TextBoxFor(m => m.RepetirContrasenia, new { @class = "form-input", placeholder = "Repetir Contraseña", required = "required", type = "password" })
                     @Html.ValidationMessageFor(m => m.RepetirContrasenia)
                 </div>
             </div>
