@@ -1,0 +1,101 @@
+﻿/* select.css - Versión definitiva para todos los custom-select */
+.custom-select-container {
+    position: relative;
+    width: 100%;
+    height: 42px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.custom-select-trigger {
+    width: 100%;
+    height: 48.78px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    background: #0f141a; /* mismo que form-input */
+    color: #e6edf3; /* texto claro */
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .custom-select-trigger:hover,
+    .custom-select-container.open .custom-select-trigger {
+        border: 1px solid #4a90d9; /* azul al hover/focus */
+        box-shadow: 0 0 0 0.25rem rgba(74, 144, 217, 0.25);
+    }
+
+    .custom-select-trigger .arrow {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+        color: #BDC3C7;
+    }
+
+.custom-select-container.open .custom-select-trigger .arrow {
+    transform: rotate(180deg);
+}
+
+.custom-select-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    background: #0f141a; /* más claro que el fondo del input */
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    z-index: 1001;
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin-top: 11px;
+    animation: fadeIn 0.3s ease;
+}
+
+
+.custom-select-container.open .custom-select-options {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.custom-select-options li {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #e6edf3;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+    .custom-select-options li:hover {
+        background-color: #1f2e3a;
+        color: #4a90d9;
+    }
+
+    .custom-select-options li.selected {
+        font-weight: 500;
+        background-color: #0f141a;
+        color: #4a90d9;
+    }
+
+.custom-select-trigger .placeholder {
+    color: #BDC3C7; /* mismo gris que placeholder de inputs */
+    background-color: #0f141a;
+    font-weight: 400;
+}

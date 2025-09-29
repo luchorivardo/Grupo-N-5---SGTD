@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MVC.Models.DTOs.RolDto.RolCreateDTO>
+
+<link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/indexBase.css" asp-append-version="true" />
+
+
+<div class="modal fade" id="modalRoles" tabindex="-1" aria-labelledby="modalRolesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRolesLabel">Roles</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div id="tablaRolesContainer">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="formCrearRol" class="d-flex w-100">
+                    <input type="hidden" name="Id" />
+                    <input type="text" name="Nombre" class="form-control me-2" placeholder="Nuevo rol" required />
+                    <button type="submit" class="btn btn-agregar">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

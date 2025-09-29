@@ -1,5 +1,6 @@
 ﻿using Data.Contracts;
 using Data.Repositorios.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.ClienteDTOs;
@@ -29,6 +30,21 @@ namespace Service.Implementations
             var usuario = await _usuarioRepository.FindAllAsync();
             return _mapper.ToReadDtoList(usuario);
         }
+        public async Task<Usuario?> ObtenerPorCorreoAsync(string correo)
+        {
+            if (string.IsNullOrWhiteSpace(correo))
+                throw new ArgumentException("El correo no puede ser vacío.");
+
+            // Llamamos al repositorio para buscar el usuario por correo
+            var usuario = await _usuarioRepository.ObtenerPorCorreoAsync(correo);
+
+            // Si no existe, devolvemos null
+            if (usuario == null)
+                return null;
+
+            return usuario;
+        }
+
 
         public async Task<UsuarioReadDTO> ObtenerPorIdAsync(int id)
         {
@@ -46,7 +62,11 @@ namespace Service.Implementations
         {
             ValidarUsuarioCreateDTO(dto);
 
+
             var usuario = _mapper.ToEntity(dto);
+
+            usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(dto.Contrasenia);
+
             await _usuarioRepository.Create(usuario);
 
             return _mapper.ToReadDto(usuario);
@@ -82,14 +102,28 @@ namespace Service.Implementations
 
             await _usuarioRepository.Delete(usuario);
         }
+        public async Task<Usuario?> LoginAsync(string correo, string contraseña)
+        {
+            var user = await _usuarioRepository.ObtenerPorCorreoAsync(correo);
 
+            if (user == null)
+                return null;
 
+            // Verificar la contraseña (ej: usando BCrypt)
+            if (!BCrypt.Net.BCrypt.Verify(contraseña, user.Contrasenia))
+                return null;
+
+            if (user.EstadoId != 1) // 1 = Activo
+                return null;
+
+            return user; // devolver usuario válido
+        }
         private async void ValidarUsuarioCreateDTO(UsuarioCreateDTO dto)
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto), "El objeto UsuarioCreateDTO no puede ser nulo.");
 
-            if (dto.TipoDocumento <= 0)
+            if (string.IsNullOrWhiteSpace(dto.TipoDocumento))
                 throw new ArgumentException("El tipo de documento debe ser un valor válido.", nameof(dto.TipoDocumento));
 
             if (string.IsNullOrWhiteSpace(dto.NumeroDocumento))
@@ -148,7 +182,7 @@ namespace Service.Implementations
             if (dto.Id != id)
                 throw new ArgumentException("El ID del cuerpo no coincide con el ID de la ruta.");
 
-            if (dto.TipoDocumento <= 0)
+            if (string.IsNullOrWhiteSpace(dto.TipoDocumento))
                 throw new ArgumentException("El tipo de documento debe ser un valor válido.", nameof(dto.TipoDocumento));
 
             if (string.IsNullOrWhiteSpace(dto.NumeroDocumento))

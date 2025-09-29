@@ -1,0 +1,141 @@
+﻿/* Fondo y texto del modal */
+.modal-content {
+    background-color: #1a1f26; /* color oscuro similar al de tu screenshot */
+    color: #ffffff;
+    border-radius: 0.5rem;
+}
+
+/* Encabezado del modal */
+.modal-header {
+    border-bottom: 1px solid #3a4a5a;
+}
+
+/* Botón cerrar */
+.btn-close {
+    filter: invert(1); /* blanco */
+}
+
+/* Tabla dentro del modal hereda los estilos de proveedores-table */
+.modal-body .proveedores-table-wrapper {
+    min-height: unset !important;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+    .modal-body .proveedores-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        table-layout: auto; /* en modal no hace falta fixed */
+    }
+
+    /* Encabezados del modal: variante más oscura */
+    .modal-body .proveedores-table thead th {
+        background: #21313a;
+        color: #e9f1f5;
+        border: 1px solid #000;
+        text-align: left;
+        padding: 10px;
+        font-weight: 500;
+    }
+
+    /* Filas del modal */
+    .modal-body .proveedores-table tbody td {
+        color: #000;
+        background: #dedede;
+        border: 1px solid #000;
+        padding: 6px 10px;
+    }
+
+    /* Hover */
+    .modal-body .proveedores-table tbody tr:hover td {
+        background: #c9d8df;
+    }
+
+/* Inputs dentro del modal */
+.modal-footer input.form-control {
+    border-radius: 0.25rem;
+}
+
+/* Botones de acción */
+.btn-modificar {
+    background: #356696;
+    color: #191b1e;
+    border-radius: 8px;
+    border: 2px solid #000;
+    padding: 4px 11px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+    .btn-modificar:hover {
+        color: #6fb5fc;
+        box-shadow: 0 0 0 0.25rem rgba(111, 181, 252, 0.25) !important;
+        border: 2px solid #6fb5fc;
+    }
+
+    .btn-modificar:disabled {
+        opacity: 0.5;
+    }
+
+.btn-eliminar {
+    background: #a14545;
+    color: #191b1e;
+    border-radius: 8px;
+    border: 2px solid #000;
+    padding: 4px 11px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+    .btn-eliminar:hover {
+        color: #ed6161;
+        box-shadow: 0 0 0 0.25rem rgba(237, 97, 97, 0.25) !important;
+        border: 2px solid #ed6161;
+    }
+
+    .btn-eliminar:disabled {
+        opacity: 0.5;
+    }
+
+.btn-agregar {
+    background: #439c57;
+    color: #191b1e;
+    border: 2px solid #000;
+    padding: 6px 11px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+    .btn-agregar:hover {
+        border: 2px solid #6ce694;
+        color: #6ce694;
+        box-shadow: 0 0 0 0.25rem rgba(108, 230, 148, 0.25) !important;
+    }
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 4px; /* grosor vertical */
+    height: 4px; /* grosor horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* elimina el contenedor gris */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #999; /* color de la línea */
+    border-radius: 10px; /* bordes redondeados */
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #555; /* más oscuro al pasar el mouse */
+    }
+
+/* Firefox */
+* {
+    scrollbar-width: thin; /* fino */
+    scrollbar-color: #999 transparent; /* color de la barra y track transparente */
+}

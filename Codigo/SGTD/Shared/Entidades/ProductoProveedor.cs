@@ -8,9 +8,11 @@ namespace Shared.Entidades
 {
     public class ProductoProveedor : EntidadBase
     {
+        public int ProductoId { get; set; }
+        public Producto Producto { get; set; }
 
-        public Producto Productos { get; set; }
-        public Proveedor Proveedores { get; set; }
+        public int ProveedorId { get; set; }
+        public Proveedor Proveedor { get; set; }
 
     }
 }
