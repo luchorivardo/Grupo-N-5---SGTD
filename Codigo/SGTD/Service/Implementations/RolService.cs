@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Data.Implementations;
 using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.RolDTOs;
@@ -36,9 +37,15 @@ namespace Service.Implementations
 
         public async Task<RolReadDTO> CrearAsync(RolCreateDTO dto)
         {
+
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del rol es obligatorio.");
-
+            var t = _rolRepository.FindAll();
+            if (t.Count() != 0)
+            {
+                if (await _rolRepository.ExistePorNombreAsync(dto.Nombre))
+                    throw new ArgumentException("Ya existe un rol con ese nombre.", nameof(dto.Nombre));
+            }
             var rol = _mapper.ToEntity(dto);
             await _rolRepository.Create(rol);
 
@@ -51,6 +58,9 @@ namespace Service.Implementations
                 throw new ArgumentException("El ID debe ser mayor a cero.");
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del rol es obligatorio.");
+
+            if (await _rolRepository.ExistePorNombreAsync(dto.Nombre))
+                throw new ArgumentException("Ya existe un rol con ese nombre.", nameof(dto.Nombre));
 
             var rol = await _rolRepository.ObtenerPorId(id);
             if (rol == null)

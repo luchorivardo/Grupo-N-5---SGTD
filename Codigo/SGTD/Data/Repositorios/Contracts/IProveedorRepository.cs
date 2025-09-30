@@ -10,5 +10,6 @@ namespace Data.Contracts
 {
     public interface IProveedorRepository : IRepository<Proveedor>
     {
+        Task<bool> ExistePorCuitAsync(string cuit, int? excludeUserId = null);
     }
 }

@@ -76,7 +76,7 @@ namespace Service.Implementations
         }
 
 
-        private void ValidarClienteCreateDTO(ClienteCreateDTO dto)
+        async private void ValidarClienteCreateDTO(ClienteCreateDTO dto)
         {
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del cliente es obligatorio.");
@@ -94,10 +94,18 @@ namespace Service.Implementations
                 throw new ArgumentException("La contraseña es obligatoria.", nameof(dto.Provincia));
             if (dto.Provincia.Length > 50)
                 throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
+            var hayCliente = _clienteRepository.FindAll();
+            if (hayCliente.Count() != 0)
+            {
+                if (await _clienteRepository.ExistePorDniAsync(dto.Dni))
+                    throw new ArgumentException("Ya existe un Cliente con ese numero de documento.", nameof(dto.Dni));
+            }
         }
 
-        private void ValidarClienteUpdateDTO(ClienteUpdateDTO dto)
+        async private void ValidarClienteUpdateDTO(ClienteUpdateDTO dto)
         {
+            if (await _clienteRepository.ExistePorDniAsync(dto.Dni))
+                throw new ArgumentException("Ya existe un Cliente con ese numero de documento.", nameof(dto.Dni));
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del cliente es obligatorio.");
             if (dto.Dni > 99999999)

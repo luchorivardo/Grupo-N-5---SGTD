@@ -10,5 +10,6 @@ namespace Data.Contracts
 {
     public interface IProductoRepository : IRepository<Producto>
     {
+        Task<bool> ExistePorNombreAsync(string nombre, int? excludeUserId = null);
     }
 }

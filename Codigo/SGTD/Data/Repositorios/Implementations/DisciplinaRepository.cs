@@ -15,5 +15,10 @@ namespace Data.Repositorios.Implementations
     public class DisciplinaRepository : Repository<Disciplina>, IDisciplinaRepository
     {
         public DisciplinaRepository(AppDbContext context) : base(context) { }
+        public async Task<bool> ExistePorNombreAsync(string nombre, int? excludeUserId = null)
+        {
+            return await _context.Disciplinas
+                .AnyAsync(u => u.Nombre == nombre && (excludeUserId == null || u.Id != excludeUserId));
+        }
     }
 }

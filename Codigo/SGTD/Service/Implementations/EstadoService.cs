@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Data.Implementations;
 using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.EstadoDTOs;
@@ -35,6 +36,12 @@ namespace Service.Implementations
 
         public async Task<EstadoReadDTO> CrearAsync(EstadoCreateDTO dto)
         {
+            var t = _estadoRepository.FindAll();
+            if (t.Count() != 0)
+            {
+                if (await _estadoRepository.ExistePorNombreAsync(dto.Nombre))
+                    throw new ArgumentException("Ya existe un estado con ese nombre.", nameof(dto.Nombre));
+            }
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del estado es obligatorio.");
 
@@ -50,6 +57,9 @@ namespace Service.Implementations
                 throw new ArgumentException("El ID debe ser mayor a cero.");
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del estado es obligatorio.");
+
+            if (await _estadoRepository.ExistePorNombreAsync(dto.Nombre))
+                throw new ArgumentException("Ya existe un estado con ese nombre.", nameof(dto.Nombre));
 
             var estado = await _estadoRepository.ObtenerPorId(id);
             if (estado == null)
