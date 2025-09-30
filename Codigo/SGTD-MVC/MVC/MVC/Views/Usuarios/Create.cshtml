@@ -1,9 +1,12 @@
-﻿@{
+﻿@model MVC.Models.DTOs.UsuarioDto.UsuarioCreateDTO
+
+@{
     ViewData["Title"] = "Añadir Usuario";
 }
 
 <link rel="stylesheet" href="~/css/createBase.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/botones.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/select.css" asp-append-version="true" />
 
 <div class="content-container p-4 add-usuario-page">
     <div class="form-card">
@@ -11,25 +14,129 @@
 
         <form asp-action="Create" method="post">
             <div class="form-row">
-                <input class="form-input" placeholder="Nombre *" name="Nombre" />
-                <input class="form-input" placeholder="Apellido *" name="Apellido" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-input", placeholder = "Nombre", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Apellido, new { @class = "form-input", placeholder = "Apellido", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Apellido)
+                </div>
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Seleccione tipo de documento" name="TipoDocumento" />
-				<input class="form-input" placeholder="Número documento *" name="NumeroDocumento" />
-                <input class="form-input" placeholder="Seleccion el Rol *" name="RolId" />
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="tipoDocumentoSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione el tipo de documento</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        <ul class="custom-select-options">
+                            <li data-value="DNI">DNI</li>
+                            <li data-value="Pasaporte">Pasaporte</li>
+                            <li data-value="Cédula de Identidad">Cédula de Identidad</li>
+                        </ul>
+
+                        <!-- hidden para enviar el valor seleccionado al servidor -->
+                        <input type="hidden" name="TipoDocumento" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TipoDocumento, "", new { @class = "field-validation-error" })
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.NumeroDocumento, new { @class = "form-input", placeholder = "Numero de Documento", required = "required" })
+                    @Html.ValidationMessageFor(m => m.NumeroDocumento)
+                </div>
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="rolSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione el rol</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        <ul class="custom-select-options">
+                            @if (ViewBag.Roles != null && ((IEnumerable<MVC.Models.DTOs.RolDto.RolReadDTO>)ViewBag.Roles).Any())
+                            {
+                                @foreach (var rol in (IEnumerable<MVC.Models.DTOs.RolDto.RolReadDTO>)ViewBag.Roles)
+                                {
+                                    <li data-value="@rol.Id">@rol.Nombre</li>
+                                }
+                            }
+                            else
+                            {
+                                <ul class="custom-multiple-select-options">
+                                    <li class="disabled">Error, no hay roles disponibles</li>
+                                </ul>
+                            }
+                        </ul>
+
+                        <!-- 👇 Ahora sí mapea con tu DTO -->
+                        <input type="hidden" name="RolId" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.RolId, "", new { @class = "field-validation-error" })
+                </div>
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Teléfono *" name="Telefono" />
-                <input class="form-input" placeholder="Correo electrónico *" name="CorreoElectronico" type="email" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-input", placeholder = "Correo Electrónico", required = "required" })
+                    @Html.ValidationMessageFor(m => m.CorreoElectronico)
+                </div>
             </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Seleccione la ciudad *" name="CiudadId" />
-                <input class="form-input" placeholder="Seleccione la provincia *" name="ProvinciaId" />
-			</div>
+                <!-- Select de Provincias -->
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="provinciaSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione provincia</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        <ul class="custom-select-options">
+                            @if (ViewBag.Provincias != null && ((IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias).Any())
+                            {
+                                @foreach (var prov in (IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias)
+                                {
+                                    <li data-value="@prov.Id">@prov.Nombre</li>
+                                }
+                            }
+                            else
+                            {
+                                <ul class="custom-multiple-select-options">
+                                    <li class="disabled">Error, no hay provincias disponibles</li>
+                                </ul>
+                            }
+                        </ul>
+
+                        <input type="hidden" name="ProvinciaId" />
+                        <input type="hidden" id="ProvinciaNombre" name="Provincia" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Provincia, "", new { @class = "field-validation-error" })
+                </div>
+
+                <!-- Select de Ciudades -->
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="ciudadSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione ciudad</span>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <ul class="custom-select-options">
+                            <!-- Vacío: se llenará dinámicamente al seleccionar provincia -->
+                        </ul>
+                        <input type="hidden" name="CiudadId" />
+                        <input type="hidden" id="CiudadNombre" name="Ciudad" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Ciudad)
+                </div>
+            </div>
             <div class="form-row">
-                <input class="form-input" placeholder="Contraseña *" name="Contrasena" type="password"/>
-                <input class="form-input" placeholder="Repetir contraseña *" type="password" />
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Contrasenia, new { @class = "form-input", placeholder = "Contraseña", required = "required", type = "password" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.RepetirContrasenia, new { @class = "form-input", placeholder = "Repetir Contraseña", required = "required", type = "password" })
+                    @Html.ValidationMessageFor(m => m.RepetirContrasenia)
+                </div>
             </div>
             <div class="estado-row">
                 <div>
@@ -37,12 +144,15 @@
                 </div>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="estadoSwitch" name="Estado" />
+                        <input type="checkbox" id="estadoSwitch" />
                         <span class="slider round"></span>
                     </label>
                     <span id="estadoLabel" class="switch-label">Inactivo</span>
                 </div>
             </div>
+
+            <!-- Campo oculto que viaja en el POST -->
+            <input type="hidden" id="EstadoId" name="EstadoId" value="4" />
 
             <div class="form-actions">
                 <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
@@ -53,18 +163,74 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/select.js" defer asp-append-version="true"></script>
+    <script src="~/js/multipleSelect.js" defer asp-append-version="true"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const switchInput = document.getElementById('estadoSwitch');
             const switchLabel = document.getElementById('estadoLabel');
+            const hiddenEstado = document.getElementById('EstadoId');
 
-            // Inicializar según el valor
+            // Inicializar valores
             switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+            hiddenEstado.value = switchInput.checked ? 3 : 4;
 
-            // Cambiar dinámicamente al hacer toggle
+            // Actualizar dinámicamente
             switchInput.addEventListener('change', () => {
-                switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
+                if (switchInput.checked) {
+                    switchLabel.textContent = "Activo";
+                    hiddenEstado.value = 3;
+                } else {
+                    switchLabel.textContent = "Inactivo";
+                    hiddenEstado.value = 4;
+                }
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const provinciaContainer = document.getElementById("provinciaSelect");
+            const ciudadContainer = document.getElementById("ciudadSelect");
+
+            const ciudadOptionsList = ciudadContainer.querySelector(".custom-select-options");
+
+            provinciaContainer.addEventListener("custom-select:change", async (e) => {
+                const provinciaNombre = e.detail.text;
+                const provinciaInput = provinciaContainer.querySelector("#ProvinciaNombre");
+                provinciaInput.value = provinciaNombre; // <-- asignamos el nombre
+
+                // Limpiar ciudades
+                ciudadOptionsList.innerHTML = "";
+                ciudadContainer.querySelector(".selected-value").textContent = "Seleccione ciudad";
+                ciudadContainer.querySelector("input[name=CiudadId]").value = "";
+                ciudadContainer.querySelector("#CiudadNombre").value = "";
+
+                try {
+                    const res = await fetch(`/Proveedores/GetCiudades?provinciaNombre=${encodeURIComponent(provinciaNombre)}`);
+                    const ciudades = await res.json();
+
+                    ciudades.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+                    ciudades.forEach(c => {
+                        const li = document.createElement("li");
+                        li.textContent = c.nombre;
+                        li.dataset.value = c.id || c.nombre;
+                        ciudadOptionsList.appendChild(li);
+                    });
+                } catch (err) {
+                    console.error("Error cargando ciudades:", err);
+                }
+            });
+
+            // Para la ciudad, si tu select dispara el mismo evento:
+            ciudadContainer.addEventListener("custom-select:change", (e) => {
+                const ciudadNombre = e.detail.text;
+                const ciudadInput = ciudadContainer.querySelector("#CiudadNombre");
+                ciudadInput.value = ciudadNombre;
+            });
+
+        });
+    </script>
 }
+

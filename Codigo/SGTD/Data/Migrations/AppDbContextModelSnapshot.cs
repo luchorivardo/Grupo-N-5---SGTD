@@ -218,10 +218,10 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductosId")
+                    b.Property<int>("ProductoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProveedoresId")
+                    b.Property<int>("ProveedorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -229,9 +229,9 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductosId");
+                    b.HasIndex("ProductoId");
 
-                    b.HasIndex("ProveedoresId");
+                    b.HasIndex("ProveedorId");
 
                     b.ToTable("ProductosProveedores");
                 });
@@ -408,8 +408,9 @@ namespace Data.Migrations
                     b.Property<int>("RolId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipoDocumento")
-                        .HasColumnType("int");
+                    b.Property<string>("TipoDocumento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
@@ -471,21 +472,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Shared.Entidades.ProductoProveedor", b =>
                 {
-                    b.HasOne("Shared.Entidades.Producto", "Productos")
-                        .WithMany()
-                        .HasForeignKey("ProductosId")
+                    b.HasOne("Shared.Entidades.Producto", "Producto")
+                        .WithMany("ProductoProveedor")
+                        .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Entidades.Proveedor", "Proveedores")
-                        .WithMany()
-                        .HasForeignKey("ProveedoresId")
+                    b.HasOne("Shared.Entidades.Proveedor", "Proveedor")
+                        .WithMany("ProductoProveedor")
+                        .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Productos");
+                    b.Navigation("Producto");
 
-                    b.Navigation("Proveedores");
+                    b.Navigation("Proveedor");
                 });
 
             modelBuilder.Entity("Shared.Entidades.Proveedor", b =>
@@ -502,13 +503,13 @@ namespace Data.Migrations
             modelBuilder.Entity("Shared.Entidades.RubroProveedor", b =>
                 {
                     b.HasOne("Shared.Entidades.Proveedor", "Proveedor")
-                        .WithMany()
+                        .WithMany("RubrosProveedor")
                         .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Shared.Entidades.Rubro", "Rubro")
-                        .WithMany()
+                        .WithMany("ProveedoresRubro")
                         .HasForeignKey("RubroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -533,6 +534,23 @@ namespace Data.Migrations
                     b.Navigation("Estado");
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("Shared.Entidades.Producto", b =>
+                {
+                    b.Navigation("ProductoProveedor");
+                });
+
+            modelBuilder.Entity("Shared.Entidades.Proveedor", b =>
+                {
+                    b.Navigation("ProductoProveedor");
+
+                    b.Navigation("RubrosProveedor");
+                });
+
+            modelBuilder.Entity("Shared.Entidades.Rubro", b =>
+                {
+                    b.Navigation("ProveedoresRubro");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,26 +3,33 @@ using MVC.Models.DTOs.ProveedorDto;
 
 namespace MVC.Controllers
 {
+    using global::MVC.Models.DTOs.RubroDto;
     using global::MVC.Models.Entity;
+    using Microsoft.AspNetCore.Authorization;
     using System.Text.Json;
 
     namespace MVC.Controllers
     {
+        [Authorize(Roles = "Admin")]
         public class ProveedoresController : Controller
         {
             private readonly HttpClient _httpClient;
             private readonly string _apiBaseUrl = "proveedor"; // endpoint base de tu API
+            private readonly string _apiRubroUrl = "rubro";
 
             public ProveedoresController(IHttpClientFactory httpClientFactory)
             {
                 _httpClient = httpClientFactory.CreateClient("ProveedoresApi");
             }
 
+            [Authorize(Roles = "2")]
             public async Task<IActionResult> Index()
             {
                 try
                 {
                     var response = await _httpClient.GetAsync(_apiBaseUrl);
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                        return View(new List<ProveedorReadDTO>());
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -42,13 +49,76 @@ namespace MVC.Controllers
                 return View(new List<ProveedorReadDTO>());
             }
 
-            public IActionResult Create()
+            [HttpGet]
+            public async Task<IActionResult> Create()
             {
+                try
+                {
+                    var response = await _httpClient.GetAsync(_apiRubroUrl);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var rubros = JsonSerializer.Deserialize<List<RubroReadDTO>>(content,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                        ViewBag.Rubros = rubros;
+                    }
+                    else
+                    {
+                        ViewBag.Rubros = new List<RubroReadDTO>();
+                    }
+                    using var http = new HttpClient();
+                    var provinciasResponse = await http.GetAsync("https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre");
+                    if (provinciasResponse.IsSuccessStatusCode)
+                    {
+                        var provinciasContent = await provinciasResponse.Content.ReadAsStringAsync();
+
+                        // DTO auxiliar
+                        var provinciasWrapper = JsonSerializer.Deserialize<ProvinciaWrapper>(provinciasContent,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                        ViewBag.Provincias = provinciasWrapper?.Provincias
+                            .OrderBy(p => p.Nombre)
+                            .ToList() ?? new List<ProvinciaDTO>();
+                    }
+                    else
+                    {
+                        ViewBag.Provincias = new List<ProvinciaDTO>();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Rubros = new List<RubroReadDTO>();
+                }
+
                 return View();
             }
 
+            [HttpGet]
+            public async Task<IActionResult> GetCiudades(string provinciaNombre)
+            {
+                try
+                {
+                    var client = new HttpClient();
+                    var response = await client.GetAsync(
+                        $"https://apis.datos.gob.ar/georef/api/localidades?provincia={Uri.EscapeDataString(provinciaNombre)}&max=5000");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var data = JsonSerializer.Deserialize<CiudadesResponse>(content,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                        return Json(data.Localidades);
+                    }
+                }
+                catch { }
+
+                return Json(new List<CiudadDTO>());
+            }
+
             [HttpPost]
-            public async Task<IActionResult> Create(Proveedor proveedor)
+            public async Task<IActionResult> Create(ProveedorCreateDTO proveedor)
             {
                 if (ModelState.IsValid)
                 {
@@ -138,5 +208,26 @@ namespace MVC.Controllers
                 }
             }
         }
+    }
+    public class ProvinciaWrapper
+    {
+        public List<ProvinciaDTO> Provincias { get; set; }
+    }
+
+    public class ProvinciaDTO
+    {
+        public string Id { get; set; }
+        public string Nombre { get; set; }
+    }
+
+    public class CiudadesResponse
+    {
+        public List<CiudadDTO> Localidades { get; set; }
+    }
+
+    public class CiudadDTO
+    {
+        public string Id { get; set; }
+        public string Nombre { get; set; }
     }
 }

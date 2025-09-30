@@ -27,7 +27,7 @@ namespace API.Controllers
             {
                 var producto = await _productoService.CrearAsync(dto);
                 if (producto != null)
-                    return CreatedAtAction(nameof(_productoService.ObtenerPorIdAsync), new { id = producto.Id }, producto);
+                    return Ok(producto);
 
                 return Conflict("Ya existe un producto con esos datos.");
             }

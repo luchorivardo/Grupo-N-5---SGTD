@@ -14,8 +14,7 @@ namespace Shared.DTOs.UsuarioDTOs
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El tipo de documento es obligatorio.")]
-        [Range(1, int.MaxValue, ErrorMessage = "El tipo de documento debe ser válido.")]
-        public int TipoDocumento { get; set; }
+        public string TipoDocumento { get; set; }
 
         [Required(ErrorMessage = "El número de documento es obligatorio.")]
         [StringLength(15, MinimumLength = 6, ErrorMessage = "El número de documento debe tener entre 6 y 15 caracteres.")]
