@@ -113,51 +113,92 @@ namespace MVC.Controllers
             return View(producto);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             try
             {
+                // Obtener el producto por id desde la API
                 var response = await _httpClient.GetAsync($"{_apiBaseUrl}/{id}");
+                if (!response.IsSuccessStatusCode)
+                    return NotFound();
 
-                if (response.IsSuccessStatusCode)
+                var content = await response.Content.ReadAsStringAsync();
+                var producto = JsonSerializer.Deserialize<ProductoUpdateDTO>(content,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (producto == null)
+                    return NotFound();
+
+                // Traer listas de disciplinas y proveedores
+                var disciplinaResponse = await _httpClient.GetAsync(_apiDisciplinaUrl);
+                ViewBag.Disciplinas = disciplinaResponse.IsSuccessStatusCode
+                    ? JsonSerializer.Deserialize<List<DisciplinaReadDTO>>(await disciplinaResponse.Content.ReadAsStringAsync(),
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    : new List<DisciplinaReadDTO>();
+
+                var proveedorResponse = await _httpClient.GetAsync(_apiProveedorUrl);
+                ViewBag.Proveedores = proveedorResponse.IsSuccessStatusCode
+                    ? JsonSerializer.Deserialize<List<ProveedorReadDTO>>(await proveedorResponse.Content.ReadAsStringAsync(),
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    : new List<ProveedorReadDTO>();
+
+                // Mapear a UpdateDTO para enviar al POST
+                var productoUpdate = new ProductoUpdateDTO
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var proveedor = JsonSerializer.Deserialize<Proveedor>(content,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    Nombre = producto.Nombre,
+                    Cantidad = producto.Cantidad,
+                    Precio = producto.Precio,
+                    EstadoId = producto.EstadoId,
+                    DisciplinaId = producto.DisciplinaId,
+                    ProveedorIds = producto.ProveedorIds
+                };
 
-                    return View(proveedor);
-                }
+                return View(productoUpdate);
             }
-            catch (Exception ex)
+            catch
             {
-                // Log error
+                return StatusCode(500, "Error al cargar el producto");
             }
-
-            return NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Proveedor proveedor)
+        public async Task<IActionResult> Edit(int id, ProductoUpdateDTO producto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    var response = await _httpClient.PutAsJsonAsync($"{_apiBaseUrl}/{id}", proveedor);
+                // Si hay error de validación, volver a traer listas para el form
+                var disciplinaResponse = await _httpClient.GetAsync(_apiDisciplinaUrl);
+                ViewBag.Disciplinas = disciplinaResponse.IsSuccessStatusCode
+                    ? JsonSerializer.Deserialize<List<DisciplinaReadDTO>>(await disciplinaResponse.Content.ReadAsStringAsync(),
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    : new List<DisciplinaReadDTO>();
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
+                var proveedorResponse = await _httpClient.GetAsync(_apiProveedorUrl);
+                ViewBag.Proveedores = proveedorResponse.IsSuccessStatusCode
+                    ? JsonSerializer.Deserialize<List<ProveedorReadDTO>>(await proveedorResponse.Content.ReadAsStringAsync(),
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    : new List<ProveedorReadDTO>();
 
-                    ModelState.AddModelError("", "Error al actualizar el proveedor");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Error de conexión con la API");
-                }
+                return View(producto);
             }
-            return View(proveedor);
+
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"{_apiBaseUrl}/{id}", producto);
+
+                if (response.IsSuccessStatusCode)
+                    return RedirectToAction(nameof(Index));
+
+                var errorContent = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", $"Error al actualizar el producto: {errorContent}");
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Error de conexión con la API");
+            }
+
+            return View(producto);
         }
 
         [HttpPost]

@@ -18,7 +18,7 @@ namespace Service.Implementations
 
         public async Task<List<ProductoReadDTO>> ObtenerTodosAsync()
         {
-            var productos = await _ProductoRepository.FindAllAsync();
+            var productos = await _ProductoRepository.FindAllAsyncConProveedores();
             return _mapper.ToReadDtoList(productos);
         }
 
@@ -27,21 +27,22 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            var producto = await _ProductoRepository.ObtenerPorId(id);
+            var producto = await _ProductoRepository.ObtenerPorIdConProveedores(id);
             if (producto == null)
                 throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
 
-            return _mapper.ToReadDto(producto);
+            return _mapper.ToReadDtoWithProveedores(producto);
         }
 
         public async Task<ProductoReadDTO> CrearAsync(ProductoCreateDTO dto)
         {
-            ValidarProductoCreateDTO(dto);
+            await ValidarProductoCreateDTO(dto);
 
             var producto = _mapper.ToEntity(dto);
-            _mapper.MapProveedores(dto, producto);
+            _mapper.CreateMapProveedores(dto, producto);
             await _ProductoRepository.Create(producto);
-            return _mapper.ToReadDto(producto);
+
+            return _mapper.ToReadDtoWithProveedores(producto);
         }
 
         public async Task<ProductoReadDTO> Editar(int id, ProductoUpdateDTO dto)
@@ -49,18 +50,18 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            ValidarProductoUpdateDTO(dto);
+            await ValidarProductoUpdateDTO(id, dto);
 
-            var producto = await _ProductoRepository.ObtenerPorId(id);
+            var producto = await _ProductoRepository.ObtenerPorIdConProveedores(id);
             if (producto == null)
                 throw new KeyNotFoundException($"No se encontró ningún producto con ID {id}.");
 
             producto.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, producto);
-
+            _mapper.UpdateMapProveedores(dto, producto);
             await _ProductoRepository.Update(producto);
 
-            return _mapper.ToReadDto(producto);
+            return _mapper.ToReadDtoWithProveedores(producto);
         }
 
         public async Task Eliminar(int id)
@@ -68,7 +69,7 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            var producto = await _ProductoRepository.ObtenerPorId(id);
+            var producto = await _ProductoRepository.ObtenerPorIdConProveedores(id);
             if (producto == null)
                 throw new KeyNotFoundException($"No se encontro ningún producto con ID {id}.");
 
@@ -76,7 +77,7 @@ namespace Service.Implementations
         }
 
 
-        async private void ValidarProductoCreateDTO(ProductoCreateDTO dto)
+        async private Task ValidarProductoCreateDTO(ProductoCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre del producto es obligatorio.");
@@ -99,9 +100,9 @@ namespace Service.Implementations
                     throw new ArgumentException("Ya existe un producto con ese nombre.", nameof(dto.Nombre));
             }
         }
-       async private void ValidarProductoUpdateDTO(ProductoUpdateDTO dto)
+        private async Task ValidarProductoUpdateDTO(int id, ProductoUpdateDTO dto)
         {
-            if (await _ProductoRepository.ExistePorNombreAsync(dto.Nombre))
+            if (await _ProductoRepository.ExistePorNombreAsync(dto.Nombre, id))
                 throw new ArgumentException("Ya existe un producto con ese nombre.", nameof(dto.Nombre));
             
             if (string.IsNullOrWhiteSpace(dto.Nombre))

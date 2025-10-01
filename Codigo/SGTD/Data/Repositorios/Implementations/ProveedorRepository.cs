@@ -16,6 +16,12 @@ namespace Data.Implementations
     {
         public ProveedorRepository(AppDbContext context) : base(context) { }
         
+        public async Task<bool> ExistePorCuitAsync(string cuit, int? excludeUserId = null)
+        {
+            return await _context.Proveedores
+                .AnyAsync(u => u.Cuit == cuit && (excludeUserId == null || u.Id != excludeUserId));
+        }
+
         public async Task<List<Proveedor>> FindAllAsyncConRubros()
         {
             return await _context.Proveedores
@@ -30,11 +36,6 @@ namespace Data.Implementations
                 .Include(p => p.RubrosProveedor)
                     .ThenInclude(rp => rp.Rubro)
                 .FirstOrDefaultAsync(p => p.Id == id);
-    
-        public async Task<bool> ExistePorCuitAsync(string cuit, int? excludeUserId = null)
-        {
-            return await _context.Proveedores
-                .AnyAsync(u => u.Cuit == cuit && (excludeUserId == null || u.Id != excludeUserId));
         }
     }
 }

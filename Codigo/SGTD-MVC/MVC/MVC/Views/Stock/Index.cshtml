@@ -150,6 +150,18 @@
                     alert('Seleccioná al menos un producto para eliminar.');
                 }
             });
+
+            btnModify?.addEventListener('click', () => {
+                const selected = document.querySelector('#tabla-body input[name="sel"]:checked');
+                if (selected) {
+                    const productoId = selected.value;
+                    // Redirigir a la acción Edit pasando el id
+                    window.location.href = `/Stock/Edit/${productoId}`;
+                } else {
+                    alert('Seleccioná un producto para modificar.');
+                }
+            });
+
         });
     </script>
 }
