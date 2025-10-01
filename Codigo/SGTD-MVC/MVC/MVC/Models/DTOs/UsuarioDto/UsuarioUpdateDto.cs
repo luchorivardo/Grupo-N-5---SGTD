@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MVC.Models.DTOs.UsuarioDto
 {
@@ -27,9 +28,10 @@ namespace MVC.Models.DTOs.UsuarioDto
         [EmailAddress(ErrorMessage = "El correo electrónico no tiene un formato válido.")]
         public string CorreoElectronico { get; set; }
 
-        [Required(ErrorMessage = "La contraseña es obligatoria.")]
         [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres.")]
-        public string Contrasenia { get; set; }
+        public string? Contrasenia { get; set; }
+        [JsonIgnore]
+        public string RepetirContrasenia { get; set; }
 
         [Required(ErrorMessage = "La ciudad es obligatoria.")]
         [StringLength(50, ErrorMessage = "La ciudad no puede superar los 50 caracteres.")]

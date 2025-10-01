@@ -8,10 +8,8 @@
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string CorreoElectronico { get; set; }
-        public string Contrasenia { get; set; }
-        public int CiudadId { get; set; }
-        public int ProvinciaId { get; set; }
-        public string Rol { get; set; }
+        public string Ciudad { get; set; }
+        public string Provincia { get; set; }
         public int RolId { get; set; }
         public int? EstadoId { get; set; }
     }
