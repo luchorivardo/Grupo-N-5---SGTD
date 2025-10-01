@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Data.Implementations;
 using Service.Contracts;
 using Service.Mappers;
 using Shared.DTOs.RubroDTOs;
@@ -35,6 +36,12 @@ namespace Service.Implementations
 
         public async Task<RubroReadDTO> CrearAsync(RubroCreateDTO dto)
         {
+            var t = _rubroRepository.FindAll();
+            if (t.Count() != 0)
+            {
+                if (await _rubroRepository.ExistePorNombreAsync(dto.Nombre))
+                    throw new ArgumentException("Ya existe un rubro con ese nombre.", nameof(dto.Nombre));
+            }
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del rol es obligatorio.");
 
@@ -48,6 +55,10 @@ namespace Service.Implementations
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
+
+            if (await _rubroRepository.ExistePorNombreAsync(dto.Nombre))
+                throw new ArgumentException("Ya existe un rubro con ese nombre.", nameof(dto.Nombre));
+
             if (string.IsNullOrEmpty(dto.Nombre))
                 throw new ArgumentException("El nombre del rol es obligatorio.");
 

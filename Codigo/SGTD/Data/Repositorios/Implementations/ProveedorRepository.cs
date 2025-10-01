@@ -1,6 +1,7 @@
 ﻿using Data.Context;
-using Data.Repositorios.Implementations;
 using Data.Contracts;
+using Data.Repositorios.Implementations;
+using Microsoft.EntityFrameworkCore;
 using Shared.Entidades;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Data.Implementations
     public class ProveedorRepository : Repository<Proveedor>, IProveedorRepository
     {
         public ProveedorRepository(AppDbContext context) : base(context) { }
-
+        
         public async Task<List<Proveedor>> FindAllAsyncConRubros()
         {
             return await _context.Proveedores
@@ -29,6 +30,11 @@ namespace Data.Implementations
                 .Include(p => p.RubrosProveedor)
                     .ThenInclude(rp => rp.Rubro)
                 .FirstOrDefaultAsync(p => p.Id == id);
+    
+        public async Task<bool> ExistePorCuitAsync(string cuit, int? excludeUserId = null)
+        {
+            return await _context.Proveedores
+                .AnyAsync(u => u.Cuit == cuit && (excludeUserId == null || u.Id != excludeUserId));
         }
     }
 }

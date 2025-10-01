@@ -76,7 +76,7 @@ namespace Service.Implementations
         }
 
 
-        private void ValidarProductoCreateDTO(ProductoCreateDTO dto)
+        async private void ValidarProductoCreateDTO(ProductoCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre del producto es obligatorio.");
@@ -92,10 +92,18 @@ namespace Service.Implementations
 
             if (dto.DisciplinaId <= 0)
                 throw new ArgumentException("El DisciplinaId debe ser válido.");
+            var hayProducto = _ProductoRepository.FindAll();
+            if (hayProducto.Count() != 0)
+            {
+                if (await _ProductoRepository.ExistePorNombreAsync(dto.Nombre))
+                    throw new ArgumentException("Ya existe un producto con ese nombre.", nameof(dto.Nombre));
+            }
         }
-
-        private void ValidarProductoUpdateDTO(ProductoUpdateDTO dto)
+       async private void ValidarProductoUpdateDTO(ProductoUpdateDTO dto)
         {
+            if (await _ProductoRepository.ExistePorNombreAsync(dto.Nombre))
+                throw new ArgumentException("Ya existe un producto con ese nombre.", nameof(dto.Nombre));
+            
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre del producto es obligatorio.");
 

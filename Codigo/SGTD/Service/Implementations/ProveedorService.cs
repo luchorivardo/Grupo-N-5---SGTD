@@ -83,7 +83,7 @@ namespace Service.Implementations
             await _proveedorRepository.Delete(proveedor);
         }
 
-        private void ValidarProveedorCreateDTO(ProveedorCreateDTO dto)
+        private async void ValidarProveedorCreateDTO(ProveedorCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre es obligatorio.");
@@ -105,6 +105,13 @@ namespace Service.Implementations
                 throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
             if (dto.EstadoId <= 0)
                 throw new ArgumentException("Debe seleccionar un estado válido.");
+
+            var hayUsuario = _proveedorRepository.FindAll();
+            if (hayUsuario.Count() != 0)
+            {
+                if (await _proveedorRepository.ExistePorCuitAsync(dto.Cuit))
+                    throw new ArgumentException("Ya existe un usuario con ese número de documento.", nameof(dto.Cuit));
+            }
         }
 
         private void ValidarProveedorUpdateDTO(ProveedorUpdateDTO dto)
@@ -122,6 +129,7 @@ namespace Service.Implementations
                 Provincia = dto.Provincia,
                 EstadoId = dto.EstadoId
             });
+
         }
 
         private bool EsTelefonoValido(string telefono)

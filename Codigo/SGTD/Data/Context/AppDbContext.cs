@@ -25,10 +25,5 @@ namespace Data.Context
         public DbSet<RubroProveedor> RubrosProveedores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=LAPTOP-KFU2M4R9;Database=TiendaDeportivaDB;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;"
-        //    );
-        //}
     }
 }
