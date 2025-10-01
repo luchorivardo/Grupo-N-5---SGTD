@@ -22,7 +22,6 @@ namespace MVC.Controllers
                 _httpClient = httpClientFactory.CreateClient("ProveedoresApi");
             }
 
-            [Authorize(Roles = "2")]
             public async Task<IActionResult> Index()
             {
                 try
@@ -141,6 +140,7 @@ namespace MVC.Controllers
                 return View(proveedor);
             }
 
+            [HttpGet]   
             public async Task<IActionResult> Edit(int id)
             {
                 try
@@ -150,22 +150,43 @@ namespace MVC.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var proveedor = JsonSerializer.Deserialize<Proveedor>(content,
+                        var proveedor = JsonSerializer.Deserialize<ProveedorUpdateDTO>(content,
                             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                        // Cargar Rubros
+                        var rubroResponse = await _httpClient.GetAsync(_apiRubroUrl);
+                        if (rubroResponse.IsSuccessStatusCode)
+                        {
+                            var rubroContent = await rubroResponse.Content.ReadAsStringAsync();
+                            var rubros = JsonSerializer.Deserialize<List<RubroReadDTO>>(rubroContent,
+                                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                            ViewBag.Rubros = rubros;
+                        }
+
+                        // Cargar Provincias
+                        using var http = new HttpClient();
+                        var provinciasResponse = await http.GetAsync("https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre");
+                        if (provinciasResponse.IsSuccessStatusCode)
+                        {
+                            var provinciasContent = await provinciasResponse.Content.ReadAsStringAsync();
+                            var provinciasWrapper = JsonSerializer.Deserialize<ProvinciaWrapper>(provinciasContent,
+                                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                            ViewBag.Provincias = provinciasWrapper?.Provincias.OrderBy(p => p.Nombre).ToList();
+                        }
 
                         return View(proveedor);
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Log error
+                    ViewBag.Error = "Error al cargar el proveedor";
                 }
 
                 return NotFound();
             }
 
             [HttpPost]
-            public async Task<IActionResult> Edit(int id, Proveedor proveedor)
+            public async Task<IActionResult> Edit(int id, ProveedorUpdateDTO proveedor)
             {
                 if (ModelState.IsValid)
                 {
@@ -185,8 +206,30 @@ namespace MVC.Controllers
                         ModelState.AddModelError("", "Error de conexión con la API");
                     }
                 }
+
+                // recargar combos si algo falla
+                var rubroResponse = await _httpClient.GetAsync(_apiRubroUrl);
+                if (rubroResponse.IsSuccessStatusCode)
+                {
+                    var rubroContent = await rubroResponse.Content.ReadAsStringAsync();
+                    var rubros = JsonSerializer.Deserialize<List<RubroReadDTO>>(rubroContent,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    ViewBag.Rubros = rubros;
+                }
+
+                using var http = new HttpClient();
+                var provinciasResponse = await http.GetAsync("https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre");
+                if (provinciasResponse.IsSuccessStatusCode)
+                {
+                    var provinciasContent = await provinciasResponse.Content.ReadAsStringAsync();
+                    var provinciasWrapper = JsonSerializer.Deserialize<ProvinciaWrapper>(provinciasContent,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    ViewBag.Provincias = provinciasWrapper?.Provincias.OrderBy(p => p.Nombre).ToList();
+                }
+
                 return View(proveedor);
             }
+
 
             [HttpPost]
             public async Task<IActionResult> Delete(int id)

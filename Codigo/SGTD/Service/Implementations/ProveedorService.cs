@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Shared.DTOs.ProveedorDTOs;
 using Shared.Entidades;
@@ -23,7 +24,7 @@ namespace Service.Implementations
 
         public async Task<List<ProveedorReadDTO>> ObtenerTodosAsync()
         {
-            var proveedores = await _proveedorRepository.FindAllAsync();
+            var proveedores = await _proveedorRepository.FindAllAsyncConRubros();
 
             return _mapper.ToReadDtoList(proveedores);
         }
@@ -33,21 +34,21 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            var proveedor = await _proveedorRepository.ObtenerPorId(id);
+            var proveedor = await _proveedorRepository.ObtenerPorIdConRubros(id);
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
-            return _mapper.ToReadDto(proveedor);
+            return _mapper.ToReadDtoWithRubros(proveedor);
         }
         public async Task<ProveedorReadDTO> CrearAsync(ProveedorCreateDTO dto)
         {
             ValidarProveedorCreateDTO(dto);
 
             var proveedor = _mapper.ToEntity(dto);
-            _mapper.MapRubros(dto, proveedor);
+            _mapper.CreateMapRubros(dto, proveedor);
             await _proveedorRepository.Create(proveedor);
 
-            return _mapper.ToReadDto(proveedor);
+            return _mapper.ToReadDtoWithRubros(proveedor);
         }
 
         public async Task<ProveedorReadDTO> Editar(int id, ProveedorUpdateDTO dto)
@@ -57,15 +58,17 @@ namespace Service.Implementations
 
             ValidarProveedorUpdateDTO(dto);
 
-            var proveedor = await _proveedorRepository.ObtenerPorId(id);
+            dto.RubroIds = dto.RubroIds?.Distinct().ToList();
+            var proveedor = await _proveedorRepository.ObtenerPorIdConRubros(id);
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
             proveedor.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, proveedor);
+            _mapper.UpdateMapRubros(dto, proveedor);
             await _proveedorRepository.Update(proveedor);
 
-            return _mapper.ToReadDto(proveedor);
+            return _mapper.ToReadDtoWithRubros(proveedor);
         }
 
         public async Task Eliminar(int id)

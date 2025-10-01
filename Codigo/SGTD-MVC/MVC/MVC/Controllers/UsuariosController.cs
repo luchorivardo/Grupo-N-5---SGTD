@@ -11,6 +11,7 @@ using System.Text.Json;
 
 namespace MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsuariosController : Controller
     {
         private readonly HttpClient _httpClient;
