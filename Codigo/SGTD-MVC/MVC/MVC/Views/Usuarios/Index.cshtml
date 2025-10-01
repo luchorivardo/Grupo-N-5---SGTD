@@ -61,8 +61,8 @@
                                         @usuario.EstadoId
                                     </span>
                                 </td> *@
-                                <td>@usuario.CiudadId</td>
-                                <td>@usuario.ProvinciaId</td>
+                                <td>@usuario.Ciudad</td>
+                                <td>@usuario.Provincia</td>
                             </tr>
                         }
                     }
@@ -144,6 +144,15 @@
                     new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
                 } else {
                     alert('Seleccioná al menos un usuario para eliminar.');
+                }
+            });
+            btnModify?.addEventListener('click', () => {
+                const selected = document.querySelector('#tabla-body input[name="sel"]:checked');
+                if (selected) {
+                    const id = selected.value;
+                    window.location.href = `/Usuarios/Edit/${id}`;
+                } else {
+                    alert('Seleccioná un usuario para modificar.');
                 }
             });
         });

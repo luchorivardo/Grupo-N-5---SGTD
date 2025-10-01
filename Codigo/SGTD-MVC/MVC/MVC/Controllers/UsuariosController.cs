@@ -118,31 +118,47 @@ namespace MVC.Controllers
             return View(usuario);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            try
+            // Obtener el usuario
+            var response = await _httpClient.GetAsync($"{_apiBaseUrl}/{id}");
+           if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"{_apiBaseUrl}/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var usuario = JsonSerializer.Deserialize<Usuario>(content,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                    return View(usuario);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log error
+                return NotFound();
             }
 
-            return NotFound();
+            var content = await response.Content.ReadAsStringAsync();
+            var usuario = JsonSerializer.Deserialize<UsuarioUpdateDTO>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            // Cargar roles
+            var rolResponse = await _httpClient.GetAsync(_apiRolUrl);
+            if (rolResponse.IsSuccessStatusCode)
+            {
+                var rolContent = await rolResponse.Content.ReadAsStringAsync();
+                var roles = JsonSerializer.Deserialize<List<RolReadDTO>>(rolContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                ViewBag.Roles = roles;
+            }
+
+            // Cargar Provincias
+            using var http = new HttpClient();
+            var provinciasResponse = await http.GetAsync("https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre");
+            if (provinciasResponse.IsSuccessStatusCode)
+            {
+                var provinciasContent = await provinciasResponse.Content.ReadAsStringAsync();
+                var provinciasWrapper = JsonSerializer.Deserialize<ProvinciaWrapper>(provinciasContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                ViewBag.Provincias = provinciasWrapper?.Provincias.OrderBy(p => p.Nombre).ToList();
+            }
+
+            return View(usuario);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Usuario usuario)
+        public async Task<IActionResult> Edit(int id, UsuarioUpdateDTO usuario)
         {
             if (ModelState.IsValid)
             {
@@ -157,11 +173,32 @@ namespace MVC.Controllers
 
                     ModelState.AddModelError("", "Error al actualizar el usuario");
                 }
-                catch (Exception ex)
+                catch
                 {
                     ModelState.AddModelError("", "Error de conexión con la API");
                 }
             }
+
+            // recargar combos si algo falla
+            var rolesResponse = await _httpClient.GetAsync(_apiRolUrl);
+            if (rolesResponse.IsSuccessStatusCode)
+            {
+                var rolesContent = await rolesResponse.Content.ReadAsStringAsync();
+                var roles = JsonSerializer.Deserialize<List<RolReadDTO>>(rolesContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                ViewBag.Roles = roles;
+            }
+
+            using var http = new HttpClient();
+            var provinciasResponse = await http.GetAsync("https://apis.datos.gob.ar/georef/api/provincias?campos=id,nombre");
+            if (provinciasResponse.IsSuccessStatusCode)
+            {
+                var provinciasContent = await provinciasResponse.Content.ReadAsStringAsync();
+                var provinciasWrapper = JsonSerializer.Deserialize<ProvinciaWrapper>(provinciasContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                ViewBag.Provincias = provinciasWrapper?.Provincias.OrderBy(p => p.Nombre).ToList();
+            }
+
             return View(usuario);
         }
 
