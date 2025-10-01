@@ -42,7 +42,7 @@ namespace Service.Implementations
         }
         public async Task<ProveedorReadDTO> CrearAsync(ProveedorCreateDTO dto)
         {
-            ValidarProveedorCreateDTO(dto);
+            await ValidarProveedorCreateDTO(dto);
 
             var proveedor = _mapper.ToEntity(dto);
             _mapper.CreateMapRubros(dto, proveedor);
@@ -56,7 +56,7 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            ValidarProveedorUpdateDTO(dto);
+            await ValidarProveedorUpdateDTO(id, dto);
 
             dto.RubroIds = dto.RubroIds?.Distinct().ToList();
             var proveedor = await _proveedorRepository.ObtenerPorIdConRubros(id);
@@ -83,7 +83,7 @@ namespace Service.Implementations
             await _proveedorRepository.Delete(proveedor);
         }
 
-        private async void ValidarProveedorCreateDTO(ProveedorCreateDTO dto)
+        private async Task ValidarProveedorCreateDTO(ProveedorCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre es obligatorio.");
@@ -110,26 +110,38 @@ namespace Service.Implementations
             if (hayUsuario.Count() != 0)
             {
                 if (await _proveedorRepository.ExistePorCuitAsync(dto.Cuit))
-                    throw new ArgumentException("Ya existe un usuario con ese número de documento.", nameof(dto.Cuit));
+                    throw new ArgumentException("Ya existe un proveedor con ese número de CUIT.", nameof(dto.Cuit));
             }
         }
 
-        private void ValidarProveedorUpdateDTO(ProveedorUpdateDTO dto)
+        private async Task ValidarProveedorUpdateDTO(int id, ProveedorUpdateDTO dto)
         {
             if (dto.Id <= 0)
                 throw new ArgumentException("ID inválido.");
-            ValidarProveedorCreateDTO(new ProveedorCreateDTO
-            {
-                Nombre = dto.Nombre,
-                Cuit = dto.Cuit,
-                Direccion = dto.Direccion,
-                Correo = dto.Correo,
-                Telefono = dto.Telefono,
-                Ciudad = dto.Ciudad,
-                Provincia = dto.Provincia,
-                EstadoId = dto.EstadoId
-            });
 
+            if (await _proveedorRepository.ExistePorCuitAsync(dto.Cuit, id))
+                throw new ArgumentException("Ya existe un proveedor con ese número de CUIT.", nameof(dto.Cuit));
+
+            if (string.IsNullOrWhiteSpace(dto.Nombre))
+                throw new ArgumentException("El nombre es obligatorio.");
+            if (!EsCuitValido(dto.Cuit))
+                throw new ArgumentException("El CUIT no es válido. Formato esperado: XX-XXXXXXXX-X");
+            if (string.IsNullOrWhiteSpace(dto.Direccion))
+                throw new ArgumentException("La dirección es obligatoria.");
+            if (!EsCorreoValido(dto.Correo))
+                throw new ArgumentException("El correo no es válido.");
+            if (!EsTelefonoValido(dto.Telefono))
+                throw new ArgumentException("El número de teléfono debe comenzar con + y tener entre 7 y 15 dígitos.");
+            if (string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La ciudad es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length > 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La provincia es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length > 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
+            if (dto.EstadoId <= 0)
+                throw new ArgumentException("Debe seleccionar un estado válido.");
         }
 
         private bool EsTelefonoValido(string telefono)

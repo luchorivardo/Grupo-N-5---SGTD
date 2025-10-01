@@ -18,7 +18,23 @@ namespace Data.Implementations
         public async Task<bool> ExistePorNombreAsync(string nombre, int? excludeUserId = null)
         {
             return await _context.Productos
-                .AnyAsync(u => u.Nombre == nombre && (excludeUserId == null || u.Id != excludeUserId));
+                .AnyAsync(u => u.Nombre == nombre && (!excludeUserId.HasValue || u.Id != excludeUserId));
+        }
+
+        public async Task<List<Producto>> FindAllAsyncConProveedores()
+        {
+            return await _context.Productos
+                .Include(p => p.ProductoProveedor)
+                    .ThenInclude(rp => rp.Proveedor) // si también querés los datos del Rubro
+                .ToListAsync();
+        }
+
+        public async Task<Producto> ObtenerPorIdConProveedores(int id)
+        {
+            return await _context.Productos
+                .Include(p => p.ProductoProveedor)
+                    .ThenInclude(rp => rp.Proveedor)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
