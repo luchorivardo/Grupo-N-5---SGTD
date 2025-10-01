@@ -25,10 +25,5 @@ namespace Data.Context
         public DbSet<RubroProveedor> RubrosProveedores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=tcp:sgdtbd.database.windows.net,1433;Initial Catalog=TiendaDeportivaDB;Persist Security Info=False;User ID=lucianorivardo@sgdtbd;Password=luri+1569;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-        //    );
-        //}
     }
 }

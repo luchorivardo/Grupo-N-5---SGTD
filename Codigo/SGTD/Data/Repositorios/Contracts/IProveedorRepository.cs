@@ -10,6 +10,8 @@ namespace Data.Contracts
 {
     public interface IProveedorRepository : IRepository<Proveedor>
     {
+        Task<List<Proveedor>> FindAllAsyncConRubros();
+        Task<Proveedor> ObtenerPorIdConRubros(int id);
         Task<bool> ExistePorCuitAsync(string cuit, int? excludeUserId = null);
     }
 }

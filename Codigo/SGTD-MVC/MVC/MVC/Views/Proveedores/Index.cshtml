@@ -163,6 +163,17 @@
                     alert('Seleccioná al menos un proveedor para eliminar.');
                 }
             });
+
+            // --- Modificar ---
+            btnModify?.addEventListener('click', () => {
+                const selected = document.querySelector('#tabla-body input[name="sel"]:checked');
+                if (selected) {
+                    const id = selected.value;
+                    window.location.href = `/Proveedores/Edit/${id}`;
+                } else {
+                    alert('Seleccioná un proveedor para modificar.');
+                }
+            });
         });
     </script>
 }
