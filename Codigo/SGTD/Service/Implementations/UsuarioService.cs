@@ -84,6 +84,7 @@ namespace Service.Implementations
                 throw new KeyNotFoundException($"No se encontró ningún usuario con ID {id}.");
 
             usuario.UpdatedDate = DateTime.Now;
+
             _mapper.UpdateEntity(dto, usuario);
 
             await _usuarioRepository.Update(usuario);

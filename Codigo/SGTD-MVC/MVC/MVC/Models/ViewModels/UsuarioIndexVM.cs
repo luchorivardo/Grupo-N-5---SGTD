@@ -1,14 +1,6 @@
-﻿using Shared.Entidades;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared.DTOs.UsuarioDTOs
+﻿namespace MVC.Models.ViewModels
 {
-    public class UsuarioReadDTO
+    public class UsuarioIndexVM
     {
         public int Id { get; set; }
         public string TipoDocumento { get; set; }
@@ -19,7 +11,8 @@ namespace Shared.DTOs.UsuarioDTOs
         public string Ciudad { get; set; }
         public string Provincia { get; set; }
         public int RolId { get; set; }
-        public string RolUsuario { get; set; }
+        public string RolNombre { get; set; }
         public int? EstadoId { get; set; }
+        public string EstadoNombre { get; set; }
     }
 }

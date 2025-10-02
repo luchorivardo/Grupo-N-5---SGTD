@@ -12,6 +12,9 @@
     _init() {
         if (!this.trigger || !this.optionsList) return;
 
+        // Inicializar los que ya vienen seleccionados
+        this._initializePreselected();
+
         this.trigger.addEventListener('click', e => {
             e.preventDefault();
             e.stopPropagation();
@@ -19,10 +22,12 @@
         });
 
         this.optionsList.querySelectorAll('li').forEach(li => {
-            li.addEventListener('click', e => {
-                e.stopPropagation();
-                this._selectOption(li);
-            });
+            if (!li.classList.contains('disabled')) {
+                li.addEventListener('click', e => {
+                    e.stopPropagation();
+                    this._selectOption(li);
+                });
+            }
         });
 
         document.addEventListener('click', e => {
@@ -30,6 +35,26 @@
                 this._close();
             }
         });
+    }
+
+    _initializePreselected() {
+        const preselected = this.optionsList.querySelectorAll('li.selected');
+        if (preselected.length > 0) {
+            preselected.forEach(li => {
+                const value = li.getAttribute('data-value');
+                // Crear inputs ocultos para los seleccionados iniciales
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = this.container.dataset.name;
+                input.value = value;
+                input.dataset.value = value;
+                this.hiddenInputsContainer.appendChild(input);
+            });
+
+            const selectedTexts = Array.from(preselected).map(li => li.textContent.trim());
+            this.selectedValue.textContent = selectedTexts.join(', ');
+            this.selectedValue.classList.remove('placeholder');
+        }
     }
 
     _toggle() {
@@ -47,7 +72,6 @@
         if (this.multiple) {
             optionLi.classList.toggle('selected');
 
-            // actualizar hidden inputs
             if (optionLi.classList.contains('selected')) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -60,7 +84,6 @@
                 if (input) input.remove();
             }
 
-            // actualizar texto del trigger
             const selectedTexts = Array.from(this.optionsList.querySelectorAll('li.selected'))
                 .map(li => li.textContent.trim());
             this.selectedValue.textContent = selectedTexts.length > 0
@@ -69,14 +92,11 @@
             this.selectedValue.classList.toggle('placeholder', selectedTexts.length === 0);
 
         } else {
-            // single-select normal
             this.optionsList.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
             optionLi.classList.add('selected');
 
-            if (this.selectedValue) {
-                this.selectedValue.textContent = text;
-                this.selectedValue.classList.remove('placeholder');
-            }
+            this.selectedValue.textContent = text;
+            this.selectedValue.classList.remove('placeholder');
 
             this.hiddenInputsContainer.innerHTML = '';
             const input = document.createElement('input');

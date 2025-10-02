@@ -42,6 +42,9 @@ namespace Shared.DTOs.ProveedorDTOs
         [StringLength(50, ErrorMessage = "La provincia no puede superar los 50 caracteres.")]
         public string Provincia { get; set; }
 
+        [Required(ErrorMessage = "El rubro es obligatorio.")]
+        public List<int> RubroIds { get; set; }
+
         [Required(ErrorMessage = "El estado es obligatorio.")]
         public int EstadoId { get; set; }
     }

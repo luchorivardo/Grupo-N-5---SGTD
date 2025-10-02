@@ -6,9 +6,11 @@ using Data.Repositorios.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Service.Implementations;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-
+QuestPDF.Settings.License = LicenseType.Community;
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

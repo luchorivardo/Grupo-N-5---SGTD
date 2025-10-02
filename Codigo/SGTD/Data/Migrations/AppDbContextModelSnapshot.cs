@@ -118,9 +118,6 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CantidadProductos")
-                        .HasColumnType("int");
-
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
@@ -144,9 +141,6 @@ namespace Data.Migrations
                     b.Property<int>("Monto")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("RazonSocial")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -161,11 +155,44 @@ namespace Data.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.HasIndex("ProductoId");
-
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Facturas");
+                });
+
+            modelBuilder.Entity("Shared.Entidades.FacturaProducto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FacturaId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacturaId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("FacturaProductos");
                 });
 
             modelBuilder.Entity("Shared.Entidades.Producto", b =>
@@ -432,12 +459,6 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Entidades.Producto", "Producto")
-                        .WithMany()
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Shared.Entidades.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
@@ -446,9 +467,26 @@ namespace Data.Migrations
 
                     b.Navigation("Cliente");
 
-                    b.Navigation("Producto");
-
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Shared.Entidades.FacturaProducto", b =>
+                {
+                    b.HasOne("Shared.Entidades.Factura", "Factura")
+                        .WithMany("FacturaProductos")
+                        .HasForeignKey("FacturaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Entidades.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Factura");
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Shared.Entidades.Producto", b =>
@@ -534,6 +572,11 @@ namespace Data.Migrations
                     b.Navigation("Estado");
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("Shared.Entidades.Factura", b =>
+                {
+                    b.Navigation("FacturaProductos");
                 });
 
             modelBuilder.Entity("Shared.Entidades.Producto", b =>

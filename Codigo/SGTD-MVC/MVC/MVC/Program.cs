@@ -81,7 +81,7 @@ builder.Services.AddDistributedMemoryCache();
     app.UseRouting();
 
     app.UseSession();
-    app.UseAuthentication();// <--- Debe ir antes de UseAuthorization
+    app.UseAuthentication();
     app.UseAuthorization();
    
 

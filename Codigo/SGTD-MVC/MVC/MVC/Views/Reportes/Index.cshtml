@@ -92,6 +92,7 @@
             <button id="btnGenerarVenta" class="btn btn-lg btn-add">GENERAR VENTA</button>
             <div class="ms-auto d-flex gap-2">
                 <button id="btnVerDetalles" class="btn btn-lg btn-edit" disabled>VER DETALLES</button>
+                <button id="btnDescargarPdf" class="btn btn-lg btn-secondary" disabled>📄 DESCARGAR PDF</button>
             </div>
         </div>
     </div>
@@ -115,6 +116,7 @@
 
             // Habilitar botón de ver detalles
             document.getElementById('btnVerDetalles').disabled = false;
+            document.getElementById('btnDescargarPdf').disabled = false;
         }
 
         // Simple filtro cliente (opcional) — filtra por texto en la tabla
@@ -157,6 +159,14 @@
             }
         });
     </script>
+    </<script>
+                  document.getElementById('btnDescargarPdf').addEventListener('click', function() {
+                  if (reporteSeleccionado) {
+                      window.location.href = `/Reportes/DescargarPdf/${reporteSeleccionado}`;
+                  }
+              });
+    </script>
+
 }
 
 <style>

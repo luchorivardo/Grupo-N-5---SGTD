@@ -17,6 +17,8 @@ namespace Data.Context
         public DbSet<Disciplina> Disciplinas { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Factura> Facturas { get; set; }
+
+        public DbSet<FacturaProducto> FacturaProductos { get; set; }
         public DbSet<Producto> Productos { get; set; }
         public DbSet<ProductoProveedor> ProductosProveedores { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
@@ -25,10 +27,5 @@ namespace Data.Context
         public DbSet<RubroProveedor> RubrosProveedores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=LAPTOP-KFU2M4R9;Database=TiendaDeportivaDB;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;"
-        //    );
-        //}
     }
 }

@@ -10,5 +10,6 @@ namespace Data.Repositorios.Contracts
 {
     public interface IDisciplinaRepository : IRepository<Disciplina>
     {
+        Task<bool> ExistePorNombreAsync(string nombre, int? excludeUserId = null);
     }
 }
