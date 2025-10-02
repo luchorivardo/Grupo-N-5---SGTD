@@ -17,6 +17,8 @@ namespace Data.Context
         public DbSet<Disciplina> Disciplinas { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Factura> Facturas { get; set; }
+
+        public DbSet<FacturaProducto> FacturaProductos { get; set; }
         public DbSet<Producto> Productos { get; set; }
         public DbSet<ProductoProveedor> ProductosProveedores { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
