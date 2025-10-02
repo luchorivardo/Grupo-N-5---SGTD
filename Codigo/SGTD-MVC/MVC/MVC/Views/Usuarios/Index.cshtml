@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC.Models.DTOs.UsuarioDto.UsuarioReadDTO>
+﻿@model IEnumerable<MVC.Models.ViewModels.UsuarioIndexVM>
 
 @{
     ViewData["Title"] = "Usuarios";
@@ -26,43 +26,61 @@
     <!-- Tabla dentro de un contenedor con scroll -->
     <div class="table-card">
         <div class="table-responsive proveedores-table-wrapper">
-            <table class="table proveedores-table mb-0">
+            <table class="table proveedores-table index-table mb-0">
                 <thead>
                     <tr>
                         <th class="check-col"><input type="checkbox" id="checkAll" /></th>
                         <th>Nombre y Apellido</th>
                         <th>Tipo Documento</th>
                         <th>Documento</th>
-                        <th>Teléfono</th>
-                        <th>Correo Electronico</th>
-                        <th>Rol</th>
-                        <th>Estado</th>
+                        <th>Correo Electronico</th>                        
                         <th>Ciudad</th>
-                        <th>Provincia</th>
+						<th>Provincia</th>
+						<th class="rol-col">Rol</th>
+                        <th class="estado-col">Estado</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
-                    @* Ejemplo: recorriendo el modelo *@
                     @if (Model != null)
                     {
                         foreach (var usuario in Model)
                         {
                             <tr>
                                 <td class="check-col"><input type="checkbox" name="sel" value="@usuario.Id" /></td>
-                                <td>@usuario.Nombre; @usuario.Apellido</td>
-                         
+                                <td>@usuario.Nombre @usuario.Apellido</td>
                                 <td>@usuario.TipoDocumento</td>
                                 <td>@usuario.NumeroDocumento</td>
-                                
                                 <td>@usuario.CorreoElectronico</td>
-                                <td>@usuario.RolId</td>
-                             @*    <td>
-                                    <span class="badge @(usuario.EstadoId == "Activo" ? "bg-success" : "bg-secondary")">
-                                        @usuario.EstadoId
-                                    </span>
-                                </td> *@
                                 <td>@usuario.Ciudad</td>
-                                <td>@usuario.Provincia</td>
+								<td>@usuario.Provincia</td>
+                                <td class="rol-col">
+                                    @if (usuario.RolNombre == "Admin")
+                                    {
+                                        <span class="badge rol-admin">Admin</span>
+                                    }
+                                    else if (usuario.RolNombre == "Empleado")
+                                    {
+                                        <span class="badge rol-empleado">Empleado</span>
+                                    }
+                                    else if (usuario.RolNombre == "Contador")
+                                    {
+                                        <span class="badge rol-contador">Contador</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge">@usuario.RolNombre</span>
+                                    }
+                                </td>
+                                <td class="estado-col">
+                                    @if (usuario.EstadoNombre == "Activo")
+                                    {
+                                        <span class="badge estado-activo">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge estado-inactivo">Inactivo</span>
+                                    }
+                                </td>
                             </tr>
                         }
                     }
