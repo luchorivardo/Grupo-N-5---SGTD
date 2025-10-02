@@ -1,6 +1,6 @@
-﻿namespace MVC.Models.DTOs.ProveedorDto
+﻿namespace MVC.Models.ViewModels
 {
-    public class ProveedorReadDTO
+    public class ProveedorIndexVm
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
@@ -11,6 +11,8 @@
         public string Ciudad { get; set; }
         public string Provincia { get; set; }
         public int EstadoId { get; set; }
+        public string EstadoNombre { get; set; }
         public List<int> RubroIds { get; set; }
+        public List<string> RubroNombres { get; set; }
     }
 }
