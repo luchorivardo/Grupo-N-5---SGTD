@@ -63,7 +63,7 @@
                             }
                             else
                             {
-                                <ul class="custom-multiple-select-options">
+                                <ul class="custom-select-options">
                                     <li class="disabled">Error, no hay roles disponibles</li>
                                 </ul>
                             }
@@ -100,7 +100,7 @@
                             }
                             else
                             {
-                                <ul class="custom-multiple-select-options">
+                                <ul class="custom-select-options">
                                     <li class="disabled">Error, no hay provincias disponibles</li>
                                 </ul>
                             }
@@ -164,30 +164,8 @@
 
 @section Scripts {
     <script src="~/js/select.js" defer asp-append-version="true"></script>
-    <script src="~/js/multipleSelect.js" defer asp-append-version="true"></script>
+    <script src="~/js/switch.js" defer asp-append-version="true"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const switchInput = document.getElementById('estadoSwitch');
-            const switchLabel = document.getElementById('estadoLabel');
-            const hiddenEstado = document.getElementById('EstadoId');
-
-            // Inicializar valores
-            switchLabel.textContent = switchInput.checked ? "Activo" : "Inactivo";
-            hiddenEstado.value = switchInput.checked ? 3 : 4;
-
-            // Actualizar dinámicamente
-            switchInput.addEventListener('change', () => {
-                if (switchInput.checked) {
-                    switchLabel.textContent = "Activo";
-                    hiddenEstado.value = 3;
-                } else {
-                    switchLabel.textContent = "Inactivo";
-                    hiddenEstado.value = 4;
-                }
-            });
-        });
-    </script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const provinciaContainer = document.getElementById("provinciaSelect");

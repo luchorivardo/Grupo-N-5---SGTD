@@ -9,5 +9,6 @@ namespace Data.Repositorios.Contracts
 {
     public interface IFacturaRepository : IRepository<Factura>
     {
+        IQueryable<Factura> Query();
     }
 }

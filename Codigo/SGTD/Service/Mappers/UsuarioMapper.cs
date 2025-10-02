@@ -17,7 +17,6 @@ namespace Service.Mappers
         public partial UsuarioReadDTO ToReadDto(Usuario entity);
 
         public partial void UpdateEntity(UsuarioUpdateDTO dto, Usuario entity);
-
         public List<UsuarioReadDTO> ToReadDtoList(IEnumerable<Usuario> entities)
             => entities.Select(ToReadDto).ToList();
     }

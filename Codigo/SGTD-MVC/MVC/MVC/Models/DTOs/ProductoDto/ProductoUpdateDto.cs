@@ -25,5 +25,6 @@ namespace MVC.Models.DTOs.ProductoDto
         [Required(ErrorMessage = "La disciplina es obligatoria.")]
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una disciplina válida.")]
         public int DisciplinaId { get; set; }
+        public List<int> ProveedorIds { get; set; } = new List<int>();
     }
 }

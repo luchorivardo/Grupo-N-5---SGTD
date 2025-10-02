@@ -1,0 +1,249 @@
+﻿@model MVC.Models.DTOs.UsuarioDto.UsuarioUpdateDTO
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<link rel="stylesheet" href="~/css/createBase.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/botones.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/select.css" asp-append-version="true" />
+
+<div class="content-container p-4 edit-usuario-page">
+    <div class="form-card">
+        <h2 class="form-title">EDITAR USUARIO</h2>
+
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-row">
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-input", placeholder = "Nombre", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.Apellido, new { @class = "form-input", placeholder = "Apellido", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Apellido)
+                </div>
+            </div>
+
+            <div class="form-row">
+                <!-- Tipo de documento -->
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="tipoDocumentoSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value">@(!string.IsNullOrEmpty(Model.TipoDocumento) ? Model.TipoDocumento : "Seleccione el tipo de documento")</span>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <ul class="custom-select-options">
+                            <li data-value="DNI" class="@(Model.TipoDocumento == "DNI" ? "selected" : "")">DNI</li>
+                            <li data-value="Pasaporte" class="@(Model.TipoDocumento == "Pasaporte" ? "selected" : "")">Pasaporte</li>
+                            <li data-value="Cédula de Identidad" class="@(Model.TipoDocumento == "Cédula de Identidad" ? "selected" : "")">Cédula de Identidad</li>
+                        </ul>
+                        <input type="hidden" name="TipoDocumento" value="@Model.TipoDocumento" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TipoDocumento)
+                </div>
+
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.NumeroDocumento, new { @class = "form-input", placeholder = "Número de Documento", required = "required" })
+                    @Html.ValidationMessageFor(m => m.NumeroDocumento)
+                </div>
+
+                <!-- Rol -->
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="rolSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value placeholder">Seleccione un rol</span>
+                            <span class="arrow">▼</span>
+                        </button>
+
+                        @if (ViewBag.Roles != null && ((IEnumerable<MVC.Models.DTOs.RolDto.RolReadDTO>)ViewBag.Roles).Any())
+                        {
+                            <ul class="custom-select-options">
+                                @foreach (var rol in (IEnumerable<MVC.Models.DTOs.RolDto.RolReadDTO>)ViewBag.Roles)
+                                {
+                                    var selected = Model.RolId == rol.Id ? "selected" : "";
+                                    <li data-value="@rol.Id" class="@selected">@rol.Nombre</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <li class="disabled">Error, no hay roles disponibles</li>
+                        }
+                        <input type="hidden" name="RolId" value="@Model.RolId" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.RolId)
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div style="width:100%;">
+                    @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-input", placeholder = "Correo Electrónico", required = "required" })
+                    @Html.ValidationMessageFor(m => m.CorreoElectronico)
+                </div>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="form-row">
+                <!-- Provincias -->
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="provinciaSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value">@(!string.IsNullOrEmpty(Model.Provincia) ? Model.Provincia : "Seleccione provincia")</span>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <ul class="custom-select-options">
+                            @if (ViewBag.Provincias != null && ((IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias).Any())
+                            {
+                                @foreach (var prov in (IEnumerable<MVC.Controllers.ProvinciaDTO>)ViewBag.Provincias)
+                                {
+                                    var selected = Model.Provincia == prov.Nombre;
+                                    <li data-value="@prov.Nombre" class="@(selected ? "selected" : "")">@prov.Nombre</li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="disabled">Error, no hay provincias disponibles</li>
+                            }
+                        </ul>
+
+                        <input type="hidden" id="ProvinciaNombre" name="Provincia" value="@Model.Provincia" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Provincia)
+                </div>
+
+                <!-- Ciudades -->
+                <div style="width:100%;">
+                    <div class="custom-select-container" id="ciudadSelect">
+                        <button type="button" class="custom-select-trigger">
+                            <span class="selected-value">@(!string.IsNullOrEmpty(Model.Ciudad) ? Model.Ciudad : "Seleccione ciudad")</span>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <ul class="custom-select-options">
+                            @if (ViewBag.Ciudades != null && ((IEnumerable<MVC.Controllers.CiudadDTO>)ViewBag.Ciudades).Any())
+                            {
+                                foreach (var ciudad in (IEnumerable<MVC.Controllers.CiudadDTO>)ViewBag.Ciudades)
+                                {
+                                    var selected = Model.Ciudad == ciudad.Nombre;
+                                    <li data-value="@ciudad.Nombre" class="@(selected ? "selected" : "")">@ciudad.Nombre</li>
+                                }
+                            }
+                            else if (!string.IsNullOrEmpty(Model.Ciudad))
+                            {
+                                <li data-value="@Model.Ciudad" class="selected">@Model.Ciudad</li>
+                            }
+                        </ul>
+                        <input type="hidden" id="CiudadNombre" name="Ciudad" value="@Model.Ciudad" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Ciudad)
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-bottom: 0;">
+                <button type="button" id="btnMostrarContrasenia" class="btn btn-edit" style="height: 48px; width: 210px; font-size: 0.95rem; padding: 8px 8px !important; margin-bottom: 21px;">
+                    MODIFICAR CONTRASEÑA
+				</button>
+                <div class="form-row" id="contraseniaContainer" style="display:none; width: 100%;">
+                    <div class="form-row" style="width:100%; margin-bottom: 0;">
+						<div style="width:100%;">
+							@Html.TextBoxFor(m => m.Contrasenia, new { @class = "form-input", placeholder = "Contraseña", type = "password" })
+						</div>
+						<div style="width:100%;">
+							@Html.TextBoxFor(m => m.RepetirContrasenia, new { @class = "form-input", placeholder = "Repetir Contraseña", type = "password" })
+						</div>
+					</div>
+				</div>
+            </div>
+
+            
+
+            <div class="estado-row">
+                <div><label>Estado:</label></div>
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" id="estadoSwitch" @(Model.EstadoId == 1 ? "checked" : "") />
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="estadoLabel" class="switch-label">@(Model.EstadoId == 1 ? "Activo" : "Inactivo")</span>
+                </div>
+            </div>
+            <input type="hidden" id="EstadoId" name="EstadoId" value="@Model.EstadoId" />
+
+            <div class="form-actions">
+                <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
+                <button type="submit" class="btn btn-lg btn-add">GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/select.js" defer asp-append-version="true"></script>
+    <script src="~/js/switch.js" defer asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const provinciaContainer = document.getElementById("provinciaSelect");
+            const ciudadContainer = document.getElementById("ciudadSelect");
+            const ciudadOptionsList = ciudadContainer.querySelector(".custom-select-options");
+
+            // Cambio de provincia
+            provinciaContainer.addEventListener("custom-select:change", async (e) => {
+                const provinciaNombre = e.detail.text;
+                provinciaContainer.querySelector("#ProvinciaNombre").value = provinciaNombre;
+
+                ciudadOptionsList.innerHTML = "";
+                ciudadContainer.querySelector(".selected-value").textContent = "Seleccione ciudad";
+                ciudadContainer.querySelector("#CiudadNombre").value = "";
+
+                try {
+                    const res = await fetch(`/Proveedores/GetCiudades?provinciaNombre=${encodeURIComponent(provinciaNombre)}`);
+                    const ciudades = await res.json();
+                    ciudades.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+                    ciudades.forEach(c => {
+                        const li = document.createElement("li");
+                        li.textContent = c.nombre;
+                        li.dataset.value = c.id || c.nombre;
+                        ciudadOptionsList.appendChild(li);
+                    });
+                } catch (err) {
+                    console.error("Error cargando ciudades:", err);
+                }
+            });
+
+            // Cambio de ciudad
+            ciudadContainer.addEventListener("custom-select:change", (e) => {
+                const ciudadNombre = e.detail.text;
+                ciudadContainer.querySelector("#CiudadNombre").value = ciudadNombre;
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const rolSelect = document.getElementById("rolSelect");
+            const selectedLi = rolSelect.querySelector("li.selected");
+            if (selectedLi) {
+                const triggerSpan = rolSelect.querySelector(".selected-value");
+                triggerSpan.textContent = selectedLi.textContent;
+                triggerSpan.classList.remove("placeholder"); // opcional, quita la clase placeholder
+            }
+
+            const btnMostrar = document.getElementById("btnMostrarContrasenia");
+            const container = document.getElementById("contraseniaContainer");
+
+            btnMostrar.addEventListener("click", function () {
+                if (container.style.display === "none") {
+                    container.style.display = "block";
+                    btnMostrar.textContent = "OCULTAR CAMPOS";
+                } else {
+                    container.style.display = "none";
+                    btnMostrar.textContent = "MODIFICAR CONTRASEÑA";
+                    // Limpiar los campos por si los ocultan luego de escribir
+                    container.querySelectorAll("input").forEach(i => i.value = "");
+                }
+            });
+        });
+    </script>
+}

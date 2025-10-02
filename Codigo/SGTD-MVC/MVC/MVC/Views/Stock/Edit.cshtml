@@ -1,7 +1,7 @@
-﻿@model MVC.Models.DTOs.ProductoDto.ProductoCreateDTO
+﻿@model MVC.Models.DTOs.ProductoDto.ProductoUpdateDTO
 
 @{
-    ViewData["Title"] = "Añadir Producto";
+    ViewData["Title"] = "Editar Producto";
 }
 
 <link rel="stylesheet" href="~/css/createBase.css" asp-append-version="true" />
@@ -11,18 +11,21 @@
 
 <div class="content-container p-4 add-producto-page">
     <div class="form-card">
-        <h2 class="form-title">AÑADIR PRODUCTO</h2>
+        <h2 class="form-title">EDITAR PRODUCTO</h2>
 
-        <form asp-action="Create" method="post">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
             <div class="form-row">
                 <div style="width:100%;">
                     @Html.TextBoxFor(m => m.Nombre, new { @class = "form-input", placeholder = "Nombre", required = "required" })
                     @Html.ValidationMessageFor(m => m.Nombre)
                 </div>
+
                 <div style="width:100%;">
-                    <div class="custom-select-container multiple" style="width:100%;">
+                    <div class="custom-select-container" style="width:100%;">
                         <button type="button" class="custom-select-trigger">
-                            <span class="selected-value placeholder">Seleccione uno o más disciplinas</span>
+                            <span class="selected-value placeholder">Seleccione disciplina</span>
                             <span class="arrow">▼</span>
                         </button>
 
@@ -31,7 +34,8 @@
                             <ul class="custom-select-options">
                                 @foreach (var disciplina in (IEnumerable<MVC.Models.DTOs.DisciplinaDto.DisciplinaReadDTO>)ViewBag.Disciplinas)
                                 {
-                                    <li data-value="@disciplina.Id">@disciplina.Nombre</li>
+                                    var selected = Model.DisciplinaId == disciplina.Id ? "selected" : "";
+                                    <li data-value="@disciplina.Id" class="@selected">@disciplina.Nombre</li>
                                 }
                             </ul>
                         }
@@ -39,14 +43,15 @@
                         {
                             <li>No hay disciplinas disponibles</li>
                         }
-                        <input type="hidden" name="DisciplinaId" />
+                        <input type="hidden" name="DisciplinaId" value="@Model.DisciplinaId" />
                     </div>
                     @Html.ValidationMessageFor(m => m.DisciplinaId, "", new { @class = "text-danger" })
                 </div>
+
                 <div style="width:100%;">
                     <div class="custom-multiple-select-container multiple" data-name="ProveedorIds" style="width:100%;">
                         <button type="button" class="custom-multiple-select-trigger">
-                            <span class="selected-value placeholder">Seleccione uno o más proveedores</span>
+                            <span class="selected-value placeholder">Seleccione proveedores</span>
                             <span class="arrow">▼</span>
                         </button>
 
@@ -55,7 +60,8 @@
                             <ul class="custom-multiple-select-options">
                                 @foreach (var proveedor in (IEnumerable<MVC.Models.DTOs.ProveedorDto.ProveedorReadDTO>)ViewBag.Proveedores)
                                 {
-                                    <li data-value="@proveedor.Id">@proveedor.Nombre</li>
+                                    var selected = Model.ProveedorIds != null && Model.ProveedorIds.Contains(proveedor.Id) ? "selected" : "";
+                                    <li data-value="@proveedor.Id" class="@selected">@proveedor.Nombre</li>
                                 }
                             </ul>
                         }
@@ -63,14 +69,23 @@
                         {
                             <li>No hay proveedores disponibles</li>
                         }
-                        <div class="hidden-inputs"></div>
+                        <div class="hidden-inputs">
+                            @if (Model.ProveedorIds != null)
+                            {
+                                @foreach (var id in Model.ProveedorIds)
+                                {
+                                    <input type="hidden" name="ProveedorIds" value="@id" />
+                                }
+                            }
+                        </div>
                     </div>
                     @Html.ValidationMessageFor(m => m.ProveedorIds, "", new { @class = "text-danger" })
                 </div>
             </div>
+
             <div class="form-row">
-                <input class="form-input" placeholder="Cantidad inicial *" name="Cantidad" type="number" min="0" />
-                <input class="form-input" placeholder="Precio *" name="Precio" type="number" />
+                <input class="form-input" placeholder="Cantidad" name="Cantidad" type="number" min="0" value="@Model.Cantidad" />
+                <input class="form-input" placeholder="Precio" name="Precio" type="number" value="@Model.Precio" />
             </div>
 
             <div class="estado-row">
@@ -79,19 +94,18 @@
                 </div>
                 <div>
                     <label class="switch">
-                        <input type="checkbox" id="estadoSwitch" />
+                        <input type="checkbox" id="estadoSwitch" @(Model.EstadoId == 1 ? "checked" : "") />
                         <span class="slider round"></span>
                     </label>
-                    <span id="estadoLabel" class="switch-label">Inactivo</span>
+                    <span id="estadoLabel" class="switch-label">@((Model.EstadoId == 1) ? "Activo" : "Inactivo")</span>
                 </div>
             </div>
 
-            <!-- Campo oculto que viaja en el POST -->
-            <input type="hidden" id="EstadoId" name="EstadoId" value="4" />
+            <input type="hidden" id="EstadoId" name="EstadoId" value="@Model.EstadoId" />
 
-			<div class="form-actions">
-				<a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
-                <button type="submit" class="btn btn-lg btn-add">AÑADIR</button>
+            <div class="form-actions">
+                <a asp-action="Index" class="btn btn-lg btn-edit">VOLVER</a>
+                <button type="submit" class="btn btn-lg btn-add">GUARDAR</button>
             </div>
         </form>
     </div>
@@ -101,4 +115,15 @@
     <script src="~/js/select.js" defer asp-append-version="true"></script>
     <script src="~/js/multipleSelect.js" defer asp-append-version="true"></script>
     <script src="~/js/switch.js" defer asp-append-version="true"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const disciplinaSelect = document.querySelector(".custom-select-container:not(.multiple)");
+            const selectedLi = disciplinaSelect.querySelector("li.selected");
+            if (selectedLi) {
+                const triggerSpan = disciplinaSelect.querySelector(".selected-value");
+                triggerSpan.textContent = selectedLi.textContent;
+                triggerSpan.classList.remove("placeholder"); // opcional, quita la clase placeholder
+            }
+        });
+    </script>
 }

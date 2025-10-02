@@ -32,10 +32,6 @@ namespace Shared.DTOs.UsuarioDTOs
         [EmailAddress(ErrorMessage = "El correo electrónico no tiene un formato válido.")]
         public string CorreoElectronico { get; set; }
 
-        [Required(ErrorMessage = "La contraseña es obligatoria.")]
-        [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres.")]
-        public string Contrasenia { get; set; }
-
         [Required(ErrorMessage = "La ciudad es obligatoria.")]
         [StringLength(50, ErrorMessage = "La ciudad no puede superar los 50 caracteres.")]
         public string Ciudad { get; set; }
@@ -50,5 +46,8 @@ namespace Shared.DTOs.UsuarioDTOs
 
         [Range(1, int.MaxValue, ErrorMessage = "El estado debe ser válido si se especifica.")]
         public int? EstadoId { get; set; }
+
+        public string? Contrasenia { get; set; }
+
     }
 }

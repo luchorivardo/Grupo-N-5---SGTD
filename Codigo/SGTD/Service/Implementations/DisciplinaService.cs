@@ -45,6 +45,13 @@ namespace Service.Implementations
 
         public async Task<DisciplinaReadDTO> CrearAsync(DisciplinaCreateDTO dto)
         {
+            var t = _DisciplinaRepository.FindAll();
+            if (t.Count() != 0)
+            {
+                if (await _DisciplinaRepository.ExistePorNombreAsync(dto.Nombre))
+                    throw new ArgumentException("Ya existe una disciplina con ese nombre.", nameof(dto.Nombre));
+            }
+
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre de la disciplina es obligatorio.");
             var disciplina = _mapper.ToEntity(dto);
@@ -60,6 +67,9 @@ namespace Service.Implementations
 
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre de la disciplina es obligatorio.");
+
+            if (await _DisciplinaRepository.ExistePorNombreAsync(dto.Nombre))
+                throw new ArgumentException("Ya existe una disciplina con ese nombre.", nameof(dto.Nombre));
 
             var disciplina = await _DisciplinaRepository.ObtenerPorId(id);
             if (disciplina == null)

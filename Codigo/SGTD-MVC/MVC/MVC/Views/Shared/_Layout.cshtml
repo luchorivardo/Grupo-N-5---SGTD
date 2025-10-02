@@ -88,9 +88,10 @@
     </nav>
 
     <!-- Contenido -->
-    <main class="content" id="main-content">
+	<main class="content" id="main-content">
+		@RenderBody()
         @RenderSection("Scripts", required: false)
-        @RenderBody()
+        
         @await Html.PartialAsync("Modals/_ModalRubro", new List<RubroCreateDTO>())
         @await Html.PartialAsync("Modals/_ModalDisciplina", new List<DisciplinaCreateDTO>())
         @await Html.PartialAsync("Modals/_ModalRol", new List<RolCreateDTO>())

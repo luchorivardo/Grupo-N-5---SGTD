@@ -16,6 +16,7 @@ namespace Shared.DTOs.ProveedorDTOs
         public string Telefono { get; set; }
         public string Ciudad { get; set; }
         public string Provincia { get; set; }
+        public List<int> RubroIds { get; set; }
         public int EstadoId { get; set; }
     }
 }

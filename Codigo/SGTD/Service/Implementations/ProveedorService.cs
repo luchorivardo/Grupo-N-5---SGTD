@@ -1,4 +1,5 @@
 ﻿using Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Shared.DTOs.ProveedorDTOs;
 using Shared.Entidades;
@@ -23,7 +24,7 @@ namespace Service.Implementations
 
         public async Task<List<ProveedorReadDTO>> ObtenerTodosAsync()
         {
-            var proveedores = await _proveedorRepository.FindAllAsync();
+            var proveedores = await _proveedorRepository.FindAllAsyncConRubros();
 
             return _mapper.ToReadDtoList(proveedores);
         }
@@ -33,21 +34,21 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            var proveedor = await _proveedorRepository.ObtenerPorId(id);
+            var proveedor = await _proveedorRepository.ObtenerPorIdConRubros(id);
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
-            return _mapper.ToReadDto(proveedor);
+            return _mapper.ToReadDtoWithRubros(proveedor);
         }
         public async Task<ProveedorReadDTO> CrearAsync(ProveedorCreateDTO dto)
         {
-            ValidarProveedorCreateDTO(dto);
+            await ValidarProveedorCreateDTO(dto);
 
             var proveedor = _mapper.ToEntity(dto);
-            _mapper.MapRubros(dto, proveedor);
+            _mapper.CreateMapRubros(dto, proveedor);
             await _proveedorRepository.Create(proveedor);
 
-            return _mapper.ToReadDto(proveedor);
+            return _mapper.ToReadDtoWithRubros(proveedor);
         }
 
         public async Task<ProveedorReadDTO> Editar(int id, ProveedorUpdateDTO dto)
@@ -55,17 +56,19 @@ namespace Service.Implementations
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor a cero.");
 
-            ValidarProveedorUpdateDTO(dto);
+            await ValidarProveedorUpdateDTO(id, dto);
 
-            var proveedor = await _proveedorRepository.ObtenerPorId(id);
+            dto.RubroIds = dto.RubroIds?.Distinct().ToList();
+            var proveedor = await _proveedorRepository.ObtenerPorIdConRubros(id);
             if (proveedor == null)
                 throw new KeyNotFoundException($"No se encontró ningún proveedor con ID {id}.");
 
             proveedor.UpdatedDate = DateTime.Now;
             _mapper.UpdateEntity(dto, proveedor);
+            _mapper.UpdateMapRubros(dto, proveedor);
             await _proveedorRepository.Update(proveedor);
 
-            return _mapper.ToReadDto(proveedor);
+            return _mapper.ToReadDtoWithRubros(proveedor);
         }
 
         public async Task Eliminar(int id)
@@ -80,7 +83,7 @@ namespace Service.Implementations
             await _proveedorRepository.Delete(proveedor);
         }
 
-        private void ValidarProveedorCreateDTO(ProveedorCreateDTO dto)
+        private async Task ValidarProveedorCreateDTO(ProveedorCreateDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Nombre))
                 throw new ArgumentException("El nombre es obligatorio.");
@@ -102,23 +105,43 @@ namespace Service.Implementations
                 throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
             if (dto.EstadoId <= 0)
                 throw new ArgumentException("Debe seleccionar un estado válido.");
+
+            var hayUsuario = _proveedorRepository.FindAll();
+            if (hayUsuario.Count() != 0)
+            {
+                if (await _proveedorRepository.ExistePorCuitAsync(dto.Cuit))
+                    throw new ArgumentException("Ya existe un proveedor con ese número de CUIT.", nameof(dto.Cuit));
+            }
         }
 
-        private void ValidarProveedorUpdateDTO(ProveedorUpdateDTO dto)
+        private async Task ValidarProveedorUpdateDTO(int id, ProveedorUpdateDTO dto)
         {
             if (dto.Id <= 0)
                 throw new ArgumentException("ID inválido.");
-            ValidarProveedorCreateDTO(new ProveedorCreateDTO
-            {
-                Nombre = dto.Nombre,
-                Cuit = dto.Cuit,
-                Direccion = dto.Direccion,
-                Correo = dto.Correo,
-                Telefono = dto.Telefono,
-                Ciudad = dto.Ciudad,
-                Provincia = dto.Provincia,
-                EstadoId = dto.EstadoId
-            });
+
+            if (await _proveedorRepository.ExistePorCuitAsync(dto.Cuit, id))
+                throw new ArgumentException("Ya existe un proveedor con ese número de CUIT.", nameof(dto.Cuit));
+
+            if (string.IsNullOrWhiteSpace(dto.Nombre))
+                throw new ArgumentException("El nombre es obligatorio.");
+            if (!EsCuitValido(dto.Cuit))
+                throw new ArgumentException("El CUIT no es válido. Formato esperado: XX-XXXXXXXX-X");
+            if (string.IsNullOrWhiteSpace(dto.Direccion))
+                throw new ArgumentException("La dirección es obligatoria.");
+            if (!EsCorreoValido(dto.Correo))
+                throw new ArgumentException("El correo no es válido.");
+            if (!EsTelefonoValido(dto.Telefono))
+                throw new ArgumentException("El número de teléfono debe comenzar con + y tener entre 7 y 15 dígitos.");
+            if (string.IsNullOrWhiteSpace(dto.Ciudad))
+                throw new ArgumentException("La ciudad es obligatoria.", nameof(dto.Ciudad));
+            if (dto.Ciudad.Length > 50)
+                throw new ArgumentException("La ciudad debe tener al menos 50 caracteres.", nameof(dto.Ciudad));
+            if (string.IsNullOrWhiteSpace(dto.Provincia))
+                throw new ArgumentException("La provincia es obligatoria.", nameof(dto.Provincia));
+            if (dto.Provincia.Length > 50)
+                throw new ArgumentException("La provincia debe tener al menos 50 caracteres.", nameof(dto.Provincia));
+            if (dto.EstadoId <= 0)
+                throw new ArgumentException("Debe seleccionar un estado válido.");
         }
 
         private bool EsTelefonoValido(string telefono)
