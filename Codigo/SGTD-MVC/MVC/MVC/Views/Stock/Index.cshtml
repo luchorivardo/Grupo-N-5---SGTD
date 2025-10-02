@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC.Models.DTOs.ProductoDto.ProductoReadDTO>
+﻿@model IEnumerable<MVC.Models.ViewModels.ProductoIndexVM>
 @{
     ViewData["Title"] = "Stock";
 }
@@ -26,30 +26,43 @@
     <!-- Tabla dentro de un contenedor con scroll -->
     <div class="table-card">
         <div class="table-responsive proveedores-table-wrapper">
-            <table class="table proveedores-table mb-0">
+            <table class="table proveedores-table index-table mb-0">
                 <thead>
                     <tr>
                         <th class="check-col"><input type="checkbox" id="checkAll" /></th>
-                        <th>Código</th>
                         <th>Nombre</th>
-                        <th>Proveedor</th>
+                        <th>Proveedores</th>
                         <th>Cantidad</th>
-                        <th>Rubro</th>
+						<th>Precio</th>
+                        <th>Disciplina</th>
+                        <th class="estado-col">Estado</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-body">
-                    @* Ejemplo: recorriendo el modelo *@
                     @if (Model != null)
                     {
                         foreach (var producto in Model)
                         {
                             <tr>
                                 <td class="check-col"><input type="checkbox" name="sel" value="@producto.Id" /></td>
-                                <td>@producto.Id</td>
                                 <td>@producto.Nombre</td>
-                                <td>@producto.Cantidad</td>
-                                <td class="@(producto.Cantidad < 5 ? "text-danger fw-bold" : "")">@producto.Cantidad</td>
-                                <td>@producto.DisciplinaId</td>
+								<td>@string.Join(", ", producto.ProveedorNombres)</td>
+                                <td class="@(producto.Cantidad <= 5 ? "celda-inactiva" : "")">
+                                    @producto.Cantidad
+                                </td>
+                                <td>@producto.Precio.ToString("C", new System.Globalization.CultureInfo("es-AR"))</td>
+
+                                <td>@producto.DisciplinaNombre</td>
+                                <td class="estado-col">
+                                    @if (producto.EstadoNombre == "Activo")
+                                    {
+                                        <span class="badge estado-activo">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge estado-inactivo">Inactivo</span>
+                                    }
+                                </td>
                             </tr>
                         }
                     }

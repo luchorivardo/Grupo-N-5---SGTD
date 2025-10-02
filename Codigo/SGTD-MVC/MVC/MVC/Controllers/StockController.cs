@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.DTOs.DisciplinaDto;
+using MVC.Models.DTOs.EstadoDto;
 using MVC.Models.DTOs.ProductoDto;
 using MVC.Models.DTOs.ProveedorDto;
 using MVC.Models.DTOs.RubroDto;
 using MVC.Models.Entity;
+using MVC.Models.ViewModels;
 using System.Text.Json;
 
 namespace MVC.Controllers
@@ -16,6 +18,7 @@ namespace MVC.Controllers
         private readonly string _apiBaseUrl = "producto";
         private readonly string _apiDisciplinaUrl = "disciplina";
         private readonly string _apiProveedorUrl = "proveedor";
+        private readonly string _apiEstadoUrl = "estado";
 
 
         public StockController(IHttpClientFactory httpClientFactory)
@@ -27,24 +30,76 @@ namespace MVC.Controllers
         {
             try
             {
+                // Obtener productos
                 var response = await _httpClient.GetAsync(_apiBaseUrl);
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    return View(new List<ProductoIndexVM>());
 
+                var productoDto = new List<ProductoReadDTO>();
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var productos = JsonSerializer.Deserialize<List<ProductoReadDTO>>(content,
+                    productoDto = JsonSerializer.Deserialize<List<ProductoReadDTO>>(content,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                    return View(productos);
                 }
+
+                // Obtener estados
+                var estadoResponse = await _httpClient.GetAsync(_apiEstadoUrl);
+                var estados = new List<EstadoReadDTO>();
+                if (estadoResponse.IsSuccessStatusCode)
+                {
+                    var estadoContent = await estadoResponse.Content.ReadAsStringAsync();
+                    estados = JsonSerializer.Deserialize<List<EstadoReadDTO>>(estadoContent,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                }
+
+                // Obtener disciplinas
+                var disciplinasResponse = await _httpClient.GetAsync(_apiDisciplinaUrl);
+                var disciplinas = new List<RubroReadDTO>();
+                if (disciplinasResponse.IsSuccessStatusCode)
+                {
+                    var rubroContent = await disciplinasResponse.Content.ReadAsStringAsync();
+                    disciplinas = JsonSerializer.Deserialize<List<RubroReadDTO>>(rubroContent,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                }
+
+                //Obtener proveedores
+                var proveedoresResponse = await _httpClient.GetAsync(_apiProveedorUrl);
+                var proveedores = new List<ProveedorReadDTO>();
+                if (proveedoresResponse.IsSuccessStatusCode)
+                {
+                    var proveedorContent = await proveedoresResponse.Content.ReadAsStringAsync();
+                    proveedores = JsonSerializer.Deserialize<List<ProveedorReadDTO>>(proveedorContent,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                }
+
+                // Mapear DTOs a ViewModel
+                var productoVM = productoDto.Select(p => new ProductoIndexVM
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Cantidad = p.Cantidad,
+                    Precio = p.Precio,
+                    DisciplinaId = p.DisciplinaId,
+                    DisciplinaNombre = disciplinas.FirstOrDefault(d => d.Id == p.DisciplinaId)?.Nombre ?? "Sin disciplina",
+
+                    ProveedorIds = p.ProveedorIds,
+                    ProveedorNombres = proveedores
+                        .Where(pr => p.ProveedorIds.Contains(pr.Id))
+                        .Select(pr => pr.Nombre)
+                        .ToList(),
+
+                    EstadoId = p.EstadoId,
+                    EstadoNombre = estados.FirstOrDefault(e => e.Id == p.EstadoId)?.Nombre ?? "Sin estado",
+                }).ToList();
+
+                return View(productoVM);
             }
             catch (Exception ex)
             {
-                // Log error si es necesario
-                ViewBag.Error = "Error al cargar los productos";
+                ViewBag.Error = "Error al cargar los proveedores";
+                return View(new List<ProveedorIndexVm>());
             }
-
-            return View(new List<ProductoReadDTO>());
         }
 
         [HttpGet]
