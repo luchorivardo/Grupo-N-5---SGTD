@@ -137,6 +137,29 @@ namespace MVC.Controllers
                 return StatusCode(500, "Error al eliminar la factura");
             }
         }
+
+
+        public async Task<IActionResult> DescargarPdf(int id)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_apiBaseUrl}/{id}/pdf");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var pdfBytes = await response.Content.ReadAsByteArrayAsync();
+                    var fileName = $"Factura_{id}.pdf";
+
+                    return File(pdfBytes, "application/pdf", fileName);
+                }
+
+                return NotFound("No se encontró la factura para generar el PDF");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error al descargar el PDF de la factura");
+            }
+        }
     }
 }
 
