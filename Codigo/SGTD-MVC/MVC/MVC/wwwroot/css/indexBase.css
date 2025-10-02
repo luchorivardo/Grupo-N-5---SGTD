@@ -72,6 +72,8 @@
         background: #dedede;
         height: 50px; /* altura fija */
         max-height: 50px;
+        font-family: 'Montserrat';
+        font-size: 15px
     }
 
 
@@ -86,8 +88,9 @@
 
 /* Columna checkbox tamaño fijo */
 .check-col {
-    width: fit-content;
-    text-align: center;
+    min-width: fit-content !important;
+    width: fit-content !important;
+    text-align: center !important;
 }
 
 #checkAll {
@@ -95,7 +98,7 @@
     height: 20px;
     position: relative;
     top: 3px;
-    left: 3px;
+    left: 0px;
 }
 
 #tabla-body input[type="checkbox"] {
@@ -121,12 +124,6 @@
         width: 46px !important;
         border: 1px solid #000;
     }
-}
-
-/* checkbox column */
-.check-col {
-    width: 46px;
-    text-align: center;
 }
 
 /* Estilos buscador */
@@ -215,4 +212,85 @@
     color: #6c757d !important;
     background: #dedede !important;
     font-style: italic;
+}
+
+/* Tablas de Index con ancho ajustado */
+.index-table {
+    table-layout: auto !important; /* que las columnas se adapten al contenido */
+    width: 100%;
+}
+
+    .index-table th,
+    .index-table td {
+        white-space: nowrap; /* evita que el texto se corte en varias líneas */
+        min-width: 120px; /* ancho mínimo para que no quede demasiado angosto */
+        max-width: 300px; /* opcional: límite máximo */
+        text-overflow: ellipsis;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+.badge {
+    display: inline-block;
+    padding: 0.4em 0.75em;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-align: center;
+    align-content: center;
+    white-space: nowrap;
+}
+
+.estado-activo {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    font-weight: 500;
+    font-family: 'Montserrat';
+}
+
+.estado-inactivo {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.rol-admin {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+    font-weight: 500;
+    font-family: 'Montserrat';
+}
+
+.rol-empleado {
+    background-color: #c2c2c2;
+    color: #adadad;
+    border: 1px solid #ebebeb;
+    font-weight: 500;
+    font-family: 'Montserrat';
+}
+
+.rol-contador {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    font-weight: 500;
+    font-family: 'Montserrat';
+}
+.proveedores-table td .badge {
+    display: flex; /* convierte el span en un flexbox */
+    justify-content: center; /* centra en el ancho */
+    align-items: center; /* centra en la altura */
+    margin: 0 auto; /* asegura que quede en el centro de la celda */
+    max-width: fit-content; /* que se ajuste al contenido */
+}
+
+.index-table td.estado-col,
+.index-table th.estado-col,
+.index-table td.rol-col,
+.index-table th.rol-col {
+    min-width: auto !important;
+    max-width: none !important;
+    text-align: center;
 }
