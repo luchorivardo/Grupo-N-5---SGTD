@@ -229,6 +229,11 @@
         overflow: hidden;
         vertical-align: middle;
     }
+.celda-inactiva {
+    background-color: #f8d7da !important; /* mismo fondo clarito del badge */
+    color: #721c24 !important; /* texto rojo */
+    font-weight: 600;
+}
 
 .badge {
     display: inline-block;
